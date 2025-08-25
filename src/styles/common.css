@@ -1,0 +1,69 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css');
+
+:root {
+  /* 브랜드 색상 */
+  --brand-blue: #0013a7;
+  --brand-blue-dark: #001979;
+  --brand-blue-disabled: #4a5568;
+
+  /* 배경 색상 */
+  --background-primary: #f8fafc;
+  --background-secondary: #ffffff;
+  --background-neutral: #eeeeee;
+
+  /* 경고 색상 */
+  --warning-dark: #b91c1c;
+  --warning-red: #dc2626;
+  --warning-light: #fee2e2;
+
+  /* 버튼 색상 */
+  --btn-active: #001979;
+  --btn-inactive: #84888f;
+
+  /* 카드 색상 */
+  --card-blue: #ebf2ff;
+  --card-green: #e8f5e8;
+  --card-mintblue: #e8f8f5;
+  --card-ocean: #ebf2ff;
+
+  /* 텍스트 색상 */
+  --text-primary: #414141;
+  --text-forest: #2f5233;
+  --text-mint: #418099;
+  --text-ocean: #1a365d;
+  --text-gray: #818181;
+  --text-blue: #0a3394;
+
+  /* 스티커 색상 */
+  --sticker-area: #e8e8e8;
+
+  /* 스티커 색상 - Professional Blue */
+  --sticker-blue-1: #4a67c4;
+  --sticker-blue-2: #3a5ab8;
+  --sticker-blue-3: #496d49;
+  --sticker-blue-4: #1a40a0;
+  --sticker-blue-5: #0a3394;
+
+  /* 스티커 색상 - Modern Sage Green */
+  --sticker-sage-1: #cccccc;
+  --sticker-sage-2: #5a7e5a;
+  --sticker-sage-3: #5a7e5a;
+  --sticker-sage-4: #385c38;
+  --sticker-sage-5: #274b27;
+
+  /* 스티커 색상 - Corporate Teal */
+  --sticker-teal-1: #4a8a7a;
+  --sticker-teal-2: #3a7a6a;
+  --sticker-teal-3: #2a6a5a;
+  --sticker-teal-4: #1a5a4a;
+
+  /* 스티커 색상 - Ocean Blue */
+  --sticker-ocean-1: #4a7ba4;
+  --sticker-ocean-2: #3a6b94;
+  --sticker-ocean-3: #2a5b84;
+  --sticker-ocean-4: #1a4b74;
+}
+
+body {
+  font-family: 'Pretendard', sans-serif;
+}
