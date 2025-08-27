@@ -1,0 +1,25 @@
+.toast {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 187px;
+  height: 19px;
+  border-radius: 5px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 1rem;   /* 16px */
+  font-weight: 500;
+  line-height: normal;
+  padding: 14px 18px; /* 텍스트 패딩 */
+}
+
+/* 🚨 에러/중단 */
+.error {
+  background: rgba(253, 224, 233, 0.5);
+  color: var(--red-red_F50E0E, #F50E0E);
+}
+
+/* 🎉 포인트 획득 */
+.point {
+  background: rgba(189, 204, 236, 0.5);
+  color: var(--brand-blue, #0013A7);
+}
