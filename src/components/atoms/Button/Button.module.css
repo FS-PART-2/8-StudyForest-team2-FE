@@ -70,68 +70,68 @@
   padding: 0; /* 원형은 내부 여백 제거 */
 }
 
-/* ================= Sizes ================= */
+/* Sizes */
 /* Action 그룹 */
 .size-xl {
   width: 600px;
   height: 55px;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.8rem; /* 18px */
 }
 .size-lg {
   width: 312px;
   height: 55px;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.8rem; /* 18px */
 }
 .size-md {
   width: 140px;
   height: 55px;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.8rem; /* 18px */
 }
 .size-cancel {
   width: 288px;
   height: 55px;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.8rem; /* 18px */
 }
 .size-study-mobile {
   width: 106px;
   height: 35px;
-  font-size: 0.875rem; /* 14px */
+  font-size: 1.4rem; /* 14px */
 }
 .size-more {
   width: 288px;
   height: 55px;
-  font-size: 1rem; /* 16px */
+  font-size: 1.6rem; /* 16px */
 }
 
 /* Chip */
 .size-chip {
   width: 400px;
   height: 55px;
-  font-size: 1rem; /* 16px */
+  font-size: 1.6rem; /* 16px */
 }
 
 /* Control - 사각형 */
 .size-ctrl-lg {
   width: 333px;
   height: 60px;
-  font-size: 1.75rem; /* 28px */
+  font-size: 2.8rem; /* 28px */
 }
 .size-ctrl-sm {
   width: 140px;
   height: 45px;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.8rem; /* 18px */
 }
 
 /* Control - 원형 */
 .size-circle-lg {
   width: 64px;
   height: 64px;
-  font-size: 1.125rem; /* 18px (아이콘/문자) */
+  font-size: 1.8rem; /* 18px (아이콘/문자) */
 }
 .size-circle-sm {
   width: 48px;
   height: 48px;
-  font-size: 1rem; /* 16px (아이콘/문자) */
+  font-size: 1.6rem; /* 16px (아이콘/문자) */
 }
 
 /* 공통 옵션 */
