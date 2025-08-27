@@ -1,0 +1,29 @@
+.toast {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+
+  padding: 1.4rem 2.8rem;
+  border-radius: 0.5rem;
+
+  font-family: 'Pretendard', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.text { 
+  white-space: nowrap;
+}
+
+.error,
+.mismatch {
+  background: rgba(253, 224, 233, 0.5);
+  color: var(--red-red_F50E0E, #F50E0E);
+}
+
+.point {
+  background: rgba(189, 204, 236, 0.5);
+  color: var(--brand-blue, #0013A7);
+}
