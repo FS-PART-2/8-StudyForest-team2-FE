@@ -2,14 +2,14 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 187px;
-  height: 19px;
+width: 18.7rem;       /* 187px */
+  height: 1.9rem;     /* 19px */
   border-radius: 5px;
   font-family: 'Pretendard', sans-serif;
   font-size: 1.6rem;   /* 16px */
   font-weight: 500;
   line-height: normal;
-  padding: 14px 18px; /* 텍스트 패딩 */
+  padding: 1.4rem 1.8rem; /* 14px 18px */
 }
 
 /* 🚨 에러/중단 */
