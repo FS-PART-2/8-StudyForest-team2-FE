@@ -16,7 +16,7 @@ export function Header() {
 
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>
+      <div>
         <Link to="/">
           <picture>
             <source
@@ -38,7 +38,7 @@ export function Header() {
 
       {/* 스터디 만들기 버튼 */}
       {isMainPage && (
-        <div className={styles.menu}>
+        <div>
           <Button
             onClick={handleLinkToCreateStudy}
             variant="action"
