@@ -17,49 +17,29 @@ import styles from '../../styles/components/atoms/Button.module.css';
  * <Button variant="control" size="ctrl-lg">Stop</Button>
  * <Button variant="control" size="circle-lg" shape="circle" aria-label="Pause">Ⅱ</Button>
  */
-function Button({
+
+export default function Button({
   children,
   variant = 'action',
   size = 'md',
-  shape = 'rect', // 'rect' | 'circle'
-  type = 'button',
-  disabled = false,
   fullWidth = false,
-  selected = false, // chip, 토글성 버튼에 사용
-  onClick,
+  disabled = false,
   className = '',
   ...props
 }) {
-  const isCircle = shape === 'circle' || String(size).startsWith('circle-');
-
-  const classes = [
+  const cls = [
     styles.btn,
     styles[variant],
     styles[`size-${size}`],
     fullWidth ? styles.fullWidth : '',
-    isCircle ? styles.circle : '',
-    selected ? styles.selected : '',
     className,
   ]
     .filter(Boolean)
     .join(' ');
 
-  // chip은 토글성으로 쓰일 수 있어 aria-pressed 부여
-  const ariaPressed =
-    variant === 'chip' || selected ? { 'aria-pressed': !!selected } : {};
-
   return (
-    <button
-      type={type}
-      className={classes}
-      disabled={disabled}
-      onClick={onClick}
-      {...ariaPressed}
-      {...props}
-    >
+    <button className={cls} disabled={disabled} {...props}>
       {children}
     </button>
   );
 }
-
-export default Button;

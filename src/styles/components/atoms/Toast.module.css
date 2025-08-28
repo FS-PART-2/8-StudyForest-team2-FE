@@ -5,10 +5,9 @@
   gap: 0.8rem;
   padding: 1.4rem 2.8rem;
   border-radius: 0.5rem;
-  font-size: 1.6rem; /* 16px */
+  font-size: 1.6rem; /* 16px 기준 */
   font-weight: 500;
   line-height: 1.6;
-  max-width: min(90vw, 32rem);
 }
 
 .text {
@@ -21,10 +20,10 @@
 .error,
 .mismatch {
   background: var(--toast-error-bg, rgba(253, 224, 233, 0.5));
-  color: var(--red-red_F50E0E, #F50E0E);
+  color: var(--warning-red, #dc2626);
 }
 
 .point {
   background: var(--toast-point-bg, rgba(189, 204, 236, 0.5));
-  color: var(--brand-blue, #0013A7);
+  color: var(--brand-blue, #0013a7);
 }
