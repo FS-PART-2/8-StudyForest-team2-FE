@@ -1,140 +1,45 @@
-.btn {
-  font-weight: 600; /* Pretendard SemiBold */
-  border-radius: 10px;
-  border: none;
+.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 0.8rem;
+  padding: 0 1.6rem;
+  border: none;
+  border-radius: 0.8rem;
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
-  padding: 0 16px; /* 텍스트 좌우 여백 */
-  background: var(--brand-blue);
-  color: #fff;
+  transition: transform 120ms ease, background-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
+}
+.button:active { transform: translateY(1px); }
+.button:disabled { background: var(--btn-inactive); color: #fff; cursor: not-allowed; opacity: .8; }
 
-  /* 부드러운 전환 */
-  transition:
-    transform 120ms ease,
-    background-color 120ms ease,
-    color 120ms ease,
-    border-color 120ms ease,
-    box-shadow 120ms ease;
-}
+/* Variant: action — 폰트 18px */
+.action { background: var(--brand-blue); color: #fff; font-size: 1.8rem; }
 
-.btn:active {
-  transform: translateY(1px);
-}
+/* Variant: control (아이콘/원형 등) */
+.control { background: var(--background-neutral, #eee); color: var(--text-primary, #111827); }
 
-.btn:disabled {
-  background: var(--btn-inactive);
-  color: #fff;
-  cursor: not-allowed;
-  opacity: 0.9;
-}
+/* 원형 버튼용 */
+.circle { border-radius: 9999px; padding: 0; }
 
-/* Variant: action */
-.action {
-  background: var(--brand-blue);
-  color: #fff;
-}
-.action:hover:not(:disabled) {
-  background: var(--brand-blue-dark);
-}
+/* Full width */
+.fullWidth { width: 100%; }
 
-/* Variant: chip */
-.chip {
-  background: var(--background-neutral);
-  color: var(--text-blue);
-}
-.chip:hover:not(:disabled) {
-  filter: brightness(0.98);
-}
-.selected.chip {
-  background: var(--brand-blue);
-  color: #fff;
-}
+/* ===== Sizes (action) ===== */
+.size-xl { width: 60rem;  height: 5.5rem; }   /* 600x55 */
+.size-lg { width: 31.2rem; height: 5.5rem; }  /* 312x55 */
+.size-md { width: 14rem;  height: 5.5rem; }   /* 140x55 */
+.size-cancel { width: 28.8rem; height: 5.5rem; } /* 288x55 */
+.size-study-mobile { width: 10.6rem; height: 3.5rem; } /* 106x35 */
+.size-more { width: 28.8rem; height: 5.5rem; } /* 288x55 */
 
-/* Variant: control */
-.control {
-  background: var(--btn-active);
-  color: #fff;
-}
-.control:hover:not(:disabled) {
-  box-shadow: 0 2px 10px rgba(0, 19, 167, 0.18);
-}
+/* ===== Sizes (control, rect) ===== */
+.size-ctrl-lg { width: 33.3rem; height: 6rem; font-size: 2.8rem; } /* 333x60, 28px */
+.size-ctrl-sm { width: 14rem;  height: 4.5rem; }                    /* 140x45 */
 
-/* 원형 컨트롤 (Pause/Seek/Delete 등) */
-.circle {
-  border-radius: 50%;
-  padding: 0; /* 원형은 내부 여백 제거 */
-}
+/* ===== Sizes (control, circle) ===== */
+.size-circle-lg { width: 6.4rem; height: 6.4rem; }  /* 64x64 */
+.size-circle-sm { width: 4.8rem; height: 4.8rem; }  /* 48x48 */
 
-/* Sizes */
-/* Action 그룹 */
-.size-xl {
-  width: 600px;
-  height: 55px;
-  font-size: 1.8rem; /* 18px */
-}
-.size-lg {
-  width: 312px;
-  height: 55px;
-  font-size: 1.8rem; /* 18px */
-}
-.size-md {
-  width: 140px;
-  height: 55px;
-  font-size: 1.8rem; /* 18px */
-}
-.size-cancel {
-  width: 288px;
-  height: 55px;
-  font-size: 1.8rem; /* 18px */
-}
-.size-study-mobile {
-  width: 106px;
-  height: 35px;
-  font-size: 1.4rem; /* 14px */
-}
-.size-more {
-  width: 288px;
-  height: 55px;
-  font-size: 1.6rem; /* 16px */
-}
-
-/* Chip */
-.size-chip {
-  width: 400px;
-  height: 55px;
-  font-size: 1.6rem; /* 16px */
-}
-
-/* Control - 사각형 */
-.size-ctrl-lg {
-  width: 333px;
-  height: 60px;
-  font-size: 2.8rem; /* 28px */
-}
-.size-ctrl-sm {
-  width: 140px;
-  height: 45px;
-  font-size: 1.8rem; /* 18px */
-}
-
-/* Control - 원형 */
-.size-circle-lg {
-  width: 64px;
-  height: 64px;
-  font-size: 1.8rem; /* 18px (아이콘/문자) */
-}
-.size-circle-sm {
-  width: 48px;
-  height: 48px;
-  font-size: 1.6rem; /* 16px (아이콘/문자) */
-}
-
-/* 공통 옵션 */
-.fullWidth {
-  width: 100% !important;
-}
+/* 중복/잔존 규칙 정리: .action/.size-ctrl-lg 중복 제거, .size-chip 삭제 */
