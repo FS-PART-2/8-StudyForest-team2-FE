@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Button.module.css';
+import styles from '../../styles/components/atoms/Button.module.css';
 
 /**
  * Variants: 'action' | 'chip' | 'control'

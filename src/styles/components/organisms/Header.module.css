@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2.5rem 20rem;
+}
+
+@media (max-width: 1024px) {
+  .header {
+    padding: 2.25rem 4.4rem;
+  }
+}
+
+@media (max-width: 743px) {
+  .header {
+    padding: 2.25rem 1.6rem;
+
+    button {
+      font-size: 1.4rem;
+      padding: 2rem 1.5rem;
+      width: auto;
+      height: auto;
+    }
+  }
+}
