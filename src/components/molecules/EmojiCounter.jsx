@@ -12,7 +12,7 @@ import Emoji from '../atoms/Emoji';
  * @param {number} props.emojiData[].id
  * @returns {JSX.Element}
  */
-export default function EmojiCounter({ emojiData }) {
+export default function EmojiCounter({ emojiData = [] }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isRestOpen, setIsRestOpen] = useState(false);
   const [selectedEmojis, setSelectedEmojis] = useState(emojiData);
