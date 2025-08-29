@@ -4,6 +4,14 @@ import { useOutsideClick } from '../../hooks/useOutsideClick';
 import styles from '../../styles/components/molecules/EmojiCounter.module.css';
 import Emoji from '../atoms/Emoji';
 
+/**
+ * 이모지를 추가 및 카운트를 증가시키는 컴포넌트
+ * @param {Object[]} props.emojiData
+ * @param {string} props.emojiData[].emoji
+ * @param {number} props.emojiData[].count
+ * @param {number} props.emojiData[].id
+ * @returns {JSX.Element}
+ */
 export default function EmojiCounter({ emojiData }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isRestOpen, setIsRestOpen] = useState(false);
@@ -36,11 +44,26 @@ export default function EmojiCounter({ emojiData }) {
             : item,
         );
       } else {
-        // 새로운 이모지인 경우 배열에 추가
-        return [...prev, { emoji: event.emoji, count: 1 }];
+        // 새로운 이모지인 경우 배열에 추가 (새 ID 생성)
+        const newId = Math.max(...prev.map(item => item.id || 0)) + 1;
+        return [...prev, { id: newId, emoji: event.emoji, count: 1 }];
       }
     });
     setIsOpen(false);
+  };
+
+  // 이모지 클릭 시 카운트 감소
+  const handleEmojiDecrease = clickedEmoji => {
+    setSelectedEmojis(prev => {
+      return prev
+        .map(item => {
+          if (item.emoji === clickedEmoji && item.count > 0) {
+            return { ...item, count: item.count - 1 };
+          }
+          return item;
+        })
+        .filter(item => item.count > 0); // 카운트가 0이 된 이모지는 제거
+    });
   };
 
   // 이모지 추가 버튼 클릭 시 이모지 팝업 토글
@@ -56,29 +79,43 @@ export default function EmojiCounter({ emojiData }) {
   return (
     <div className={styles.emojiWrapper}>
       <div className={styles.emojiContainer}>
-        {topEmojis.map(({ emoji, count }) => (
-          <Emoji key={emoji} size="lg" emoji={emoji} count={count} />
+        {topEmojis.map(({ id, emoji, count }) => (
+          <Emoji
+            key={id}
+            size="lg"
+            emoji={emoji}
+            count={count}
+            onClick={handleEmojiDecrease}
+          />
         ))}
 
         {/* 나머지 이모지 추가 */}
-        <div className={styles.restEmojiWrapper} ref={restPopupRef}>
-          <button
-            className={styles.restCountButton}
-            onClick={handleRestEmojiClick}
-            aria-label="나머지 이모지 보기"
-          >
-            +{restCount} ..
-          </button>
-          {restEmojis.length > 0 && isRestOpen && (
-            <div className={styles.restEmojiContainer}>
-              <div className={styles.restPopup}>
-                {restEmojis.map(({ emoji, count }) => (
-                  <Emoji key={emoji} size="sm" emoji={emoji} count={count} />
-                ))}
+        {restCount > 0 && (
+          <div className={styles.restEmojiWrapper} ref={restPopupRef}>
+            <button
+              className={styles.restCountButton}
+              onClick={handleRestEmojiClick}
+              aria-label="나머지 이모지 보기"
+            >
+              +{restCount} ..
+            </button>
+            {restEmojis.length > 0 && isRestOpen && (
+              <div className={styles.restEmojiContainer}>
+                <div className={styles.restPopup}>
+                  {restEmojis.map(({ id, emoji, count }) => (
+                    <Emoji
+                      key={id}
+                      size="sm"
+                      emoji={emoji}
+                      count={count}
+                      onClick={handleEmojiDecrease}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className={styles.pickerContainer} ref={pickerRef}>
