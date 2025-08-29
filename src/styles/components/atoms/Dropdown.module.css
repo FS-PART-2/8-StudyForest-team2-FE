@@ -1,0 +1,19 @@
+.customDropdown { 
+  font-size: 1rem;
+  font-style: normal; 
+  font-weight: 400;
+  color: #818181;
+  padding: 0.5625rem 1.25rem;
+  border-radius: 0.625rem;
+  background-color: #fff;
+  cursor: pointer; 
+}
+
+.customDropdown option {
+  color: #414141;
+  border-radius: 0.625rem;
+}
+
+.highlightedOption {
+  background-color: #f0f0f0;
+}
