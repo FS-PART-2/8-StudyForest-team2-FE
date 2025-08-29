@@ -3,6 +3,7 @@ import { Layout } from './components/organisms/Layout';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { MainPage } from './pages/MainPage';
 import { StudyPage } from './pages/StudyPage';
+import TestPage from './pages/TestPage';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<MainPage />} />
           <Route path="/study" element={<StudyPage />} />
+          <Route path="/test" element={<TestPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
