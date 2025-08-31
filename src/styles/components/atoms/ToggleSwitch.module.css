@@ -1,0 +1,51 @@
+.switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 트랙: 51 x 31 */
+.track {
+  width: 51px;
+  height: 31px;
+  border-radius: 9999px;
+  background: var(--btn-inactive, #9ca3af);
+  position: relative;
+  display: inline-block;
+  transition: background-color 120ms ease, box-shadow 120ms ease;
+}
+
+/* 엄지: 27 x 27 */
+.thumb {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 2px;
+  left: 2px; /* OFF 기본 위치 */
+  transition: left 120ms ease, box-shadow 120ms ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.16);
+}
+
+/* ON 상태 */
+.on .track { background: var(--brand-blue, #0013a7); }
+.on .thumb { left: 22px; } /* 51 - 27 - 2 = 22 */
+
+/* OFF 상태 */
+.off .track { background: var(--btn-inactive, #9ca3af); }
+.off .thumb { left: 2px; }
+
+/* 포커스 링 */
+.switch:focus-visible .track {
+  box-shadow: 0 0 0 3px rgba(0, 19, 167, 0.18);
+}
+
+/* 비활성화 */
+.disabled { cursor: not-allowed; opacity: 0.6; }
+.disabled .thumb { box-shadow: none; }

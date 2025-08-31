@@ -1,5 +1,4 @@
-import styles from "../../../styles/components/atoms/Toast.module.css";
-import PropTypes from "prop-types";
+import styles from "../../styles/components/atoms/Toast.module.css";
 
 export default function Toast({ type, point = 0, className = "", ...props }) {
   const messageMap = {
@@ -26,7 +25,6 @@ export default function Toast({ type, point = 0, className = "", ...props }) {
       role={role}
       aria-live={ariaLive}
       aria-atomic={true}
-      {...props}
     >
       <span aria-hidden="true">{iconMap[safeType]}</span>
       <span className={styles.text}>{messageMap[safeType]}</span>
