@@ -9,37 +9,112 @@
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
-  transition: transform 120ms ease, background-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
+  transition:
+    transform 120ms ease,
+    background-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
 }
-.button:active { transform: translateY(1px); }
-.button:disabled { background: var(--btn-inactive); color: #fff; cursor: not-allowed; opacity: .8; }
+.button:active {
+  transform: translateY(1px);
+}
+.button:disabled {
+  background: var(--btn-inactive);
+  color: #fff;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
 
 /* Variant: action — 폰트 18px */
-.action { background: var(--brand-blue); color: #fff; font-size: 1.8rem; }
+.action {
+  background: var(--brand-blue);
+  color: #fff;
+  font-size: 1.8rem;
+}
 
 /* Variant: control (아이콘/원형 등) */
-.control { background: var(--background-neutral, #eee); color: var(--text-primary, #111827); }
+.control {
+  background: var(--brand-blue);
+  color: var(--background-secondary);
+}
 
 /* 원형 버튼용 */
-.circle { border-radius: 9999px; padding: 0; }
+.circle {
+  border-radius: 9999px;
+  padding: 0;
+}
 
 /* Full width */
-.fullWidth { width: 100%; }
+.fullWidth {
+  width: 100%;
+}
 
 /* ===== Sizes (action) ===== */
-.size-xl { width: 60rem;  height: 5.5rem; }   /* 600x55 */
-.size-lg { width: 31.2rem; height: 5.5rem; }  /* 312x55 */
-.size-md { width: 14rem;  height: 5.5rem; }   /* 140x55 */
-.size-cancel { width: 28.8rem; height: 5.5rem; } /* 288x55 */
-.size-study-mobile { width: 10.6rem; height: 3.5rem; } /* 106x35 */
-.size-more { width: 28.8rem; height: 5.5rem; } /* 288x55 */
+.size-xl {
+  width: 60rem;
+  height: 5.5rem;
+} /* 600x55 */
+.size-lg {
+  width: 31.2rem;
+  height: 5.5rem;
+} /* 312x55 */
+.size-md {
+  width: 14rem;
+  height: 5.5rem;
+} /* 140x55 */
+.size-cancel {
+  width: 28.8rem;
+  height: 5.5rem;
+} /* 288x55 */
+.size-study-mobile {
+  width: 10.6rem;
+  height: 3.5rem;
+} /* 106x35 */
+.size-more {
+  width: 28.8rem;
+  height: 5.5rem;
+} /* 288x55 */
 
 /* ===== Sizes (control, rect) ===== */
-.size-ctrl-lg { width: 33.3rem; height: 6rem; font-size: 2.8rem; } /* 333x60, 28px */
-.size-ctrl-sm { width: 14rem;  height: 4.5rem; }                    /* 140x45 */
+.size-ctrl-lg {
+  width: 33.3rem;
+  height: 6rem;
+  font-size: 2.8rem;
+} /* 333x60, 28px */
+.size-ctrl-sm {
+  width: 14rem;
+  height: 4.5rem;
+} /* 140x45 */
 
 /* ===== Sizes (control, circle) ===== */
-.size-circle-lg { width: 6.4rem; height: 6.4rem; }  /* 64x64 */
-.size-circle-sm { width: 4.8rem; height: 4.8rem; }  /* 48x48 */
+.size-circle-lg {
+  width: 6.4rem;
+  height: 6.4rem;
+} /* 64x64 */
+.size-circle-sm {
+  width: 4.8rem;
+  height: 4.8rem;
+} /* 48x48 */
 
 /* 중복/잔존 규칙 정리: .action/.size-ctrl-lg 중복 제거, .size-chip 삭제 */
+@media (max-width: 743px) {
+  .size-ctrl-lg {
+    width: 14rem;
+    height: 4.5rem;
+    font-size: 1.8rem;
+    gap: 1rem;
+
+    img {
+      width: 1.7rem;
+    }
+  }
+
+  .size-circle-lg {
+    width: 4.8rem;
+    height: 4.8rem;
+
+    img {
+      width: 2.4rem;
+    }
+  }
+}

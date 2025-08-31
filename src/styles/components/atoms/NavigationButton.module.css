@@ -11,3 +11,11 @@
   border: 1px solid var(--border-gray);
   cursor: pointer;
 }
+
+@media (max-width: 743px) {
+  .navigationButton {
+    padding: 0.8rem 0.6rem 0.8rem 1rem;
+    font-size: 1.6rem;
+    border-radius: 1.5rem;
+  }
+}

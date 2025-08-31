@@ -1,0 +1,246 @@
+/* FocusPage 스타일 */
+.focusPage {
+  max-width: 1248px;
+  margin: 5rem auto;
+  padding: 4rem;
+  position: relative;
+  background-color: var(--background-secondary);
+  border-radius: 1rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* 헤더 영역 */
+.focusHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+}
+
+/* 포인트 컨테이너 */
+.pointBadgeText {
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--text-gray);
+  margin-bottom: 0.8rem;
+}
+
+/* 포인트 배지 */
+.pointBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #e8f5e8;
+  color: #166534;
+  padding: 0.8rem 1.6rem;
+  border-radius: 2rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.pointIcon {
+  font-size: 1.6rem;
+}
+
+.pointText {
+  white-space: nowrap;
+}
+
+/* 타이머 컨테이너 */
+.timerContainer {
+  padding: 4rem 2.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rem;
+  border-radius: 1.6rem;
+  margin: 0 auto;
+  width: 100%;
+  border: 1px solid var(--border-gray);
+}
+
+.timerTitle {
+  font-size: 2.4rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+/* 시간 표시 영역 */
+.timeDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.mainTime {
+  color: #1a1a1a;
+  user-select: none;
+  line-height: 1;
+  min-height: 8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* 시간 입력 필드 스타일 */
+.timeInput {
+  font-size: 15rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-align: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.timeInput:read-only {
+  cursor: default;
+}
+
+.timeInput:not(:read-only) {
+  cursor: text;
+  border-radius: 0.5rem;
+}
+
+/* 경고 상태 (1분 1초 이하) - 파란색 */
+.warningTime {
+  color: #007bff !important;
+}
+
+/* 마이너스 시간 - 회색 */
+.negativeTime {
+  color: #6c757d !important;
+}
+
+.timeSeparator {
+  font-size: 15rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0.5rem;
+}
+
+.minusSign {
+  font-size: 15rem;
+  font-weight: 700;
+  color: #6c757d;
+  margin-right: 0.5rem;
+}
+
+/* 버튼 컨테이너 */
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 6.4rem;
+  gap: 2rem;
+  width: 100%;
+}
+
+/* 토스트 컨테이너 */
+.toastContainer {
+  position: fixed;
+  bottom: 4rem;
+  left: 50%;
+  opacity: 0;
+  transform: translateX(-50%);
+  z-index: 1000;
+  animation: slideUp 1.8s ease-out;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateX(-50%) translateY(100%);
+    opacity: 0;
+  }
+  10% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  90% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 1199px) {
+  .focusPage {
+    width: calc(100% - 4.8rem);
+    padding: 4rem 2.4rem;
+  }
+
+  .mainTime {
+    font-size: 12rem;
+  }
+
+  .timeInput {
+    font-size: 12rem;
+  }
+
+  .timeSeparator {
+    font-size: 12rem;
+  }
+
+  .minusSign {
+    font-size: 12rem;
+  }
+}
+
+@media (max-width: 743px) {
+  .focusPage {
+    width: calc(100% - 3.2rem);
+    padding: 1.6rem;
+  }
+
+  .mainTime {
+    font-size: 8rem;
+  }
+
+  .timeInput {
+    font-size: 8rem;
+  }
+
+  .timeSeparator {
+    font-size: 8rem;
+  }
+
+  .minusSign {
+    font-size: 8rem;
+  }
+
+  .focusHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.6rem;
+  }
+
+  .buttonContainer {
+    gap: 0.8rem;
+  }
+
+  .timerContainer {
+    gap: 2.4rem 1.6rem;
+  }
+}
