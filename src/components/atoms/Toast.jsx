@@ -1,33 +1,32 @@
 import styles from "../../styles/components/atoms/Toast.module.css";
 
-export default function Toast({
-  type = "info",           // 'info' | 'success' | 'error' | 'point'
-  role = "status",
-  message,
-  className = "",
-  ...props
-}) {
-  const allowed = new Set(["info", "success", "error", "point"]);
-  const safeType = allowed.has(type) ? type : "info";
+export default function Toast({ type, point = 0, className = "" }) {
   const messageMap = {
-    info: "알림",
-    success: "완료",
-    error: "에러",
-    point: "포인트",
+    error: "집중이 중단되었습니다.",
+    mismatch: "비밀번호가 일치하지 않습니다. 다시 입력해주세요.",
+    point: `${point}포인트를 획득했습니다!`,
   };
+
+  const iconMap = {
+    error: "🚨",
+    mismatch: "🚨",
+    point: "🎉",
+  };
+
+  const allowedTypes = ["error", "mismatch", "point"];
+  const safeType = allowedTypes.includes(type) ? type : "error";
+
+  // role만으로 라이브영역이 암묵 지정됨 (alert=assertive, status=polite)
+  const role = safeType === "point" ? "status" : "alert";
 
   return (
     <div
       className={`${styles.toast} ${styles[safeType]} ${className}`}
       role={role}
       aria-atomic={true}
-      {...props}
     >
-      <span className={styles.text}>
-        {typeof message === "string" && message.trim().length > 0
-          ? message
-          : messageMap[safeType]}
-      </span>
+      <span aria-hidden="true">{iconMap[safeType]}</span>
+      <span className={styles.text}>{messageMap[safeType]}</span>
     </div>
   );
 }
