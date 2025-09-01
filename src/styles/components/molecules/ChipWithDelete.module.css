@@ -1,0 +1,43 @@
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto; /* 가운데 Chip + 오른쪽 Delete */
+  align-items: center;
+  gap: 0.8rem; /* 8px */
+}
+
+.center {
+  display: flex;
+  justify-content: center; /* 칩 중앙 정렬 */
+}
+
+/* Delete 버튼 */
+.deleteBtn {
+  width: 4rem;
+  height: 4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+
+  background: var(--background-neutral, #EEE);
+  color: var(--warning-red, #dc2626);
+
+  transition: background-color .15s ease, opacity .15s ease;
+}
+
+.deleteBtn:hover { opacity: .9; }
+.deleteBtn:active { opacity: .8; }
+
+.deleteBtn:focus-visible {
+  outline: .2rem solid var(--brand-blue, #3b82f6);
+  outline-offset: .2rem;
+}
+
+.deleteBtn img {
+  width: 2rem;
+  height: 2rem;
+  pointer-events: none;
+}
+
