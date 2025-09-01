@@ -1,12 +1,11 @@
 // Tag.jsx
-import React from "react";
-import styles from "../../styles/components/atoms/Tag.module.css"; // 
+import React from 'react';
+import styles from '../../styles/components/atoms/Tag.module.css'; //
 
 export default function Tag({
   points = 310,
-  size = "md", // "sm" | "md" | "lg"
-  className = "",
-  ariaLabel, // 선택적 커스텀 aria-label
+  size = 'md', // "sm" | "md" | "lg"
+  className = '',
 }) {
   const label = `${points}P 획득`;
 
@@ -18,15 +17,13 @@ export default function Tag({
   }[size];
 
   return (
-    <div
-      className={`${styles.tag} ${sizeClass} ${className}`}
-      role="status"
-      aria-label={ariaLabel || label}
-      title={label}
-    >
-      <span className={styles.tagIcon} aria-hidden="true">
-        🥏
-      </span>
+    <div className={`${styles.tag} ${sizeClass} ${className}`} title={label}>
+      <img
+        src="/assets/icons/tag-icon.svg"
+        alt="tag-icon"
+        aria-hidden="true"
+        className={styles.tagIcon}
+      />
       <span>{points}P 획득</span>
     </div>
   );
