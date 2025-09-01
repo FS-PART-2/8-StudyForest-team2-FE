@@ -1,0 +1,52 @@
+.emojiWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.emojiContainer {
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.pickerButton {
+  font-size: 2rem;
+  margin-left: 0.8rem;
+  padding: 0.6rem 0.8rem;
+  color: #fff;
+  background-color: rgba(121, 121, 121, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.restPopup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.restEmojiContainer {
+  position: absolute;
+  width: 24.2rem;
+  height: 21.8rem;
+  padding: 1.2rem;
+  margin-top: 0.8rem;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.08);
+}
+
+.restCountButton {
+  padding: 0.6rem 0.8rem;
+  font-size: 1.6rem;
+  border: none;
+  background-color: rgba(121, 121, 121, 0.4);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: #fff;
+}

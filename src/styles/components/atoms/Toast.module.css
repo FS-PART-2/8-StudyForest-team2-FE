@@ -5,26 +5,22 @@
   gap: 0.8rem;
   padding: 1.4rem 2.8rem;
   border-radius: 0.5rem;
-  font-size: 1.6rem; /* 16px */
+  font-size: 1.6rem;   /* 16px 기준 */
   font-weight: 500;
   line-height: 1.6;
+  /* 긴 메시지 대응 (CodeRabbit 제안 반영) */
   max-width: min(90vw, 32rem);
+  width: max-content;
 }
 
 .text {
-  white-space: nowrap;
-  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.error,
-.mismatch {
-  background: var(--toast-error-bg, rgba(253, 224, 233, 0.5));
-  color: var(--red-red_F50E0E, #F50E0E);
-}
-
-.point {
-  background: var(--toast-point-bg, rgba(189, 204, 236, 0.5));
-  color: var(--brand-blue, #0013A7);
-}
+/* Variants */
+.info    { background: #edf2ff; color: #1e3a8a; }
+.success { background: #e8f5e8; color: #166534; }
+.error   { background: var(--warning-light, #fee2e2); color: var(--warning-dark, #b91c1c); }
+.point   { background: #e8f8f5; color: #0a3394; }
