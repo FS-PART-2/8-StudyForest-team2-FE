@@ -16,7 +16,7 @@ export default function Toast({ type, point = 0, className = "" }) {
   const allowedTypes = ["error", "mismatch", "point"];
   const safeType = allowedTypes.includes(type) ? type : "error";
 
-  // role만으로 라이브 영역이 암묵 지정됨 (alert=assertive, status=polite)
+  // role만으로 라이브영역이 암묵 지정됨 (alert=assertive, status=polite)
   const role = safeType === "point" ? "status" : "alert";
 
   return (
