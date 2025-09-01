@@ -1,0 +1,16 @@
+.text {
+  font-family: "Pretendard", sans-serif;
+  margin: 0;
+}
+
+/* 크기 */
+.text-xs { font-size: 0.75rem; }   /* 12px */
+.text-sm { font-size: 0.875rem; }  /* 14px */
+.text-md { font-size: 1rem; }      /* 16px */
+.text-lg { font-size: 1.25rem; }   /* 20px */
+.text-xl { font-size: 1.5rem; }    /* 24px */
+
+/* 두께 */
+.text-light { font-weight: 300; }
+.text-normal { font-weight: 400; }
+.text-bold { font-weight: 700; }
