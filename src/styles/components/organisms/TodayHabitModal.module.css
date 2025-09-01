@@ -1,0 +1,104 @@
+/* 오버레이 */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+
+/* 모달 박스: 600 x 781, 패딩 위아래40 좌우24 */
+.modal {
+  width: 60rem;        /* 600px */
+  height: 78.1rem;     /* 781px */
+  background: var(--background-secondary, #fff);
+  border-radius: 1.6rem;
+  padding: 4rem 2.4rem;  /* 40 / 24 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 제목 */
+.title {
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--text-primary, #414141);
+  margin: 0;
+}
+
+/* 칩 리스트: 칩은 항상 가운데 정렬, 8개 이후 스크롤 */
+.list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;          /* 칩 사이 20px */
+  padding: 2rem 0;
+  max-height: 58rem;  /* 대략 8개 나타나도록 */
+}
+
+/* 칩(가운데) + 삭제 버튼(오른쪽 44px 위치) */
+.chipWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 칩은 중앙 고정 */
+}
+
+/* 삭제 버튼: 칩 기준 절대 위치, 오른쪽 패딩에서 44px */
+.deleteBtn {
+  position: absolute;
+  right: -5.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4.8rem;          /* 48px */
+  height: 4.8rem;         /* 48px */
+  border: none;
+  border-radius: 50%;
+  background: var(--background-neutral, #eee);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.deleteIcon {
+  width: 3.2rem;    /* 32px (X 아이콘) */
+  height: 3.2rem;
+  pointer-events: none;
+}
+
+/* 추가 칩도 가운데 */
+.addRow {
+  display: flex;
+  justify-content: center;
+}
+
+/* 하단 버튼 행 */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 2.4rem;  /* 24px */
+}
+
+/* 취소 버튼: 비활성 컬러, 폭 288px */
+.cancelBtn {
+  width: 28.8rem;                     /* 288px */
+  background: var(--btn-inactive) !important;
+  color: var(--text-secondary, #4b4b4b);
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+/* 수정 완료 버튼: brand-blue, 폭 288px */
+.saveBtn {
+  width: 28.8rem;                     /* 288px */
+  background: var(--brand-blue, #0013A7) !important;
+  color: #fff;
+  font-size: 1.8rem;
+}
