@@ -1,6 +1,6 @@
 import styles from "../../styles/components/atoms/Toast.module.css";
 
-export default function Toast({ type, point = 0, className = "", ...props }) {
+export default function Toast({ type, point = 0, className = "" }) {
   const messageMap = {
     error: "집중이 중단되었습니다.",
     mismatch: "비밀번호가 일치하지 않습니다. 다시 입력해주세요.",
@@ -31,9 +31,3 @@ export default function Toast({ type, point = 0, className = "", ...props }) {
     </div>
   );
 }
-
-Toast.propTypes = {
-  type: PropTypes.oneOf(["error", "mismatch", "point"]).isRequired,
-  point: PropTypes.number,
-  className: PropTypes.string,
-};
