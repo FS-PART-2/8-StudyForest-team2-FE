@@ -16,14 +16,13 @@ export default function Toast({ type, point = 0, className = "" }) {
   const allowedTypes = ["error", "mismatch", "point"];
   const safeType = allowedTypes.includes(type) ? type : "error";
 
+  // role만으로 라이브 영역이 암묵 지정됨 (alert=assertive, status=polite)
   const role = safeType === "point" ? "status" : "alert";
-  const ariaLive = safeType === "point" ? "polite" : "assertive";
 
   return (
     <div
       className={`${styles.toast} ${styles[safeType]} ${className}`}
       role={role}
-      aria-live={ariaLive}
       aria-atomic={true}
     >
       <span aria-hidden="true">{iconMap[safeType]}</span>
