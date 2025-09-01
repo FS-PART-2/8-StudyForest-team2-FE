@@ -20,6 +20,9 @@
   --btn-active: #001979;
   --btn-inactive: #84888f;
 
+  /* 테두리 색상 */
+  --border-gray: #ddd;
+
   /* 카드 색상 */
   --card-blue: #ebf2ff;
   --card-green: #e8f5e8;
@@ -64,6 +67,11 @@
   --sticker-ocean-4: #1a4b74;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Pretendard', sans-serif;
+  background-color: var(--background-primary);
 }
