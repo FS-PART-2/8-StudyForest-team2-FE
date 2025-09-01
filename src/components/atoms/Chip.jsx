@@ -2,30 +2,17 @@ import { forwardRef, useEffect, useRef } from "react";
 import styles from "../../styles/components/atoms/Chip.module.css";
 
 /**
- * Chip (40rem x 5.5rem, 10px = 1rem)
- *
- * props:
- * - label: string
+ * Chip Atom
  * - variant: 'neutral' | 'add'
- *   - neutral: 일반 칩
- *   - add    : 추가용 칩(＋만 표시, 항상 비선택 톤)
- * - selected: boolean      (선택 시 브랜드 블루 배경)
- * - editing : boolean      (편집 중이면 1px 브랜드 블루 테두리 + input 표시)
+ * - selected: boolean
+ * - editing: boolean
  * - disabled: boolean
- *
- * - onClick(): void                  칩 클릭(선택/편집 진입 트리거)
- * - onChange(value: string): void    편집 중 입력 변경
- * - onConfirm(e, value: string): void  Enter/blur 저장
- * - onCancel(e): void                Esc 취소
- *
- * 접근성:
- * - neutral 변형: aria-pressed 로 토글 표현(단일선택 그룹이면 radiogroup 사용 고려)
- * - add 변형: 시각용 ＋는 aria-hidden, 버튼에는 aria-label="새 칩 추가"
+ * - onClick, onChange, onConfirm(e, value), onCancel(e)
  */
 const Chip = forwardRef(function Chip(
   {
     label = "",
-    variant = "neutral",   // 'neutral' | 'add'
+    variant = "neutral",
     selected = false,
     editing = false,
     disabled = false,
@@ -41,7 +28,6 @@ const Chip = forwardRef(function Chip(
   const inputRef = useRef(null);
   const ignoreNextBlurRef = useRef(false);
 
-  // 편집 모드 진입 시 자동 포커스 & 전체 선택
   useEffect(() => {
     if (editing && inputRef.current) {
       inputRef.current.focus();
@@ -50,7 +36,6 @@ const Chip = forwardRef(function Chip(
   }, [editing]);
 
   const isAdd = variant === "add";
-  // add 변형은 항상 비선택 톤, neutral은 selected에 따라 톤 결정
   const toneClass = !isAdd && selected ? styles.selected : styles.unselected;
 
   return (
@@ -65,10 +50,10 @@ const Chip = forwardRef(function Chip(
         className,
       ].filter(Boolean).join(" ")}
       onClick={disabled ? undefined : onClick}
-      {...rest}                                {/* 외부 props 먼저 병합 */}
+      {...rest}
       aria-pressed={!isAdd ? selected : undefined}
       aria-disabled={disabled || undefined}
-      aria-label={isAdd ? "새 칩 추가" : rest?.["aria-label"]} /* add는 접근성 라벨 강제 */
+      aria-label={isAdd ? "새 칩 추가" : undefined}
       disabled={disabled}
     >
       {isAdd ? (
@@ -85,7 +70,7 @@ const Chip = forwardRef(function Chip(
               onConfirm?.(e, e.currentTarget.value);
             } else if (e.key === "Escape") {
               e.preventDefault();
-              ignoreNextBlurRef.current = true; // 직후 blur 무시
+              ignoreNextBlurRef.current = true;
               onCancel?.(e);
             }
           }}

@@ -3,13 +3,13 @@ import EmojiCounter from "../components/molecules/EmojiCounter";
 import Chip from "../components/atoms/Chip.jsx";
 
 export default function TestPage() {
-  // ---- 기존 EmojiCounter 테스트 ----
+  // EmojiCounter 테스트
   const emojiData = [
     { id: 1, emoji: "👍", count: 1 },
     { id: 2, emoji: "❤️", count: 1 },
   ];
 
-  // ---- Chip 테스트용 상태 ----
+  // Chip 테스트 상태
   const [chips, setChips] = useState([
     { id: "1", label: "미라클모닝 6시 기상", selected: false },
     { id: "2", label: "운동 30분", selected: false },
@@ -21,14 +21,12 @@ export default function TestPage() {
     const cur = chips.find((c) => c.id === id);
     setEditingId(id);
     setDraft(cur ? cur.label : "");
-    setChips((prev) =>
-      prev.map((c) => ({ ...c, selected: c.id === id }))
-    );
+    setChips((prev) => prev.map((c) => ({ ...c, selected: c.id === id })));
   };
 
-  const confirmEdit = () => {
+  const confirmEdit = (nextLabel) => {
     if (!editingId) return;
-    const text = (draft || "").trim();
+    const text = (nextLabel ?? draft ?? "").trim();
     setChips((prev) =>
       prev.map((c) =>
         c.id === editingId ? { ...c, label: text || c.label } : c
@@ -44,7 +42,10 @@ export default function TestPage() {
   };
 
   const addChip = () => {
-    const id = `id_${Date.now()}`;
+    const id =
+      typeof crypto !== "undefined" && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `id_${Date.now()}`;
     setEditingId(id);
     setDraft("새 습관");
     setChips((prev) => [
@@ -55,13 +56,11 @@ export default function TestPage() {
 
   return (
     <div style={{ display: "grid", gap: "2rem", padding: "1.6rem" }}>
-      {/* 기존 EmojiCounter */}
       <section>
         <h2>EmojiCounter Test</h2>
         <EmojiCounter emojiData={emojiData} />
       </section>
 
-      {/* 새로운 Chip 샌드박스 */}
       <section>
         <h2>Chip Test</h2>
         <div style={{ display: "grid", gap: "0.8rem" }}>
@@ -73,12 +72,11 @@ export default function TestPage() {
               editing={editingId === c.id}
               onClick={() => startEdit(c.id)}
               onChange={(v) => setDraft(v)}
-              onConfirm={confirmEdit}
+              onConfirm={(_, v) => confirmEdit(v)}
               onCancel={cancelEdit}
             />
           ))}
-          {/* 추가용 칩 */}
-          <Chip variant="add" onClick={addChip} />
+          <Chip variant="add" onClick={addChip} aria-label="새 칩 추가" />
         </div>
       </section>
     </div>
