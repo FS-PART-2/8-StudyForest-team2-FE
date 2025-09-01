@@ -4,13 +4,14 @@
   align-items: center;
   justify-content: center;
 
-  width: 40rem;          /* 400px */
-  height: 5.5rem;        /* 55px */
-  padding: 0 1.6rem;     /* 16px */
-  border-radius: 1rem;   /* 10px */
+  width: 40rem;          /* 기본 PC: 400px */
+  height: 5.5rem;        /* 55px 고정 */
+  padding: 0 1.6rem;
+  border-radius: 1rem;
+  box-sizing: border-box;
 
-  border: none;          /* 기본은 테두리 없음 */
-  font-size: 1.6rem;     /* 16px */
+  border: none;
+  font-size: 1.6rem;
   line-height: 1;
   cursor: pointer;
   user-select: none;
@@ -18,8 +19,18 @@
     background-color .15s ease,
     color .15s ease,
     opacity .15s ease,
-    border-color .15s ease;
+    border-color .15s ease,
+    outline-color .15s ease;
 }
+
+/* 모바일 대응 */
+@media (max-width: 480px) {
+  .chip {
+    width: 25.6rem; /* 256px */
+    height: 5.5rem; /* 55px 동일 */
+  }
+}
+
 
 /* 비선택 톤 */
 .unselected {
@@ -29,19 +40,19 @@
 
 /* 선택 톤 */
 .selected {
-  background: var(--brand-blue);
+  background: var(--brand-blue, #3b82f6);
   color: var(--background-secondary, #FFF);
 }
 
 /* 편집 중이면 1px(=0.1rem) 브랜드 블루 테두리 */
 .editing {
-  border: 0.1rem solid var(--brand-blue);
+  border: 0.1rem solid var(--brand-blue, #3b82f6);
 }
 
 .disabled { opacity: .5; cursor: not-allowed; }
 
 .chip:focus-visible {
-  outline: 0.2rem solid var(--brand-blue);
+  outline: 0.2rem solid var(--brand-blue, #3b82f6);
   outline-offset: 0.2rem;
 }
 
