@@ -3,20 +3,26 @@ import PasswordInput from "../molecules/PasswordInput.jsx";
 import Button from "../atoms/Button.jsx";
 import Toast from "../atoms/Toast.jsx";
 import styles from "../../styles/components/organisms/StudyPasswordModal.module.css";
+import { verifyStudyPassword } from '../../utils/api/study/studyPasswordApi';
 
-export default function StudyPasswordModal({ isOpen, onClose, onVerify }) {
+
+export default function StudyPasswordModal({
+  isOpen,
+  onClose,
+  onVerify,   // (pw) => Promise<boolean> | boolean  (검증 실패: false, 네트워크 오류: throw)
+}) {
   const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [showMismatch, setShowMismatch] = useState(false);
   const [showNetworkError, setShowNetworkError] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
 
-  // 모달 열림/닫힘 초기화
+  // 열릴 때 상태 초기화
   useEffect(() => {
     if (!isOpen) {
       setPassword("");
+      setSubmitting(false);
       setShowMismatch(false);
       setShowNetworkError(false);
-      setSubmitting(false);
     }
   }, [isOpen]);
 
@@ -34,27 +40,26 @@ export default function StudyPasswordModal({ isOpen, onClose, onVerify }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!password || submitting) return; // ✅ 중복 제출 가드
+    if (!password || submitting) return; // 중복 제출 가드
 
     try {
       setSubmitting(true);
       setShowNetworkError(false);
       const ok = (await onVerify?.(password)) ?? false;
       if (!ok) {
-        setShowMismatch(true); // 비밀번호 불일치
+        setShowMismatch(true); // 불일치 토스트
         return;
       }
       onClose?.();
     } catch {
-      // 네트워크/서버 오류는 별도 토스트
-      setShowNetworkError(true);
+      setShowNetworkError(true); // 네트워크/서버 오류 토스트
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleChange = (e) => {
-    if (showMismatch) setShowMismatch(false); // 다시 입력 시작 → mismatch 토스트 닫기
+    if (showMismatch) setShowMismatch(false); // 재입력 시작 → mismatch 토스트 숨김
     setPassword(e.target.value);
   };
 
@@ -68,10 +73,14 @@ export default function StudyPasswordModal({ isOpen, onClose, onVerify }) {
         aria-labelledby="studyPasswordTitle"
         aria-describedby="studyPasswordDesc"
       >
-        <h2 id="studyPasswordTitle" className={styles.title}>00연우의 개발공장</h2>
-        <p id="studyPasswordDesc" className={styles.subTitle}>권한이 필요해요!</p>
+        <h2 id="studyPasswordTitle" className={styles.title}>
+          연우의 개발공장
+        </h2>
+        <p id="studyPasswordDesc" className={styles.subTitle}>
+          권한이 필요해요!
+        </p>
 
-        {/* 모바일 폭 제어 wrapper(.content) 필요 시 CSS에서만 제어 */}
+        {/* 모바일 폭 제어 wrapper */}
         <div className={styles.content}>
           <form onSubmit={handleSubmit} className={styles.form}>
             <PasswordInput
@@ -79,7 +88,7 @@ export default function StudyPasswordModal({ isOpen, onClose, onVerify }) {
               onChange={handleChange}
               onSubmit={handleSubmit}
               placeholder="비밀번호를 입력해 주세요"
-              disabled={submitting}                /* ✅ 인풋 비활성화 */
+              disabled={submitting}
             />
 
             <div className={styles.actions}>
@@ -87,21 +96,21 @@ export default function StudyPasswordModal({ isOpen, onClose, onVerify }) {
                 variant="action"
                 size="xl"
                 type="submit"
-                disabled={!password || submitting}   /* ✅ 버튼 비활성화 */
+                disabled={!password || submitting}
               >
                 {submitting ? "확인 중..." : "수정하러 가기"}
               </Button>
             </div>
           </form>
 
-          {/* PC: 우상단 absolute, Mobile: 버튼 아래 중앙 (CSS로 제어) */}
+          {/* PC: 우상단 absolute / 모바일: 버튼 아래 중앙 (CSS에서 분기) */}
           <button className={styles.exit} onClick={onClose}>
             나가기
           </button>
         </div>
       </div>
 
-      {/* 토스트: 화면 기준 하단 4rem 고정 */}
+      {/* 화면 하단 4rem 고정 토스트 */}
       {showMismatch && (
         <div className={styles.toastFixed}>
           <Toast type="mismatch" />

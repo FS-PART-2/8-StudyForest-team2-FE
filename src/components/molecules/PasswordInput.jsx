@@ -10,9 +10,9 @@ const PasswordInput = ({
   label = "비밀번호",
 }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const inputId = useId(); // ✅ 라벨-입력 연계 (접근성)
+  const inputId = useId(); // 라벨-입력 연계 (접근성)
 
-  // Enter → 폼 onSubmit과 충돌 방지: 이벤트 전달 + 기본동작 방지
+  // Enter: 이벤트 전달 + 기본동작 방지(중복 submit 방지)
   const handleKeyDown = useCallback(
     (e) => {
       if (e.key === "Enter" && !disabled) {
@@ -42,9 +42,10 @@ const PasswordInput = ({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled}
-          autoComplete="current-password" /* ✅ 접근성/UX */
+          autoComplete="current-password"
           className={styles.input}
         />
+
         <button
           type="button"
           onClick={togglePasswordVisibility}
@@ -53,7 +54,11 @@ const PasswordInput = ({
           aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
         >
           <img
-            src={showPassword ? "/assets/icons/pswd-eye-off.svg" : "/assets/icons/pswd-eye.svg"}
+            src={
+              showPassword
+                ? "/assets/icons/pswd-eye-off.svg"
+                : "/assets/icons/pswd-eye.svg"
+            }
             alt=""
             width="20"
             height="20"

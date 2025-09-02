@@ -8,32 +8,30 @@
   font-size: 1.6rem;
   font-weight: 500;
   line-height: 1.6;
-  /* 긴 메시지 대응 */
-  max-width: min(90vw, 32rem); /* ✅ invalid 'min(90vw)' 수정 */
-  width: max-content;
+  width: max-content;       /* 글자 길이만큼 가로폭 */
+  white-space: nowrap;      /* 줄바꿈 방지 */
 }
 
 .text {
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 /* Variants */
-.info    { background: #edf2ff; color: #1e3a8a; }
-.success { background: #e8f5e8; color: #166534; }
-.error   { background: var(--warning-light, #fee2e2); color: var(--warning-dark, #b91c1c); }
-
-/* mismatch 대비 개선 (AA 4.5:1 준수하도록 글자색 강화) */
+.info {
+  background: #edf2ff;
+  color: #1e3a8a;
+}
+.success {
+  background: #e8f5e8;
+  color: #166534;
+}
+.error {
+  background: var(--warning-light, #fee2e2);
+  color: var(--warning-dark, #b91c1c);
+}
 .mismatch {
   background-color: var(--pink-pink_FDE0E9, #FDE0E9);
-  color: #9C0A0A;         /* #F50E0E → #9C0A0A로 콘트라스트 향상 */
+  color: #9C0A0A;
   width: max-content;
-}
-
-/* 필요 시 mismatch는 말줄임 해제 & 한 줄 유지 */
-.mismatch .text {
   white-space: nowrap;
-  overflow: visible;
-  text-overflow: clip;
 }
