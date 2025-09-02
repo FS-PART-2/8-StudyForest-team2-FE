@@ -4,3 +4,15 @@
   text-align: center;
   padding: 2.5rem 20rem;
 }
+
+.studyList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+}
+
+.studyPageTitle {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+}

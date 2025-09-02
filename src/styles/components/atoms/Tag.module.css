@@ -1,0 +1,43 @@
+/* Tag.module.css */
+
+/* 기본 스타일 */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(121, 121, 121, 0.8);
+  color: #ffffff;
+  white-space: nowrap;
+  vertical-align: middle;
+  margin: 0;
+  gap: 0.4rem; /* 아이콘과 텍스트 사이 간격 */
+  border-radius: 0.8rem; /* 둥근 테두리 */
+  font-weight: 400;
+}
+
+/* 크기 옵션 */
+.tagSm {
+  font-size: 1.2rem;
+  padding: 0.4rem 0.8rem;
+}
+.tagSm .tagIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.tagMd {
+  font-size: 1.2rem;
+  padding: 0.4rem 1.2rem;
+}
+.tagMd .tagIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.tagLg {
+  font-size: 1.6rem;
+  padding: 0.6rem 1.2rem;
+}
+.tagLg .tagIcon {
+  width: 1.9rem;
+  height: 1.9rem;
+}
