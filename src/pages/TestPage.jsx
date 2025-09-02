@@ -1,15 +1,17 @@
 // src/pages/TestPage.jsx
 import React, { useState } from "react";
 
-// Organisms / Molecules / Atoms
-import TodayHabitModal from "../components/organisms/TodayHabitModal.jsx";
-import EmojiCounter from "../components/molecules/EmojiCounter";
+// Atoms / Molecules / Organisms
+import Button from "../components/atoms/Button.jsx";
 import Chip from "../components/atoms/Chip.jsx";
+import EmojiCounter from "../components/molecules/EmojiCounter";
+import TodayHabitModal from "../components/organisms/TodayHabitModal.jsx";
+import StudyPasswordModal from "../components/organisms/StudyPasswordModal.jsx";
 import Card from "../components/organisms/Card.jsx";
 
 export default function TestPage() {
   /** ------------------------------
-   *  EmojiCounter demo
+   *  EmojiCounter demo (develop)
    *  ------------------------------ */
   const emojiData = [
     { id: 1, emoji: "👍", count: 1 },
@@ -17,7 +19,7 @@ export default function TestPage() {
   ];
 
   /** ------------------------------
-   *  Chip demo (select & inline edit)
+   *  Chip demo (develop)
    *  ------------------------------ */
   const [chips, setChips] = useState([
     { id: "1", label: "미라클모닝 6시 기상", selected: false },
@@ -64,27 +66,38 @@ export default function TestPage() {
   };
 
   /** ------------------------------
-   *  TodayHabitModal demo
+   *  TodayHabitModal demo (develop)
    *  ------------------------------ */
-  const [open, setOpen] = useState(true);
+  const [openHabitModal, setOpenHabitModal] = useState(false);
   const [items, setItems] = useState([]); // 비어 있으면 Add만 보임
 
   const addItem = () => setItems((prev) => [...prev, "새 습관"]);
   const deleteItem = (idx) =>
     setItems((prev) => prev.filter((_, i) => i !== idx));
 
-  const handleClose = () => setOpen(false);
-  const handleSave = () => {
+  const handleHabitClose = () => setOpenHabitModal(false);
+  const handleHabitSave = () => {
     // TODO: 저장 로직 연동
-    setOpen(false); // 저장 후 닫기
+    setOpenHabitModal(false); // 저장 후 닫기
   };
+
+  /** ------------------------------
+   *  StudyPasswordModal demo (feature)
+   *  ------------------------------ */
+  const [openStudyModal, setOpenStudyModal] = useState(false);
+
+  // 데모 검증: "1234"만 통과
+  const verifyStudyPassword = async (pw) => pw === "1234";
 
   return (
     <div style={{ display: "grid", gap: "2rem", padding: "1.6rem" }}>
-      <header>
-        <button onClick={() => setOpen(true)} aria-label="오늘의 습관 모달 열기">
-          모달 열기
-        </button>
+      <header style={{ display: "flex", gap: "1rem" }}>
+        <Button variant="action" size="md" onClick={() => setOpenHabitModal(true)}>
+          오늘의 습관 모달 열기
+        </Button>
+        <Button variant="action" size="md" onClick={() => setOpenStudyModal(true)}>
+          스터디 비밀번호 모달 열기
+        </Button>
       </header>
 
       <section>
@@ -112,13 +125,21 @@ export default function TestPage() {
         </div>
       </section>
 
+      {/* TodayHabitModal (develop) */}
       <TodayHabitModal
-        open={open}
+        open={openHabitModal}
         items={items}
         onAdd={addItem}
         onDelete={deleteItem}
-        onClose={handleClose}
-        onSave={handleSave}
+        onClose={handleHabitClose}
+        onSave={handleHabitSave}
+      />
+
+      {/* StudyPasswordModal (feature) */}
+      <StudyPasswordModal
+        isOpen={openStudyModal}
+        onClose={() => setOpenStudyModal(false)}
+        onVerify={verifyStudyPassword}
       />
     </div>
   );
