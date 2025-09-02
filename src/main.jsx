@@ -6,7 +6,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { Route, Routes } from 'react-router-dom';
 import { Layout } from './components/organisms/Layout';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { MainPage } from './pages/MainPage';
 import { StudyPage } from './pages/StudyPage';
 import TestPage from './pages/TestPage';
 import FocusPage from './pages/FocusPage';
@@ -16,8 +15,7 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<MainPage />} />
-          <Route path="/study" element={<StudyPage />} />
+          <Route index element={<StudyPage />} />
           <Route path="/focus" element={<FocusPage />} />
           <Route path="/test" element={<TestPage />} />
         </Route>
