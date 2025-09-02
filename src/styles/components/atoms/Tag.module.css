@@ -4,50 +4,40 @@
 .tag {
   display: inline-flex;
   align-items: center;
-  background: rgba(121, 121, 121, 0.80);
+  background: rgba(121, 121, 121, 0.8);
   color: #ffffff;
   white-space: nowrap;
   vertical-align: middle;
   margin: 0;
-  gap: 0.125rem; /* 아이콘과 텍스트 사이 간격 */
-  border-radius: 0.275rem; /* 둥근 테두리 */
-  border: 1px solid rgba(0, 0, 0, 0.30);
-  font-weight: 500;
-}
-
-.tagIcon {
-  width: 1rem; /* 16px */
-  height: 1rem; /* 16px */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-right: 0.25rem; /* 아이콘과 텍스트 사이 간격 */
+  gap: 0.4rem; /* 아이콘과 텍스트 사이 간격 */
+  border-radius: 0.8rem; /* 둥근 테두리 */
+  font-weight: 400;
 }
 
 /* 크기 옵션 */
 .tagSm {
-  font-size: 0.75rem; /* 12px */
-  padding: 0.25rem 0.5rem; /* 상하 4px, 좌우 8px */
+  font-size: 1.2rem;
+  padding: 0.4rem 0.8rem;
 }
 .tagSm .tagIcon {
-  width: 0.875rem; /* 14px */
-  height: 0.875rem; /* 14px */
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
 .tagMd {
-  font-size: 0.75rem; /* 12px */
-  padding: 0.25rem 0.75rem; /* 상하 4px, 좌우 12px */
+  font-size: 1.2rem;
+  padding: 0.4rem 1.2rem;
 }
 .tagMd .tagIcon {
-  width: 1rem; /* 16px */
-  height: 1rem; /* 16px */
+  width: 1.4rem;
+  height: 1.4rem;
 }
 
 .tagLg {
-  font-size: 1rem; /* 16px */
-  padding: 0.375rem 0.75rem; /* 상하 6px, 좌우 12px */
+  font-size: 1.6rem;
+  padding: 0.6rem 1.2rem;
 }
 .tagLg .tagIcon {
-  width: 1.25rem; /* 20px */
-  height: 1.25rem; /* 20px */
+  width: 1.9rem;
+  height: 1.9rem;
 }
