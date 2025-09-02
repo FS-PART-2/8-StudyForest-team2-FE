@@ -1,8 +1,5 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useId } from "react";
 import styles from "../../styles/components/molecules/PasswordInput.module.css";
-// 아이콘이 public/assets/icons 안에 있다면 ↓ 이렇게 변경
-// import eye from "../../assets/icons/pswd-eye.svg";
-// import eyeOff from "../../assets/icons/pswd-eye-off.svg";
 
 const PasswordInput = ({
   value,
@@ -10,13 +7,17 @@ const PasswordInput = ({
   onSubmit,
   placeholder = "비밀번호를 입력하세요",
   disabled = false,
+  label = "비밀번호",
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const inputId = useId(); // ✅ 라벨-입력 연계 (접근성)
 
+  // Enter → 폼 onSubmit과 충돌 방지: 이벤트 전달 + 기본동작 방지
   const handleKeyDown = useCallback(
     (e) => {
       if (e.key === "Enter" && !disabled) {
-        onSubmit?.();
+        e.preventDefault();
+        onSubmit?.(e);
       }
     },
     [disabled, onSubmit]
@@ -28,16 +29,20 @@ const PasswordInput = ({
 
   return (
     <div className={styles.container}>
-      {/* 라벨 추가 */}
-      <label className={styles.label}>비밀번호</label>
+      <label className={styles.label} htmlFor={inputId}>
+        {label}
+      </label>
+
       <div className={styles.wrapper}>
         <input
+          id={inputId}
           type={showPassword ? "text" : "password"}
           value={value}
           onChange={onChange}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled}
+          autoComplete="current-password" /* ✅ 접근성/UX */
           className={styles.input}
         />
         <button
