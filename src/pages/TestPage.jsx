@@ -8,10 +8,11 @@ import EmojiCounter from "../components/molecules/EmojiCounter";
 import TodayHabitModal from "../components/organisms/TodayHabitModal.jsx";
 import StudyPasswordModal from "../components/organisms/StudyPasswordModal.jsx";
 import Card from "../components/organisms/Card.jsx";
+import SearchBar from "../components/molecules/SearchBar.jsx";   // ✅ 주석 해제
 
 export default function TestPage() {
   /** ------------------------------
-   *  EmojiCounter demo (develop)
+   *  EmojiCounter demo
    *  ------------------------------ */
   const emojiData = [
     { id: 1, emoji: "👍", count: 1 },
@@ -19,7 +20,7 @@ export default function TestPage() {
   ];
 
   /** ------------------------------
-   *  Chip demo (develop)
+   *  Chip demo
    *  ------------------------------ */
   const [chips, setChips] = useState([
     { id: "1", label: "미라클모닝 6시 기상", selected: false },
@@ -66,39 +67,53 @@ export default function TestPage() {
   };
 
   /** ------------------------------
-   *  TodayHabitModal demo (develop)
+   *  TodayHabitModal demo
    *  ------------------------------ */
   const [openHabitModal, setOpenHabitModal] = useState(false);
-  const [items, setItems] = useState([]); // 비어 있으면 Add만 보임
-
+  const [items, setItems] = useState([]);
   const addItem = () => setItems((prev) => [...prev, "새 습관"]);
-  const deleteItem = (idx) =>
-    setItems((prev) => prev.filter((_, i) => i !== idx));
-
+  const deleteItem = (idx) => setItems((prev) => prev.filter((_, i) => i !== idx));
   const handleHabitClose = () => setOpenHabitModal(false);
-  const handleHabitSave = () => {
-    // TODO: 저장 로직 연동
-    setOpenHabitModal(false); // 저장 후 닫기
+  const handleHabitSave = () => setOpenHabitModal(false);
+
+  /** ------------------------------
+   *  StudyPasswordModal demo
+   *  ------------------------------ */
+  const [isOpenStudyModal, setIsOpenStudyModal] = useState(false);
+  const handleVerify = async (password) => {
+    if (password !== "1234") return false;
+    setIsOpenStudyModal(false);
+    return true;
   };
 
   /** ------------------------------
-   *  StudyPasswordModal demo (feature)
+   *  SearchBar demo
    *  ------------------------------ */
-  const [openStudyModal, setOpenStudyModal] = useState(false);
-
-  // 데모 검증: "1234"만 통과
-  const verifyStudyPassword = async (pw) => pw === "1234";
+  const [search, setSearch] = useState("");
 
   return (
     <div style={{ display: "grid", gap: "2rem", padding: "1.6rem" }}>
       <header style={{ display: "flex", gap: "1rem" }}>
-        <Button variant="action" size="md" onClick={() => setOpenHabitModal(true)}>
-          오늘의 습관 모달 열기
+        <Button variant="action" size="lg" onClick={() => setOpenHabitModal(true)}>
+          오늘의 습관 모달
         </Button>
-        <Button variant="action" size="md" onClick={() => setOpenStudyModal(true)}>
-          스터디 비밀번호 모달 열기
+        <Button variant="action" size="lg" onClick={() => setIsOpenStudyModal(true)}>
+          스터디 비밀번호모달
         </Button>
       </header>
+
+      {/* ✅ SearchBar lg */}
+      <section>
+        <h2>SearchBar Test</h2>
+        <SearchBar
+          value={search}
+          onChange={(v) => setSearch(v)}
+          onSubmit={(v) => setSearch(v)}
+          placeholder="스터디 검색"
+          size="lg"
+        />
+        <p style={{ marginTop: "1rem" }}>검색어: {search}</p>
+      </section>
 
       <section>
         <h2>EmojiCounter Test</h2>
@@ -125,7 +140,6 @@ export default function TestPage() {
         </div>
       </section>
 
-      {/* TodayHabitModal (develop) */}
       <TodayHabitModal
         open={openHabitModal}
         items={items}
@@ -135,11 +149,10 @@ export default function TestPage() {
         onSave={handleHabitSave}
       />
 
-      {/* StudyPasswordModal (feature) */}
       <StudyPasswordModal
-        isOpen={openStudyModal}
-        onClose={() => setOpenStudyModal(false)}
-        onVerify={verifyStudyPassword}
+        isOpen={isOpenStudyModal}
+        onClose={() => setIsOpenStudyModal(false)}
+        onVerify={handleVerify}
       />
     </div>
   );
