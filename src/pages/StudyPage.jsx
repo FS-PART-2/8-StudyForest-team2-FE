@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from '../styles/pages/StudyPage.module.css';
 import { studyApi } from '../utils/api/study/getStudyApi';
 import Card from '../components/organisms/Card';
-import { CARD_PRESETS } from '../utils/constants/cardPresets';
+import Dropdown from '../components/atoms/Dropdown';
 
 export function StudyPage() {
   const [studyList, setStudyList] = useState([]);
@@ -17,19 +17,41 @@ export function StudyPage() {
   }, []);
 
   return (
-    <main className={styles.studyPage}>
-      <h1 className={styles.studyPageTitle}>스터디 둘러보기</h1>
-      <div className={styles.studyList}>
-        {studyList.map(study => (
-          <Card
-            key={study.id}
-            preset={'SOLID_GREEN'}
-            title={study.name}
-            subtitle={study.createdAt.split('T')[0]}
-            description={study.content}
-          />
-        ))}
-      </div>
+    <main className={styles.studyPageContainer}>
+      <section className={styles.studyPageWrapper}>
+        <h1 className={styles.studyPageTitle}>최근 조회한 스터디</h1>
+        <div className={styles.studyList}>
+          {studyList.map(study => (
+            <Card
+              key={study.id}
+              preset={'SOLID_BLUE'}
+              nick={study.nick}
+              title={study.name}
+              createdAt={study.createdAt.split('T')[0]}
+              description={study.content}
+            />
+          ))}
+        </div>
+      </section>
+      <section className={styles.studyPageWrapper}>
+        <h1 className={styles.studyPageTitle}>스터디 둘러보기</h1>
+        <div className={styles.studyListFilter}>
+          <input type="text" />
+          <Dropdown />
+        </div>
+        <div className={styles.studyList}>
+          {studyList.map(study => (
+            <Card
+              key={study.id}
+              preset={'SOLID_BLUE'}
+              nick={study.nick}
+              title={study.name}
+              createdAt={study.createdAt.split('T')[0]}
+              description={study.content}
+            />
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
