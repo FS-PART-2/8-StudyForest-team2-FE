@@ -9,9 +9,13 @@ export function StudyPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await studyApi.getStudyApi();
-      console.log(data);
-      setStudyList(data.studies);
+      try {
+        const data = await studyApi.getStudyApi();
+        console.log(data);
+        setStudyList(data.studies);
+      } catch (error) {
+        console.error(error);
+      }
     };
     fetchData();
   }, []);
