@@ -3,6 +3,8 @@ import Tag from '../atoms/Tag';
 import Text from '../atoms/Text';
 import Emoji from '../atoms/Emoji';
 import { CARD_PRESETS } from '../../utils/constants/cardPresets';
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
 
 /**
  * Card 컴포넌트
@@ -13,6 +15,7 @@ import { CARD_PRESETS } from '../../utils/constants/cardPresets';
  * @param {string} props.textColor - 커스텀 텍스트 색상
  * @param {number} props.overlayOpacity - 오버레이 투명도 (0-1)
  * @param {number} props.points - 획득 포인트 (기본값: 310)
+ * @param {string} props.nickname - 유저 닉네임
  * @param {string} props.title - 카드 제목
  * @param {string} props.subtitle - 카드 부제목
  * @param {string} props.description - 카드 설명
@@ -25,16 +28,16 @@ export default function Card({
   preset,
   backgroundImage,
   backgroundColor,
-  textColor,
   overlayOpacity,
-  points = 310,
+  nick,
+  points = 5,
   title = '이우더의 UX 스터디',
-  subtitle = '62일째 진행 중',
+  createdAt = '62',
   description = 'Slow And Steady Wins The Race!!',
   emojiData = [
-    { emoji: '👍', count: 37 },
-    { emoji: '🔥', count: 26 },
-    { emoji: '❤️', count: 14 },
+    { emoji: '👍', count: 1 },
+    { emoji: '🔥', count: 3 },
+    { emoji: '❤️', count: 5 },
   ],
   onClick,
   isSelected = false,
@@ -44,7 +47,7 @@ export default function Card({
 
   const finalBackgroundImage = backgroundImage || presetData?.backgroundImage;
   const finalBackgroundColor = backgroundColor || presetData?.backgroundColor;
-  const finalTextColor = textColor || presetData?.textColor || '#FFFFFF';
+
   const finalOverlayOpacity =
     overlayOpacity !== undefined
       ? overlayOpacity
@@ -75,6 +78,16 @@ export default function Card({
     }
   };
 
+  const [daysPassed, setDaysPassed] = useState(createdAt);
+  const calculateDaysPassed = createdAt => {
+    const today = dayjs();
+    const createdDate = dayjs(createdAt);
+    setDaysPassed(today.diff(createdDate, 'day'));
+  };
+  useEffect(() => {
+    calculateDaysPassed('2025-09-01');
+  }, [createdAt]);
+
   return (
     <div
       className={`${styles.card} ${isSelected ? styles.selected : ''}`}
@@ -88,17 +101,32 @@ export default function Card({
 
       <div className={styles.cardContent}>
         <div className={styles.tagSection}>
+          <Text
+            size="lg"
+            weight="bold"
+            color={presetData?.titleTextColor}
+            tag="h3"
+          >
+            <b>{nick}</b>의 {title}
+          </Text>
           <Tag points={points} size="sm" />
         </div>
 
         <div className={styles.textSection}>
-          <Text size="lg" weight="bold" color={finalTextColor} as="h3">
-            {title}
+          <Text
+            size="sm"
+            weight="normal"
+            color={presetData?.dayTextColor}
+            tag="p"
+          >
+            {`${daysPassed}일째 진행 중`}
           </Text>
-          <Text size="sm" weight="normal" color={finalTextColor} as="p">
-            {subtitle}
-          </Text>
-          <Text size="md" weight="normal" color={finalTextColor} as="p">
+          <Text
+            size="md"
+            weight="normal"
+            color={presetData?.descriptionTextColor}
+            tag="p"
+          >
             {description}
           </Text>
         </div>

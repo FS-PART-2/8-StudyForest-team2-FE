@@ -1,12 +1,14 @@
 // 카드 프리셋 정의
 export const CARD_PRESETS = {
   // 단색 배경 프리셋
-  SOLID_GRAY: {
+  SOLID_BLUE: {
     id: 'solid-gray',
-    name: '회색',
+    name: '파란색',
     type: 'solid',
-    backgroundColor: '#9CA3AF',
-    textColor: '#FFFFFF',
+    backgroundColor: 'var(--card-blue)',
+    titleTextColor: 'var(--text-primary)',
+    dayTextColor: 'var(--text-gray)',
+    descriptionTextColor: 'var(--text-primary)',
     overlayOpacity: 0,
   },
   SOLID_GREEN: {
@@ -14,7 +16,7 @@ export const CARD_PRESETS = {
     name: '연두색',
     type: 'solid',
     backgroundColor: '#84CC16',
-    textColor: '#FFFFFF',
+
     overlayOpacity: 0,
   },
   SOLID_MINT: {

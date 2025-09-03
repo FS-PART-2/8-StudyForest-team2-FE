@@ -1,12 +1,12 @@
-.customDropdown { 
-  font-size: 1rem;
-  font-style: normal; 
+.customDropdown {
+  font-size: 1.6rem;
+  font-style: normal;
   font-weight: 400;
   color: #818181;
-  padding: 0.5625rem 1.25rem;
-  border-radius: 0.625rem;
-  background-color: #fff;
-  cursor: pointer; 
+  padding: 0.9rem 2rem;
+  border-radius: 1rem;
+  background-color: var(--background-secondary);
+  cursor: pointer;
 }
 
 .customDropdown option {
