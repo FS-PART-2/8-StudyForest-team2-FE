@@ -118,3 +118,21 @@
     }
   }
 }
+
+/* Variant: outline — 흰 배경 + 회색 테두리 */
+.outline {
+  background: #fff;
+  color: var(--text-primary);
+  border: 1px solid #ccc; /* 회색 테두리 */
+  font-size: 1.6rem;
+}
+
+.outline:hover {
+  border-color: #999;
+}
+
+.outline:disabled {
+  background: #f5f5f5;
+  color: #aaa;
+  border-color: #ddd;
+}

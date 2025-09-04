@@ -8,7 +8,7 @@ export function Header() {
 
   // 스터디 만들기 버튼 클릭 시 스터디 생성 페이지로 이동
   const handleLinkToCreateStudy = () => {
-    navigate('/study');
+    navigate('/study/new');
   };
 
   // 현재 페이지가 스터디 메인페이지 인지 확인

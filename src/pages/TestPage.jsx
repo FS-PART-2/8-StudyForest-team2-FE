@@ -8,7 +8,7 @@ import EmojiCounter from "../components/molecules/EmojiCounter";
 import TodayHabitModal from "../components/organisms/TodayHabitModal.jsx";
 import StudyPasswordModal from "../components/organisms/StudyPasswordModal.jsx";
 import Card from "../components/organisms/Card.jsx";
-import SearchBar from "../components/molecules/SearchBar.jsx";   // ✅ 주석 해제
+import SearchBar from "../components/molecules/SearchBar.jsx";   // 주석 해제
 
 export default function TestPage() {
   /** ------------------------------
@@ -97,12 +97,13 @@ export default function TestPage() {
         <Button variant="action" size="lg" onClick={() => setOpenHabitModal(true)}>
           오늘의 습관 모달
         </Button>
-        <Button variant="action" size="lg" onClick={() => setIsOpenStudyModal(true)}>
+        {/* outline 버튼으로 변경 */}
+        <Button variant="outline" size="lg" onClick={() => setIsOpenStudyModal(true)}>
           스터디 비밀번호모달
         </Button>
       </header>
 
-      {/* ✅ SearchBar lg */}
+      {/* SearchBar lg */}
       <section>
         <h2>SearchBar Test</h2>
         <SearchBar
