@@ -108,9 +108,9 @@ export function StudyCreatePage() {
       const background = selectedBgId;
 
       const data = await createStudy({
-        nickname,
-        studyName,
-        description,
+        nickname: nickname.trim(),
+        studyName: studyName.trim(),
+        description: description.trim(),
         background,
         password,
         passwordConfirm,
