@@ -65,7 +65,7 @@ export function StudyPage() {
               preset={'img-08'}
               nick={study.nick}
               title={study.name}
-              createdAt={study.createdAt.split('T')[0]}
+              createdAt={study?.createdAt?.split('T')[0]}
               description={study.content}
             />
           ))}
@@ -88,7 +88,7 @@ export function StudyPage() {
                 nick={study.nick}
                 title={study.name}
                 points={study?.points[0]?.value || 0}
-                createdAt={study.createdAt.split('T')[0]}
+                createdAt={study?.createdAt?.split('T')[0]}
                 description={study.content}
               />
             ))}
