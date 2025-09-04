@@ -1,5 +1,5 @@
-import React from "react";
-import styles from "../../styles/components/atoms/Input.module.css";
+import React from 'react';
+import styles from '../../styles/components/atoms/Input.module.css';
 
 /**
  * 기본 Input 컴포넌트 (재사용 가능)
@@ -10,11 +10,11 @@ export default function Input({
   onBlur,
   onKeyDown,
   placeholder,
-  type = "text",
+  type = 'text',
   size, // "lg" | "mobile" 등 (내부에서 size-${size}로 변환)
   autoFocus = false,
   disabled = false,
-  className = "",
+  className = '',
   leftSlot,
   rightSlot,
   leftInteractive = false,
@@ -33,14 +33,12 @@ export default function Input({
         size && styles[`size-${size}`],
         leftInteractive && styles.leftInteractive,
         className,
-      ].filter(Boolean).join(" ")}
+      ]
+        .filter(Boolean)
+        .join(' ')}
       style={style}
     >
-      {hasLeft && (
-        <div className={styles.leftSlot}>
-          {leftSlot}
-        </div>
-      )}
+      {hasLeft && <div className={styles.leftSlot}>{leftSlot}</div>}
 
       <input
         className={styles.input}
@@ -55,11 +53,7 @@ export default function Input({
         {...rest}
       />
 
-      {hasRight && (
-        <div className={styles.rightSlot}>
-          {rightSlot}
-        </div>
-      )}
+      {hasRight && <div className={styles.rightSlot}>{rightSlot}</div>}
     </div>
   );
 }

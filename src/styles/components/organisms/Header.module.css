@@ -6,6 +6,18 @@
   margin-bottom: 4rem;
 }
 
+.headerButtons {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.headerButton {
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--brand-blue);
+}
+
 @media (max-width: 1024px) {
   .header {
     padding: 2.25rem 4.4rem;
