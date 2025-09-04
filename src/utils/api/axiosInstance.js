@@ -1,21 +1,47 @@
 import axios from 'axios';
 
-const baseURL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080';
-
 export const instance = axios.create({
-  baseURL,
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: import.meta.env.VITE_API_TEST_URL, // .env 파일에 정의된 환경변수 / 변경 필요
+  timeout: 5000,
 });
 
-// 필요하면 인터셉터 추가
-// instance.interceptors.request.use((config) => config);
-// instance.interceptors.response.use((res) => res, (err) => Promise.reject(err));
+// 응답 인터셉터로 공통 에러 처리
+instance.interceptors.response.use(
+  response => response,
+  error => {
+    console.error('API 에러:', error.response?.data || error.message);
 
-// 편의상 같은 걸 http 이름으로도 노출 (기존 코드 호환)
-export const http = instance;
+    // 에러 타입별 처리
+    switch (error.response?.status) {
+      case 400:
+        console.error('잘못된 요청');
+        break;
+      case 401:
+        console.error('인증 오류');
+        break;
+      case 403:
+        console.error('권한 없음');
+        break;
+      case 404:
+        console.error('리소스를 찾을 수 없음');
+        break;
+      case 409:
+        console.error('리소스 충돌');
+        break;
+      case 500:
+        console.error('내부 서버 오류');
+        break;
+      case 502:
+        console.error('게이트웨이 오류');
+        break;
+      case 503:
+        console.error('서비스 이용 불가');
+        break;
+      case 504:
+        console.error('게이트웨이 시간 초과');
+        break;
+    }
 
-// default 도 내보내서 과거 코드도 깨지지 않게
-export default instance;
+    return Promise.reject(error);
+  },
+);

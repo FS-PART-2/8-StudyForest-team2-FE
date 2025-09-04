@@ -1,10 +1,10 @@
-import React from "react";
-import Input from "../atoms/Input.jsx";
-import styles from "../../styles/components/molecules/SearchBar.module.css";
+import React from 'react';
+import Input from '../atoms/Input.jsx';
+import styles from '../../styles/components/molecules/SearchBar.module.css';
 
 export default function SearchBar({
   value,
-  onChange,
+  onChange = () => {},
   onSubmit,
   placeholder = "검색어를 입력하세요",
   ariaLabel = "검색어", // 접근성을 위한 별도 라벨
@@ -22,6 +22,8 @@ export default function SearchBar({
     </svg>
   ),
 }) {
+
+
   const handleChange = (e) => {
     onChange?.(e);
   };

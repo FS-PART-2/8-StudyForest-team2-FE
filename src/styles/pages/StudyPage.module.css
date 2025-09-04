@@ -34,10 +34,26 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2.4rem;
+  min-height: 51rem;
 }
 
 .studyPageTitle {
   font-size: 2.4rem;
   font-weight: 700;
   margin-bottom: 2.5rem;
+}
+
+.studyListEmpty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40rem;
+  width: 100%;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--text-gray);
+}
+
+.studyListMore {
+  text-align: center;
 }
