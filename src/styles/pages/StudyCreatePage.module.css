@@ -28,10 +28,10 @@
 
 /* 섹션 공통: 간격 줄임 */
 .section { 
-  padding-bottom: 1.6rem; /* 24px → 16px로 줄임 */
-  margin-bottom: 0.8rem;  /* 16px → 8px로 줄임 */
+  padding-bottom: 1.6rem;
+  margin-bottom: 0.8rem;
 }
-.section > * + * { margin-top: 1.2rem; } /* 16px → 12px로 줄임 */
+.section > * + * { margin-top: 1.2rem; }
 
 /* 라벨 (간격 줄임) */
 .label {
