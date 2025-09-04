@@ -1,14 +1,14 @@
 // src/components/molecules/SearchBar.jsx
-import React from "react";
-import Input from "../atoms/Input.jsx";
-import styles from "../../styles/components/molecules/SearchBar.module.css";
+import React from 'react';
+import Input from '../atoms/Input.jsx';
+import styles from '../../styles/components/molecules/SearchBar.module.css';
 
 export default function SearchBar({
   value,
-  onChange,
+  onChange = () => {},
   onSubmit,
-  placeholder = "검색어를 입력하세요",
-  size = "lg",            // "lg" | "mobile"
+  placeholder = '검색어를 입력하세요',
+  size = 'lg', // "lg" | "mobile"
   autoFocus = false,
   leftIcon = (
     <svg
@@ -29,12 +29,12 @@ export default function SearchBar({
     </svg>
   ),
 }) {
-  const handleChange = (e) => {
+  const handleChange = e => {
     onChange?.(e.target.value);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+  const handleKeyDown = e => {
+    if (e.key === 'Enter') {
       // IME(한/중/일) 조합 중 Enter 방지
       if (e.isComposing || e.nativeEvent?.isComposing) return;
       e.preventDefault();

@@ -30,10 +30,10 @@ export default function Card({
   backgroundColor,
   overlayOpacity,
   nick,
-  points = 5,
-  title = '이우더의 UX 스터디',
-  createdAt = '62',
-  description = 'Slow And Steady Wins The Race!!',
+  points = 0,
+  title = '스터디 제목',
+  createdAt = '2025-00-00',
+  description = '스터디 설명',
   emojiData = [
     { emoji: '👍', count: 1 },
     { emoji: '🔥', count: 3 },
@@ -42,6 +42,7 @@ export default function Card({
   onClick,
   isSelected = false,
 }) {
+  const [daysPassed, setDaysPassed] = useState(createdAt);
   // 프리셋이 있으면 프리셋 사용, 없으면 직접 전달된 props 사용
   const presetData = preset ? CARD_PRESETS[preset] : null;
 
@@ -78,14 +79,13 @@ export default function Card({
     }
   };
 
-  const [daysPassed, setDaysPassed] = useState(createdAt);
   const calculateDaysPassed = createdAt => {
     const today = dayjs();
     const createdDate = dayjs(createdAt);
     setDaysPassed(today.diff(createdDate, 'day'));
   };
   useEffect(() => {
-    calculateDaysPassed('2025-09-01');
+    calculateDaysPassed(createdAt);
   }, [createdAt]);
 
   return (
@@ -107,7 +107,8 @@ export default function Card({
             color={presetData?.titleTextColor}
             tag="h3"
           >
-            <b>{nick}</b>의 {title}
+            <b style={{ color: presetData?.nicknameTextColor }}>{nick}</b>의{' '}
+            {title}
           </Text>
           <Tag points={points} size="sm" />
         </div>
