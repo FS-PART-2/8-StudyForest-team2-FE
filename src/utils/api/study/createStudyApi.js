@@ -1,4 +1,4 @@
-import { http } from "../axiosInstance";
+import { instance } from '../axiosInstance';
 
 /**
  * 스터디 생성 API
@@ -7,12 +7,12 @@ export async function createStudy({
   nickname,
   studyName,
   description,
-  background,         // URL 또는 HEX
+  background, // URL 또는 HEX
   password,
   passwordConfirm,
   isPublic,
 }) {
-  const res = await http.post("/api/studies", {
+  const res = await instance.post('/api/studies', {
     nick: nickname,
     name: studyName,
     content: description,

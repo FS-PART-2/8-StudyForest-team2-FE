@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-const baseURL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080';
-
 export const instance = axios.create({
   baseURL: import.meta.env.VITE_API_TEST_URL, // .env 파일에 정의된 환경변수 / 변경 필요
   timeout: 5000,
