@@ -24,32 +24,32 @@ export function StudyCreatePage() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [isPublic, setIsPublic] = useState(true);
-  const [selectedBgId, setSelectedBgId] = useState("c1");
+  const [selectedBgId, setSelectedBgId] = useState("img-01");
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   // ─────────────────────────────────────────────────────────────────────────
 
+  const base = import.meta.env.BASE_URL || "/";
 
-const base = import.meta.env.BASE_URL || "/";
-
-const backgrounds = useMemo(
-  () => [
-    { id: "c1", type: "color", value: "#E2E8F0" },
-    { id: "c2", type: "color", value: "#D1FAE5" },
-    { id: "c3", type: "color", value: "#E5E7EB" },
-    { id: "c4", type: "color", value: "#E0E7FF" },
-    { id: "i1", type: "image", value: `${base}assets/images/bg-desk-1.svg` },
-    { id: "i2", type: "image", value: `${base}assets/images/bg-laptop-1.svg` },
-    { id: "i3", type: "image", value: `${base}assets/images/bg-tiles-1.svg` },
-    { id: "i4", type: "image", value: `${base}assets/images/bg-plant-1.svg` },
-  ],
-  []
-);
-
-
+  const backgrounds = useMemo(
+    () => [
+      { id: "img-01", type: "color", value: "#E2E8F0" },
+      { id: "img-02", type: "color", value: "#D1FAE5" },
+      { id: "img-03", type: "color", value: "#E5E7EB" },
+      { id: "img-04", type: "color", value: "#E0E7FF" },
+      { id: "img-05", type: "image", value: `${base}assets/images/bg-desk-1.svg` },
+      { id: "img-06", type: "image", value: `${base}assets/images/bg-laptop-1.svg` },
+      { id: "img-07", type: "image", value: `${base}assets/images/bg-tiles-1.svg` },
+      { id: "img-08", type: "image", value: `${base}assets/images/bg-plant-1.svg` },
+    ],
+    [base]
+  );
 
   // 실시간 불일치
   const mismatchNow = passwordConfirm.length > 0 && password !== passwordConfirm;
+
+  // 필수 필드 검증
+  const isFormValid = nickname.trim() && studyName.trim() && password.trim();
 
   // 유효성 검사
   const validate = () => {
@@ -66,24 +66,31 @@ const backgrounds = useMemo(
 
   // blur 시 개별 필드 유효성 검사
   const validateField = (fieldName, value) => {
+    console.log('validateField called:', fieldName, value);
     const next = { ...errors };
     
-    if (fieldName === 'nickname' && !value.trim()) {
-      next.nickname = "*닉네임을 입력해주세요";
-    } else if (fieldName === 'nickname') {
-      delete next.nickname;
+    if (fieldName === 'nickname') {
+      if (!value.trim()) {
+        next.nickname = "*닉네임을 입력해주세요";
+      } else {
+        delete next.nickname;
+      }
     }
     
-    if (fieldName === 'studyName' && !value.trim()) {
-      next.studyName = "*스터디 이름을 입력해주세요";
-    } else if (fieldName === 'studyName') {
-      delete next.studyName;
+    if (fieldName === 'studyName') {
+      if (!value.trim()) {
+        next.studyName = "*스터디 이름을 입력해주세요";
+      } else {
+        delete next.studyName;
+      }
     }
     
-    if (fieldName === 'password' && !value.trim()) {
-      next.password = "*비밀번호를 입력해주세요";
-    } else if (fieldName === 'password') {
-      delete next.password;
+    if (fieldName === 'password') {
+      if (!value.trim()) {
+        next.password = "*비밀번호를 입력해주세요";
+      } else {
+        delete next.password;
+      }
     }
     
     setErrors(next);
@@ -98,9 +105,7 @@ const backgrounds = useMemo(
     try {
       setSubmitting(true);
 
-      const rawBg = backgrounds.find((b) => b.id === selectedBgId)?.value || "";
-      const background =
-        rawBg.startsWith("/") ? `${window.location.origin}${rawBg}` : rawBg;
+      const background = selectedBgId;
 
       const data = await createStudy({
         nickname,
@@ -317,7 +322,7 @@ const backgrounds = useMemo(
             size="md"
             type="submit"
             className={styles.submitButton}
-            disabled={submitting || mismatchNow}
+            disabled={submitting || mismatchNow || !isFormValid}
           >
             {submitting ? "만드는 중..." : "만들기"}
           </Button>

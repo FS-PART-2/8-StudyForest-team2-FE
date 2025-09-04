@@ -1,41 +1,28 @@
-// src/components/atoms/Input.jsx
-import { forwardRef } from "react";
+import React from "react";
 import styles from "../../styles/components/atoms/Input.module.css";
 
 /**
- * Pure Input atom
- * - invalid prop 또는 aria-invalid 둘 다 지원
- * - leftSlot / rightSlot: 오버레이 아이콘/버튼
- * - size: "lg" | "mobile"  (높이/폰트 스케일)
- * - leftInteractive: 왼쪽 슬롯 클릭 가능 (기본 false)
+ * 기본 Input 컴포넌트 (재사용 가능)
  */
-const Input = forwardRef(function Input(
-  {
-    value,
-    onChange,
-    type = "text",
-    placeholder,
-    disabled = false,
-    invalid = false,
-    leftSlot = null,
-    rightSlot = null,
-    size, // "lg" | "mobile"
-    leftInteractive = false,
-    className = "",
-    ...rest
-  },
-  ref
-) {
+export default function Input({
+  value,
+  onChange,
+  onBlur,
+  onKeyDown,
+  placeholder,
+  type = "text",
+  size, // "lg" | "mobile" 등 (내부에서 size-${size}로 변환)
+  autoFocus = false,
+  disabled = false,
+  className = "",
+  leftSlot,
+  rightSlot,
+  leftInteractive = false,
+  style,
+  ...rest
+}) {
   const hasLeft = !!leftSlot;
   const hasRight = !!rightSlot;
-
-  // aria-invalid 우선, 없으면 invalid prop 사용
-  const restAriaInvalid = rest["aria-invalid"];
-  const ariaInvalid =
-    restAriaInvalid !== undefined ? restAriaInvalid : (invalid ? true : undefined);
-
-  const isInvalidClass =
-    invalid || ariaInvalid === true || ariaInvalid === "true";
 
   return (
     <div
@@ -46,29 +33,33 @@ const Input = forwardRef(function Input(
         size && styles[`size-${size}`],
         leftInteractive && styles.leftInteractive,
         className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      ].filter(Boolean).join(" ")}
+      style={style}
     >
-      {hasLeft ? <div className={styles.leftSlot}>{leftSlot}</div> : null}
+      {hasLeft && (
+        <div className={styles.leftSlot}>
+          {leftSlot}
+        </div>
+      )}
 
       <input
-        className={[styles.input, isInvalidClass && styles.invalid]
-          .filter(Boolean)
-          .join(" ")}
-        {...(value !== undefined ? { value } : {})}
-        {...(onChange ? { onChange } : {})}
-        type={type}
+        className={styles.input}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        onKeyDown={onKeyDown}
         placeholder={placeholder}
+        type={type}
+        autoFocus={autoFocus}
         disabled={disabled}
-        aria-invalid={ariaInvalid}
-        ref={ref}
         {...rest}
       />
 
-      {hasRight ? <div className={styles.rightSlot}>{rightSlot}</div> : null}
+      {hasRight && (
+        <div className={styles.rightSlot}>
+          {rightSlot}
+        </div>
+      )}
     </div>
   );
-});
-
-export default Input;
+}

@@ -3,7 +3,7 @@
 .page {
   display: grid;
   place-items: start center;
-  padding: 2rem;
+  padding: 2.4rem; /* 24px */
 }
 
 .card {
@@ -12,7 +12,7 @@
   background: #fff;
   border-radius: 1rem; /* 5px */
   box-shadow: 0 0.4rem 1.2rem rgba(0,0,0,0.06);
-  padding: 2.4rem 2.4rem 2.4rem 2.4rem;       /* 24px */
+  padding: 2.4rem;       /* 모든 면에 동일한 24px 패딩 */
 }
 
 .title {
@@ -26,15 +26,19 @@
   padding-top: 1.0rem;
 }
 
+/* 섹션 공통: 간격 줄임 */
+.section { 
+  padding-bottom: 1.6rem; /* 24px → 16px로 줄임 */
+  margin-bottom: 0.8rem;  /* 16px → 8px로 줄임 */
+}
+.section > * + * { margin-top: 1.2rem; } /* 16px → 12px로 줄임 */
 
-.section > * + * { margin-top: 1.2rem; } /* 라벨-인풋, 인풋-에러 등 모두 16px */
-
-/* 라벨 (PC/모바일 동일 16px 리듬) */
+/* 라벨 (간격 줄임) */
 .label {
   color: var(--text-primary, #414141);
   font-weight: 500;
   font-size: 1.6rem; 
-  margin-bottom: 1.6rem; 
+  margin-bottom: 1.2rem; /* 16px → 12px로 줄임 */
 }
 
 /* --- 인풋/텍스트에어리어 통일 규칙 --- */
@@ -55,7 +59,7 @@
   line-height: 1.4;
   outline: none;
   background: #fff;
-  resize: vertical;
+  resize: none; /* 텍스트에리어 크기 고정 */
 }
 
 .inputReset:focus {
@@ -66,7 +70,6 @@
 .textarea { min-height: 9.6rem; /* 96px */ }
 
 /* 배경 선택 그리드: PC/모바일 모두 간격 16px 고정 */
-/* 배경 선택 그리드 */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4열 고정 */
@@ -93,7 +96,6 @@
   transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
   background: #fff;
 }
-
 
 .bgSwatch { width: 100%; height: 100%; display: block; }
 .bgImg {
@@ -125,19 +127,19 @@
 .cta { margin-top: 1.2rem; display: flex; justify-content: center; }
 .submitButton { 
   width: 62.8rem; 
-  height: 5rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
 @media (max-width: 76.8rem) {
-  .card { max-width: 31.2rem; min-height: 108.1rem;}
+  .card { max-width: 31.2rem; min-height: 108.1rem; padding: 2.4rem; }
   .title { font-size: 2.4rem; }
   .label { font-size: 1.6rem; }
   .submitButton { 
     width: 100%; 
-    height: 5rem;
+    height: 6rem;
+    /* 중앙정렬은 위에서 이미 설정됨 */
   }
 }
 
@@ -169,16 +171,15 @@
 
 /* === 에러 슬롯: 메시지가 없어도 높이를 미리 잡아 레이아웃 안 밀리게 === */
 .errorSlot {
-  min-height: 2.2rem;   /* 메시지 1줄 높이 확보 (여백 포함) */
+  min-height: 1rem;
   display: block;
 }
 
 /* 에러 텍스트: 더 진하고 크게 */
 .error {
-  margin-top: 0.5rem;
+  margin-top: 0.1rem;
   color: var(--warning-red, #dc2626) !important; /* 덮어쓰기 강제 */
-  font-size: 1.2rem;      
-  line-height: 1;
+  font-size: 1.1rem;
   font-weight: 500;
 }
 
