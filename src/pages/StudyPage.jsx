@@ -9,7 +9,7 @@ import Button from '../components/atoms/Button';
 export function StudyPage() {
   const [studyList, setStudyList] = useState([]);
   const [studyParams, setStudyParams] = useState({
-    recentOrder: true,
+    recentOrder: 'recent',
     offset: 0,
     limit: 6,
     keyword: '',
@@ -20,7 +20,6 @@ export function StudyPage() {
     const fetchData = async () => {
       try {
         const data = await studyApi.getStudyApi(studyParams);
-        console.log(data);
         setStudyList(data.studies);
       } catch (error) {
         console.error(error);
@@ -30,32 +29,28 @@ export function StudyPage() {
   }, [studyParams]);
 
   const handleSubmit = value => {
-    console.log(value);
     setStudyParams({ ...studyParams, keyword: value });
   };
 
   const handleDropdownChange = value => {
-    console.log(value);
     if (value === 'recent' || value === 'old') {
       setStudyParams({
         ...studyParams,
         recentOrder: value,
-        pointOrder: null,
+        pointOrder: '',
       });
     }
     if (value === 'desc' || value === 'asc') {
       setStudyParams({
         ...studyParams,
-        recentOrder: null,
+        recentOrder: '',
         pointOrder: value,
       });
     }
   };
 
   const handleStudyMore = () => {
-    console.log('스터디 추가');
     setStudyParams({ ...studyParams, limit: studyParams.limit + 6 });
-    console.log(studyParams.limit);
   };
 
   return (
@@ -92,7 +87,7 @@ export function StudyPage() {
                 preset={'img-04'}
                 nick={study.nick}
                 title={study.name}
-                points={study.points[0].value}
+                points={study?.points[0]?.value || 0}
                 createdAt={study.createdAt.split('T')[0]}
                 description={study.content}
               />
