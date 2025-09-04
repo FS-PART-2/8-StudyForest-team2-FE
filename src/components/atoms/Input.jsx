@@ -3,11 +3,11 @@ import { forwardRef } from "react";
 import styles from "../../styles/components/atoms/Input.module.css";
 
 /**
- * Pure Input atom — 라벨/헬퍼/에러 문구 없이 시각 상태만.
- * - invalid: 테두리만 빨강
- * - leftSlot / rightSlot: 아이콘/버튼 오버레이
- * - size: "lg" | "mobile" (내부에서 size-${token} 클래스로 매핑)
- * - leftInteractive: 왼쪽 아이콘을 클릭 가능하게 전환 (기본 false)
+ * Pure Input atom
+ * - invalid prop 또는 aria-invalid 둘 다 지원
+ * - leftSlot / rightSlot: 오버레이 아이콘/버튼
+ * - size: "lg" | "mobile"  (높이/폰트 스케일)
+ * - leftInteractive: 왼쪽 슬롯 클릭 가능 (기본 false)
  */
 const Input = forwardRef(function Input(
   {
@@ -19,15 +19,23 @@ const Input = forwardRef(function Input(
     invalid = false,
     leftSlot = null,
     rightSlot = null,
-    size,                 // "lg" | "mobile"
+    size, // "lg" | "mobile"
     leftInteractive = false,
     className = "",
     ...rest
   },
-  ref,
+  ref
 ) {
   const hasLeft = !!leftSlot;
   const hasRight = !!rightSlot;
+
+  // aria-invalid 우선, 없으면 invalid prop 사용
+  const restAriaInvalid = rest["aria-invalid"];
+  const ariaInvalid =
+    restAriaInvalid !== undefined ? restAriaInvalid : (invalid ? true : undefined);
+
+  const isInvalidClass =
+    invalid || ariaInvalid === true || ariaInvalid === "true";
 
   return (
     <div
@@ -38,23 +46,26 @@ const Input = forwardRef(function Input(
         size && styles[`size-${size}`],
         leftInteractive && styles.leftInteractive,
         className,
-      ].filter(Boolean).join(" ")}
+      ]
+        .filter(Boolean)
+        .join(" ")}
     >
       {hasLeft ? <div className={styles.leftSlot}>{leftSlot}</div> : null}
+
       <input
-        className={[
-          styles.input,
-          invalid && styles.invalid,
-        ].filter(Boolean).join(" ")}
+        className={[styles.input, isInvalidClass && styles.invalid]
+          .filter(Boolean)
+          .join(" ")}
         {...(value !== undefined ? { value } : {})}
         {...(onChange ? { onChange } : {})}
         type={type}
         placeholder={placeholder}
         disabled={disabled}
-        aria-invalid={invalid || undefined}
+        aria-invalid={ariaInvalid}
         ref={ref}
         {...rest}
       />
+
       {hasRight ? <div className={styles.rightSlot}>{rightSlot}</div> : null}
     </div>
   );

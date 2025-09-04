@@ -2,32 +2,97 @@
   width: 100%;
 }
 
-/* 인풋 좌측 아이콘 크기/여백 */
+/* 폭 제어: fixed / fluid */
+.wrap {
+  position: relative;
+  /* 기본은 fixed로 가정, 실제 폭은 .fixed/.fluid에서 결정 */
+}
+
+/* ✅ 고정 폭: PC/모바일 각각 고정 (CSS 변수로 커스터마이즈 가능) */
+.fixed {
+  width: var(--sb-width-pc, 29.5rem);
+}
+@media (max-width: 768px) {
+  .fixed {
+    width: var(--sb-width-mobile, 27.2rem);
+  }
+}
+
+/* ✅ 유동 폭: 100% 가로 채우기 */
+.fluid {
+  width: 100%;
+}
+
+/* 인풋 사이즈(높이/폰트) — sm / md / lg */
+.input {
+  display: block;
+  width: 100%;
+  border: 0.1rem solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem 1.6rem; /* 좌우 기본 패딩 */
+  font-size: 1.4rem;
+  line-height: 1.4;
+  box-sizing: border-box;
+  background: #fff;
+  color: var(--text-primary, #111);
+}
+
+/* 기본 md = 60px */
+.size-md .input { height: 5.5rem; font-size: 1.4rem; }
+/* 소형 52px */
+.size-sm .input { height: 4.5rem; font-size: 1.4rem; }
+/* 대형 68px */
+.size-lg .input { height: 5.5rem; font-size: 1.6rem; }
+
+.input:focus {
+  border-color: #0013A7;
+  box-shadow: 0 0 0 0.3rem rgba(0,19,167,0.15);
+  outline: none;
+}
+
+/* 에러 상태 */
+.input[aria-invalid="true"] {
+  border-color: var(--warning-red, #dc2626);
+  outline-color: var(--warning-red, #dc2626);
+}
+
+/* 좌측 아이콘: 수직 중앙 */
 .leftSpace {
+  position: absolute;
+  left: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
   display: inline-flex;
-  width: var(--icon-size, 18px);
-  height: var(--icon-size, 18px);
+  width: 1.8rem;
+  height: 1.8rem;
   align-items: center;
   justify-content: center;
   color: #666;
+  pointer-events: none;
 }
+.hasLeft .input { padding-left: 3.6rem; } /* 아이콘 공간 확보 */
 
-/* 우측에 붙는 작은 버튼들(선택 사용) */
+/* 우측 버튼/아이콘 묶음: 수직 중앙 */
 .rightSlot {
+  position: absolute;
+  right: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0.4rem;
 }
+.hasRight .input { padding-right: 5.2rem; } /* 버튼 공간 확보 */
 
-/* 아이콘 버튼 접근성 보강 */
+/* 아이콘 버튼 공통 */
 .iconBtn {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
-  min-width: 36px;   /* 가능하면 40~44px */
-  min-height: 36px;  /* 가능하면 40~44px */
-  border-radius: 4px;
+  padding: 0.4rem;
+  min-width: 3.6rem;
+  min-height: 3.6rem;
+  border-radius: 0.4rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,17 +101,11 @@
   outline-offset: 2px;
   transition: background-color 120ms ease, color 120ms ease, outline-color 120ms ease;
 }
-
-/* 포인터/호버 가능한 디바이스에만 hover 적용 */
 @media (hover: hover) and (pointer: fine) {
-  .iconBtn:hover {
-    background-color: var(--color-hover-bg, #f5f5f5);
-  }
+  .iconBtn:hover { background-color: var(--color-hover-bg, #f5f5f5); }
 }
-
-/* 키보드 포커스 가시성 */
 .iconBtn:focus-visible {
   outline-color: var(--color-focus, #2684FF);
   background-color: var(--color-focus-bg, #eef5ff);
 }
-
+.iconBtn:disabled { cursor: not-allowed; opacity: .6; }

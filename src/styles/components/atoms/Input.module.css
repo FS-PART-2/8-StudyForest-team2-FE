@@ -1,77 +1,103 @@
-/* 1rem = 10px 기준 */
+/* 1rem = 10px */
 
 .wrap {
   position: relative;
-  display: flex;
-  align-items: center;
   width: 100%;
 }
 
+/* 기본 인풋 스펙 (페이지/패스워드와 통일) */
 .input {
   width: 100%;
-  box-sizing: border-box;
+  height: 5.5rem;                      /* 60px */
   border: 0.1rem solid #e5e7eb;
-  border-radius: 0.5rem; 
-  background: #fff;
-  color: var(--text-primary, #414141);
-  font-size: 1.4rem;
+  border-radius: 0.5rem;             /* 5px */
+  padding: 1rem 1.6rem; 
+  font-size: 1.4rem;              
   line-height: 1.4;
-  padding: 0.9rem 2.0rem;
-  outline: none;
+  box-sizing: border-box;
+  background: #fff;
+  color: var(--text-primary, #111);
 }
 
 .input:focus {
-  border-color: #c7d2fe;
-  box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.15);
+  border-color: #0013A7;
+  box-shadow: 0 0 0 0.3rem rgba(0,19,167,0.15);
+  outline: none;
 }
 
-.invalid {
-  border-color: #ef4444;
+/* 에러 */
+.input.invalid,
+.input[aria-invalid="true"] {
+  border-color: var(--warning-red, #dc2626);
+  outline-color: var(--warning-red, #dc2626);
 }
 
-/* 포커스 시에도 invalid 유지 */
-.input.invalid:focus {
-  border-color: #ef4444;
-  box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.15);
+/* ───────── 좌/우 슬롯 오버레이 ───────── */
+
+/* 왼쪽 아이콘(기본 비클릭) */
+.leftSlot {
+  position: absolute;
+  left: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  width: 1.8rem;
+  height: 1.8rem;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  pointer-events: none;              /* 클릭 통과 */
 }
 
-/* ---- 아이콘/버튼 영역 (오른쪽) ---- */
+/* 왼쪽 슬롯을 클릭 가능하게 (토글 시) */
+.leftInteractive .leftSlot { pointer-events: auto; cursor: pointer; }
+
+/* 오른쪽 버튼/아이콘 그룹 */
 .rightSlot {
   position: absolute;
   right: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* 슬롯이 있을 때 인풋 패딩 자동 확장 (겹침 방지) */
+.hasLeft .input  { padding-left: 3.6rem; }   /* 1.2rem + 1.8rem + 여유 0.6rem */
+.hasRight .input { padding-right: 5.2rem; }  /* 버튼/아이콘 영역 확보 */
+
+/* 사이즈 토큰 (필요 시 확장) */
+.size-lg .input {
+  height: 5.5rem;
+  font-size: 1.4rem;
+}
+.size-mobile .input {
+  height: 4.8rem;
+  font-size: 1.4rem;
+}
+
+/* 아이콘 버튼에 사용할 수 있는 공통 스타일(선택) */
+.iconBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 2.8rem;
+  height: 2.8rem;
   display: grid;
   place-items: center;
-  height: 100%;
+  border-radius: 0.4rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  color: var(--color-icon, #666);
+  transition: background-color 120ms ease, outline-color 120ms ease;
 }
 
-.hasRight .input {
-  padding-right: 4.0rem; /* 아이콘 자리 확보 */
+@media (hover: hover) and (pointer: fine) {
+  .iconBtn:hover { background: #f5f5f5; }
 }
-
-/* ---- 아이콘/버튼 영역 (왼쪽) ---- */
-.leftSlot {
-  position: absolute;
-  left: 0.8rem;
-  display: grid;
-  place-items: center;
-  height: 100%;
-  pointer-events: none; /* 기본은 클릭 불가 (검색 등) */
+.iconBtn:focus-visible {
+  outline-color: var(--color-focus, #2684FF);
+  background: #eef5ff;
 }
-
-/* 래퍼에 .leftInteractive 붙이면 클릭 가능 */
-.leftInteractive .leftSlot {
-  pointer-events: auto;
-}
-
-.hasLeft .input {
-  padding-left: 4.0rem; /* 왼쪽 아이콘 자리 확보 */
-}
-
-/* ===== 넓이 프리셋 ===== */
-.size-lg {
-  width: 29.5rem;   /* PC */
-}
-
-.size-mobile {
-  width: 27.2rem;   /* Mobile */
-}
+.iconBtn:disabled { cursor: not-allowed; opacity: .6; }

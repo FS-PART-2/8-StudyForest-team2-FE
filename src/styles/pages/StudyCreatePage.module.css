@@ -1,0 +1,189 @@
+/* 기준: 1rem = 10px */
+
+.page {
+  display: grid;
+  place-items: start center;
+  padding: 2rem;
+}
+
+.card {
+  width: 100%;
+  max-width: 64.8rem;   /* 648px */
+  background: #fff;
+  border-radius: 1rem; /* 5px */
+  box-shadow: 0 0.4rem 1.2rem rgba(0,0,0,0.06);
+  padding: 2.4rem 2.4rem 2.4rem 2.4rem;       /* 24px */
+}
+
+.title {
+  font-weight: 800;
+  color: var(--text-primary, #414141);
+  text-align: left;
+  border-radius: 1rem;
+  font-size: 2.4rem;     /* 24px */
+  line-height: 1.2;
+  margin: 0 0 2.4rem;    /* 아래 24px */
+  padding-top: 1.0rem;
+}
+
+
+.section > * + * { margin-top: 1.2rem; } /* 라벨-인풋, 인풋-에러 등 모두 16px */
+
+/* 라벨 (PC/모바일 동일 16px 리듬) */
+.label {
+  color: var(--text-primary, #414141);
+  font-weight: 500;
+  font-size: 1.6rem; 
+  margin-bottom: 1.6rem; 
+}
+
+/* --- 인풋/텍스트에어리어 통일 규칙 --- */
+.section :global(input),
+.section :global(textarea) {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 페이지용 공통 인풋(텍스트에어리어 포함) 스펙 */
+.inputReset {
+  width: 100%;
+  height: 5rem !important;
+  border: 0.1rem solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem 5.2rem 1rem 1.6rem;
+  font-size: 1.4rem;
+  line-height: 1.4;
+  outline: none;
+  background: #fff;
+  resize: vertical;
+}
+
+.inputReset:focus {
+  border-color: #0013A7;
+  box-shadow: 0 0 0 0.3rem rgba(0,19,167,0.15); /* 3px */
+}
+
+.textarea { min-height: 9.6rem; /* 96px */ }
+
+/* 배경 선택 그리드: PC/모바일 모두 간격 16px 고정 */
+/* 배경 선택 그리드 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4열 고정 */
+  gap: 1.6rem; /* 16px */
+}
+
+@media (max-width: 48rem) { /* 480px */
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* 카드(정사각형) 크기는 그대로 유지 */
+.bgItem {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 15rem;   /* 150px */
+  max-height: 15rem;  /* 150px */
+  border-radius: 0.8rem;
+  overflow: hidden;
+  border: 0.1rem solid #E5E7EB;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+  background: #fff;
+}
+
+
+.bgSwatch { width: 100%; height: 100%; display: block; }
+.bgImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bgItemSelected::after { display: none; }
+
+.checkIcon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 2.8rem;
+  height: 2.8rem;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.15));
+}
+
+.checkIcon svg { width: 3.2rem; height: 3.2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,.35)); }
+
+/* 공개 여부 행 */
+.toggleRow { display: flex; align-items: center; justify-content: space-between; }
+
+/* CTA */
+.cta { margin-top: 1.2rem; display: flex; justify-content: center; }
+.submitButton { 
+  width: 62.8rem; 
+  height: 5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 76.8rem) {
+  .card { max-width: 31.2rem; min-height: 108.1rem;}
+  .title { font-size: 2.4rem; }
+  .label { font-size: 1.6rem; }
+  .submitButton { 
+    width: 100%; 
+    height: 5rem;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bgItem:hover {
+    transform: translateY(-1px) scale(1.005); /* -1px, 0.5% 확대만 */
+    box-shadow: 0 0.6rem 1.2rem rgba(0,0,0,.08);
+  }
+}
+
+.bgItem:focus-visible {
+  outline: none;
+  transform: translateY(-1px) scale(1.005);
+  box-shadow:
+    0 0 0 3px rgba(0, 19, 167, 0.18),
+    0 0.6rem 1.2rem rgba(0,0,0,.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bgItem {
+    transition: border-color 120ms ease;
+  }
+  .bgItem:hover,
+  .bgItem:focus-visible {
+    transform: none;
+    box-shadow: 0 0 0 3px rgba(0, 19, 167, 0.18);
+  }
+}
+
+/* === 에러 슬롯: 메시지가 없어도 높이를 미리 잡아 레이아웃 안 밀리게 === */
+.errorSlot {
+  min-height: 2.2rem;   /* 메시지 1줄 높이 확보 (여백 포함) */
+  display: block;
+}
+
+/* 에러 텍스트: 더 진하고 크게 */
+.error {
+  margin-top: 0.5rem;
+  color: var(--warning-red, #dc2626) !important; /* 덮어쓰기 강제 */
+  font-size: 1.2rem;      
+  line-height: 1;
+  font-weight: 500;
+}
+
+/* 인풋/텍스트에어리어 빨간 보더 (모듈 경계 방지) */
+:where(input, textarea)[aria-invalid="true"] {
+  border-color: var(--warning-red, #dc2626) !important;
+  outline-color: var(--warning-red, #dc2626) !important;
+}
