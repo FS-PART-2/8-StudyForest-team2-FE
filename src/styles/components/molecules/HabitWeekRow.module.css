@@ -1,0 +1,78 @@
+.row {
+  display: grid;
+  grid-template-columns: 19.8rem 84rem; /* 왼쪽 이름칸 + 스티커 영역 고정 84rem */
+  align-items: center;
+  height: 6rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 요일 전용 행(헤더)은 높이를 더 얇게 */
+.rowHeader {
+  height: 3.4rem; /* 살짝 더 얇게 */
+}
+
+.name {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 2rem;
+  box-sizing: border-box;
+}
+.nameSpacer {
+  padding-right: 0; /* 요일 헤더용: 좌우 정렬 오프셋 제거 */
+}
+.nameText {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-primary, #222);
+  font-weight: 600;
+  font-size: 1.4rem; /* 요청: 습관 리스트 텍스트 크기 */
+}
+
+.stickers {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7등분 */
+  justify-items: center; /* 각 칸 중앙 */
+  align-items: center;
+  width: 84rem; /* 스티커 영역 고정 */
+  padding: 1.4rem 0; /* 세로 패딩만 */
+  box-sizing: border-box;
+  gap: 0;
+}
+
+/* 요일 헤더 전용 영역 */
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 스티커와 동일 7등분 */
+  justify-items: center; /* 텍스트 중앙 */
+  align-items: center;
+  width: 84rem; /* 스티커 영역과 동일 폭 */
+  padding: 0; /* 좌우 패딩 제거 */
+}
+
+.dayLabel {
+  color: var(--text-gray, #818181);
+  font-size: 1.4rem;
+}
+
+.sticker {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  background: var(--sticker-area, #e8e8e8);
+  display: inline-block;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.sticker:hover {
+  opacity: 0.8;
+}
+
+.active {
+  background: var(--brand-blue, #0013a7);
+}

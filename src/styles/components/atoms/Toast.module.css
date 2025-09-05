@@ -8,8 +8,8 @@
   font-size: 1.6rem;
   font-weight: 500;
   line-height: 1.6;
-  width: max-content;       /* 글자 길이만큼 가로폭 */
-  white-space: nowrap;      /* 줄바꿈 방지 */
+  width: max-content; /* 글자 길이만큼 가로폭 */
+  white-space: nowrap; /* 줄바꿈 방지 */
 }
 
 .text {
@@ -30,8 +30,18 @@
   color: var(--warning-dark, #b91c1c);
 }
 .mismatch {
-  background-color: var(--pink-pink_FDE0E9, #FDE0E9);
-  color: #9C0A0A;
+  background-color: var(--pink-pink_FDE0E9, #fde0e9);
+  color: #9c0a0a;
   width: max-content;
   white-space: nowrap;
+}
+
+.delete {
+  background: var(--btn-inactive, #818181);
+  color: white;
+}
+
+.copy {
+  background: var(--btn-inactive, #818181);
+  color: white;
 }

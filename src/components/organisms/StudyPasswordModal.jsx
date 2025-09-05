@@ -1,17 +1,18 @@
-import { useEffect, useState } from "react";
-import PasswordInput from "../molecules/PasswordInput.jsx";
-import Button from "../atoms/Button.jsx";
-import Toast from "../atoms/Toast.jsx";
-import styles from "../../styles/components/organisms/StudyPasswordModal.module.css";
+import { useEffect, useState } from 'react';
+import PasswordInput from '../molecules/PasswordInput.jsx';
+import Button from '../atoms/Button.jsx';
+import Toast from '../atoms/Toast.jsx';
+import styles from '../../styles/components/organisms/StudyPasswordModal.module.css';
 import { verifyStudyPassword } from '../../utils/api/study/studyPasswordApi';
-
 
 export default function StudyPasswordModal({
   isOpen,
   onClose,
-  onVerify,   // (pw) => Promise<boolean> | boolean  (검증 실패: false, 네트워크 오류: throw)
+  onVerify, // (pw) => Promise<boolean> | boolean  (검증 실패: false, 네트워크 오류: throw)
+  studyTitle = '스터디', // 동적 제목을 위한 prop 추가
+  mode = 'edit', // 'edit' 또는 'delete'
 }) {
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [showMismatch, setShowMismatch] = useState(false);
   const [showNetworkError, setShowNetworkError] = useState(false);
@@ -19,7 +20,7 @@ export default function StudyPasswordModal({
   // 열릴 때 상태 초기화
   useEffect(() => {
     if (!isOpen) {
-      setPassword("");
+      setPassword('');
       setSubmitting(false);
       setShowMismatch(false);
       setShowNetworkError(false);
@@ -29,16 +30,16 @@ export default function StudyPasswordModal({
   // Esc로 닫기 (접근성)
   useEffect(() => {
     if (!isOpen) return;
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") onClose?.();
+    const onKeyDown = e => {
+      if (e.key === 'Escape') onClose?.();
     };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     if (!password || submitting) return; // 중복 제출 가드
 
@@ -58,7 +59,7 @@ export default function StudyPasswordModal({
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     if (showMismatch) setShowMismatch(false); // 재입력 시작 → mismatch 토스트 숨김
     setPassword(e.target.value);
   };
@@ -67,14 +68,14 @@ export default function StudyPasswordModal({
     <div className={styles.modalBackdrop} onClick={onClose}>
       <div
         className={styles.modal}
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="studyPasswordTitle"
         aria-describedby="studyPasswordDesc"
       >
         <h2 id="studyPasswordTitle" className={styles.title}>
-          연우의 개발공장
+          {studyTitle}
         </h2>
         <p id="studyPasswordDesc" className={styles.subTitle}>
           권한이 필요해요!
@@ -98,7 +99,11 @@ export default function StudyPasswordModal({
                 type="submit"
                 disabled={!password || submitting}
               >
-                {submitting ? "확인 중..." : "수정하러 가기"}
+                {submitting
+                  ? '확인 중...'
+                  : mode === 'delete'
+                    ? '삭제하기'
+                    : '수정하러 가기'}
               </Button>
             </div>
           </form>
