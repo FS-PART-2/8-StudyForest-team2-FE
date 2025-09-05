@@ -28,6 +28,17 @@ const getStudyApi = async (params = {}) => {
   }
 };
 
+const getStudyDetailApi = async id => {
+  try {
+    const response = await instance.get(`/api/studies/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const studyApi = {
   getStudyApi,
+  getStudyDetailApi,
 };

@@ -5,10 +5,12 @@ import Emoji from '../atoms/Emoji';
 import { CARD_PRESETS } from '../../utils/constants/cardPresets';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Card 컴포넌트
  * @param {Object} props
+ * @param {string} props.id - 스터디 ID
  * @param {string} props.preset - 프리셋 ID (CARD_PRESETS의 키)
  * @param {string} props.backgroundImage - 커스텀 배경 이미지 URL
  * @param {string} props.backgroundColor - 커스텀 배경색
@@ -26,6 +28,7 @@ import { useEffect, useState } from 'react';
  */
 export default function Card({
   preset,
+  id,
   backgroundImage,
   backgroundColor,
   overlayOpacity,
@@ -43,6 +46,7 @@ export default function Card({
   isSelected = false,
 }) {
   const [daysPassed, setDaysPassed] = useState(createdAt);
+  const navigate = useNavigate();
   // 프리셋이 있으면 프리셋 사용, 없으면 직접 전달된 props 사용
   const presetData = preset ? CARD_PRESETS[preset] : null;
 
@@ -77,6 +81,8 @@ export default function Card({
         },
       );
     }
+
+    navigate(`/study/${id}`);
   };
 
   const calculateDaysPassed = createdAt => {

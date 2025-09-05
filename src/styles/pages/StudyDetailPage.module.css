@@ -1,0 +1,22 @@
+.studyDetailPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.studyDetailPageTitle {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.studyDetailPageDescription {
+  font-size: 2rem;
+  color: #666;
+
+  strong {
+    font-weight: 700;
+    color: #0013a7;
+  }
+}

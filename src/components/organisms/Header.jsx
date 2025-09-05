@@ -37,17 +37,25 @@ export function Header() {
       </div>
 
       {/* 스터디 만들기 버튼 */}
-      {isMainPage && (
-        <div>
-          <Button
-            onClick={handleLinkToCreateStudy}
-            variant="action"
-            size="ctrl-sm"
-          >
-            스터디 만들기
-          </Button>
-        </div>
-      )}
+      <div className={styles.headerButtons}>
+        <Link className={styles.headerButton} to="/register">
+          회원가입
+        </Link>
+        <Link className={styles.headerButton} to="/login">
+          로그인
+        </Link>
+        {isMainPage && (
+          <div>
+            <Button
+              onClick={handleLinkToCreateStudy}
+              variant="action"
+              size="ctrl-sm"
+            >
+              스터디 만들기
+            </Button>
+          </div>
+        )}
+      </div>
     </header>
   );
 }

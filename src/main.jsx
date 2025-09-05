@@ -10,6 +10,9 @@ import { StudyPage } from './pages/StudyPage';
 import TestPage from './pages/TestPage';
 import FocusPage from './pages/FocusPage';
 import { StudyCreatePage } from './pages/StudyCreatePage';
+import RegisterPage from './pages/RegisterPage';
+import LoginPage from './pages/LoginPage';
+import StudyDetailPage from './pages/StudyDetailPage';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -20,6 +23,9 @@ createRoot(document.getElementById('root')).render(
           <Route path="/focus" element={<FocusPage />} />
           <Route path="/test" element={<TestPage />} />
           <Route path="/study/new" element={<StudyCreatePage />} />
+          <Route path="/study/:id" element={<StudyDetailPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

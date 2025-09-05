@@ -14,6 +14,13 @@
   padding: 4rem;
 }
 
+.studyPageWrapperHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.4rem;
+}
+
 .studyListFilter {
   display: flex;
   justify-content: space-between;
@@ -35,6 +42,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 2.4rem;
   min-height: 51rem;
+  align-items: flex-start;
 }
 
 .studyPageTitle {
