@@ -9,6 +9,7 @@ import TodayHabitModal from "../components/organisms/TodayHabitModal.jsx";
 import StudyPasswordModal from "../components/organisms/StudyPasswordModal.jsx";
 import Card from "../components/organisms/Card.jsx";
 import SearchBar from "../components/molecules/SearchBar.jsx";   // 주석 해제
+import Popup from "../components/molecules/Popup.jsx";           // ✅ 추가
 
 export default function TestPage() {
   /** ------------------------------
@@ -91,15 +92,28 @@ export default function TestPage() {
    *  ------------------------------ */
   const [search, setSearch] = useState("");
 
+  /** ------------------------------
+   *  Popup demo (1버튼 / 2버튼)
+   *  ------------------------------ */
+  const [openAlert, setOpenAlert] = useState(false);   // 1버튼
+  const [openConfirm, setOpenConfirm] = useState(false); // 2버튼
+
   return (
     <div style={{ display: "grid", gap: "2rem", padding: "1.6rem" }}>
-      <header style={{ display: "flex", gap: "1rem" }}>
+      <header style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
         <Button variant="action" size="lg" onClick={() => setOpenHabitModal(true)}>
           오늘의 습관 모달
         </Button>
-        {/* outline 버튼으로 변경 */}
         <Button variant="outline" size="lg" onClick={() => setIsOpenStudyModal(true)}>
           스터디 비밀번호모달
+        </Button>
+
+        {/* ✅ Popup 테스트 버튼 2개 */}
+        <Button variant="action" size="lg" onClick={() => setOpenAlert(true)}>
+          알럿 팝업(1버튼)
+        </Button>
+        <Button variant="outline" size="lg" onClick={() => setOpenConfirm(true)}>
+          컨펌 팝업(2버튼)
         </Button>
       </header>
 
@@ -141,6 +155,7 @@ export default function TestPage() {
         </div>
       </section>
 
+      {/* TodayHabit Modal */}
       <TodayHabitModal
         open={openHabitModal}
         items={items}
@@ -150,10 +165,35 @@ export default function TestPage() {
         onSave={handleHabitSave}
       />
 
+      {/* Study Password Modal */}
       <StudyPasswordModal
         isOpen={isOpenStudyModal}
         onClose={() => setIsOpenStudyModal(false)}
         onVerify={handleVerify}
+      />
+
+      {/* ✅ Popup: 1버튼(알럿) */}
+      <Popup
+        open={openAlert}
+        onClose={() => setOpenAlert(false)}
+        message="팝업 관련 메시지가 들어갑니다."
+        confirmText="확인"                 // cancelText 없으면 1버튼 모드
+        width="lg"                         // 큰 사이즈
+      />
+
+      {/* ✅ Popup: 2버튼(컨펌) */}
+      <Popup
+        open={openConfirm}
+        onClose={() => setOpenConfirm(false)}
+        message="정말 나가시겠습니까?"
+        confirmText="확인"
+        cancelText="취소"                  // 지정하면 2버튼 모드
+        onConfirm={() => {
+          // TODO: 컨펌 확정 액션
+          setOpenConfirm(false);
+        }}
+        onCancel={() => setOpenConfirm(false)}
+        width="md"                         // 작은 사이즈
       />
     </div>
   );
