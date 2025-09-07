@@ -132,7 +132,8 @@ export function StudyCreatePage() {
     try {
       setSubmitting(true);
 
-      const background = selectedBgId;
+      const selected = backgrounds.find(bg => bg.id === selectedBgId);
+      const background = selected?.value ?? selectedBgId; // id 미스매치 대비 안전장치
 
       const data = await createStudy({
         nickname: nickname.trim(),
@@ -293,7 +294,7 @@ export function StudyCreatePage() {
                   )}
                   {selected && (
                     <img
-                      src="/assets/icons/selected.svg"
+                      src={`${base}assets/icons/selected.svg`}
                       alt=""
                       aria-hidden
                       className={styles.checkIcon}

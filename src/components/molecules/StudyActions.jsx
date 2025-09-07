@@ -1,5 +1,5 @@
 // src/components/molecules/StudyActions.jsx
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../atoms/Button.jsx';
 import Toast from '../atoms/Toast.jsx';
@@ -29,7 +29,7 @@ export default function StudyActions({
   onShare,
   onEdit,
   onDelete,
-  confirmBeforeDelete = true,
+  confirmBeforeDelete = true, // eslint-disable-line no-unused-vars
 }) {
   const navigate = useNavigate();
   const [openShare, setOpenShare] = useState(false);
@@ -38,6 +38,15 @@ export default function StudyActions({
   const [showCopyToast, setShowCopyToast] = useState(false);
   const [showDeleteToast, setShowDeleteToast] = useState(false);
   const inputRef = useRef(null);
+  const copyTimerRef = useRef(null);
+  const deleteTimerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+      if (deleteTimerRef.current) clearTimeout(deleteTimerRef.current);
+    };
+  }, []);
 
   const shareUrl = useMemo(() => {
     try {
@@ -67,7 +76,8 @@ export default function StudyActions({
       }
       // 토스트 표시
       setShowCopyToast(true);
-      setTimeout(() => setShowCopyToast(false), 3000);
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = setTimeout(() => setShowCopyToast(false), 3000);
     } catch {
       // 마지막 수단
       window.prompt('아래 링크를 복사하세요:', shareUrl);
@@ -113,7 +123,11 @@ export default function StudyActions({
 
       // 삭제 완료 토스트 표시
       setShowDeleteToast(true);
-      setTimeout(() => setShowDeleteToast(false), 3000);
+      if (deleteTimerRef.current) clearTimeout(deleteTimerRef.current);
+      deleteTimerRef.current = setTimeout(
+        () => setShowDeleteToast(false),
+        3000,
+      );
 
       // navigate('/');
     }
@@ -122,17 +136,21 @@ export default function StudyActions({
 
   return (
     <div className={`${styles.actions} ${className || ''}`}>
-      <span className={styles.actionLink} onClick={handleShare}>
+      <button type="button" className={styles.actionLink} onClick={handleShare}>
         공유하기
-      </span>
+      </button>
       <span className={styles.separator}>|</span>
-      <span className={styles.actionLink} onClick={handleEdit}>
+      <button type="button" className={styles.actionLink} onClick={handleEdit}>
         수정하기
-      </span>
+      </button>
       <span className={styles.separator}>|</span>
-      <span className={styles.actionLinkDelete} onClick={handleDelete}>
+      <button
+        type="button"
+        className={styles.actionLinkDelete}
+        onClick={handleDelete}
+      >
         스터디 삭제하기
-      </span>
+      </button>
 
       {openShare && (
         <div

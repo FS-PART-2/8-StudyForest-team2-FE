@@ -11,7 +11,7 @@ export default function NavigationButton({ to, children }) {
   return (
     <Link to={to} className={styles.navigationButton}>
       <span>{children}</span>
-      <img src="/assets/icons/next.svg" alt="next" aria-hidden="true" />
+      <img src="/assets/icons/next.svg" alt="" aria-hidden="true" />
     </Link>
   );
 }

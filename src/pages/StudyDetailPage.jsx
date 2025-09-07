@@ -51,43 +51,10 @@ export default function StudyDetailPage() {
     );
   }
 
-  // 배경 스타일 생성
-  const getBackgroundStyle = () => {
-    // 로컬 스토리지에서 임시 수정 데이터 확인
-    const tempModifyData = localStorage.getItem(`study_modify_${id}`);
-    let backgroundValue = null;
-
-    if (tempModifyData) {
-      try {
-        const tempData = JSON.parse(tempModifyData);
-        backgroundValue = tempData.img;
-      } catch (error) {
-        console.error('로컬 스토리지 데이터 파싱 오류:', error);
-      }
-    }
-
-    // 로컬 스토리지에 없으면 서버 데이터 사용
-    if (!backgroundValue) {
-      backgroundValue = studyData.background || studyData.img;
-    }
-
-    if (!backgroundValue) return {};
-
-    // 색상인지 이미지인지 확인
-    if (backgroundValue.startsWith('#')) {
-      return { backgroundColor: backgroundValue };
-    } else {
-      return {
-        backgroundImage: `url(${backgroundValue})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      };
-    }
-  };
+  // 배경 스타일 제거 - Card 컴포넌트에서만 배경 적용
 
   return (
-    <div className={styles.page} style={getBackgroundStyle()}>
+    <div className={styles.page}>
       {/* 상단: 이모지 카운터 + 스터디 액션 */}
       <div className={styles.topSection}>
         <div className={styles.emojiSection}>

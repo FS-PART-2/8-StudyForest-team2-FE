@@ -34,10 +34,9 @@ export async function verifyStudyPassword(studyId, password, options = {}) {
     if (err?.response?.status === 401 || err?.response?.status === 403) {
       return false;
     }
-    // CORS 오류나 네트워크 오류의 경우도 false 반환
+    // CORS 오류나 네트워크 오류는 비밀번호 불일치가 아닌 예외로 처리
     if (err?.code === 'ERR_NETWORK' || err?.message?.includes('CORS')) {
-      console.log('비밀번호 검증 중 네트워크 오류:', err.message);
-      return false;
+      throw err;
     }
     throw err;
   }

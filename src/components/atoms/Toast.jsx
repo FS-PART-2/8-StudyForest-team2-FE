@@ -37,14 +37,16 @@ export default function Toast({
   ];
   const safeType = allowedTypes.includes(type) ? type : 'error';
 
-  // role만으로 라이브영역이 암묵 지정됨 (alert=assertive, status=polite)
-  const role = safeType === 'point' ? 'status' : 'alert';
+  const politeTypes = new Set(['point', 'copy', 'basic']);
+  const role = politeTypes.has(safeType) ? 'status' : 'alert';
+  const ariaLive = role === 'status' ? 'polite' : 'assertive';
 
   return (
     <div
       className={`${styles.toast} ${styles[safeType]} ${className}`}
       role={role}
       aria-atomic={true}
+      aria-live={ariaLive}
     >
       {iconMap[safeType] && <span aria-hidden="true">{iconMap[safeType]}</span>}
       <span className={styles.text}>{messageMap[safeType]}</span>

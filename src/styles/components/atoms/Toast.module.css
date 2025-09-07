@@ -37,11 +37,11 @@
 }
 
 .delete {
-  background: var(--btn-inactive, #818181);
-  color: white;
+  background: var(--btn-inactive-dark, #525252);
+  color: #fff;
 }
 
 .copy {
-  background: var(--btn-inactive, #818181);
-  color: white;
+  background: var(--btn-inactive-dark, #525252);
+  color: #fff;
 }

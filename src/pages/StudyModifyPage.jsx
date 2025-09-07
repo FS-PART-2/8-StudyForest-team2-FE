@@ -23,7 +23,6 @@ export function StudyModifyPage() {
   const [studyName, setStudyName] = useState('');
   const [description, setDescription] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [isPublic, setIsPublic] = useState(true);
   const [selectedBgId, setSelectedBgId] = useState('img-01');
   const [errors, setErrors] = useState({});
@@ -72,7 +71,15 @@ export function StudyModifyPage() {
         if (data) {
           setStudyName(data.name || '');
           setDescription(data.description || data.content || '');
-          setSelectedBgId(data.background || data.img || 'img-01');
+          const serverBg = data.background ?? data.img ?? null; // 서버가 주는 실제 값(색상/URL) or 과거 id
+          if (serverBg) {
+            const matched = backgrounds.find(
+              bg => bg.value === serverBg || bg.id === serverBg,
+            );
+            setSelectedBgId(matched ? matched.id : 'img-01');
+          } else {
+            setSelectedBgId('img-01');
+          }
           setIsPublic(data.isPublic !== false);
 
           // 디버깅을 위한 로그
@@ -90,23 +97,18 @@ export function StudyModifyPage() {
     if (id) {
       fetchStudyData();
     }
-  }, [id, navigate]);
+  }, [id, navigate, backgrounds]);
 
-  // 실시간 불일치
-  const mismatchNow =
-    passwordConfirm.length > 0 && password !== passwordConfirm;
+  // 실시간 불일치 제거
 
-  // 필수 필드 검증 (닉네임 제외)
+  // 필수 필드 검증
   const isFormValid = studyName.trim() && password.trim();
 
-  // 유효성 검사 (닉네임 제외)
+  // 유효성 검사
   const validate = () => {
     const next = {};
     if (!studyName.trim()) next.studyName = '*스터디 이름을 입력해주세요';
     if (!password.trim()) next.password = '*비밀번호를 입력해주세요';
-    if (passwordConfirm && password !== passwordConfirm) {
-      next.passwordConfirm = '*비밀번호가 일치하지 않습니다';
-    }
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -132,15 +134,7 @@ export function StudyModifyPage() {
       }
     }
 
-    if (fieldName === 'passwordConfirm') {
-      if (!value.trim()) {
-        next.passwordConfirm = '*비밀번호 확인을 입력해주세요';
-      } else if (value !== password) {
-        next.passwordConfirm = '*비밀번호가 일치하지 않습니다';
-      } else {
-        delete next.passwordConfirm;
-      }
-    }
+    // passwordConfirm 필드 검증 제거
 
     setErrors(next);
   };
@@ -154,7 +148,8 @@ export function StudyModifyPage() {
     try {
       setSubmitting(true);
 
-      const background = selectedBgId;
+      const selected = backgrounds.find(bg => bg.id === selectedBgId);
+      const background = selected?.value ?? selectedBgId; // id 미스매치 대비 안전장치
 
       // 스터디 수정 API 호출
       await modifyStudy(id, {
@@ -162,7 +157,6 @@ export function StudyModifyPage() {
         description: description.trim(),
         background,
         password,
-        passwordConfirm,
         isPublic,
       });
 
@@ -297,7 +291,7 @@ export function StudyModifyPage() {
                   )}
                   {selected && (
                     <img
-                      src="/assets/icons/selected.svg"
+                      src={`${base}assets/icons/selected.svg`}
                       alt=""
                       aria-hidden
                       className={styles.checkIcon}
@@ -333,32 +327,7 @@ export function StudyModifyPage() {
           </div>
         </section>
 
-        {/* 비밀번호 확인 */}
-        <section className={styles.section}>
-          <div className={FIELD_WRAP_CLASS}>
-            <PasswordInput
-              value={passwordConfirm}
-              onChange={e => setPasswordConfirm(e.target.value)}
-              onBlur={e => validateField('passwordConfirm', e.target.value)}
-              onSubmit={handleSubmit}
-              placeholder="비밀번호를 다시 한 번 입력해 주세요"
-              label="비밀번호 확인"
-              aria-invalid={!!errors.passwordConfirm || mismatchNow}
-              aria-describedby={
-                errors.passwordConfirm || mismatchNow
-                  ? 'passwordConfirm-error'
-                  : undefined
-              }
-            />
-          </div>
-          <div className={styles.errorSlot}>
-            {(errors.passwordConfirm || mismatchNow) && (
-              <p id="passwordConfirm-error" className={styles.error}>
-                *비밀번호가 일치하지 않습니다
-              </p>
-            )}
-          </div>
-        </section>
+        {/* 비밀번호 확인 섹션 제거 */}
 
         {/* 공개 여부 */}
         <section className={styles.section}>
@@ -375,17 +344,28 @@ export function StudyModifyPage() {
           <div className={styles.errorSlot}></div>
         </section>
 
-        {/* 수정하기 버튼 */}
+        {/* 취소/수정하기 버튼 */}
         <div className={styles.cta}>
-          <Button
-            variant="action"
-            size="md"
-            type="submit"
-            className={styles.submitButton}
-            disabled={submitting || mismatchNow || !isFormValid}
-          >
-            {submitting ? '수정하는 중...' : '수정하기'}
-          </Button>
+          <div className={styles.buttonGroup}>
+            <Button
+              variant="secondary"
+              size="md"
+              type="button"
+              className={styles.cancelButton}
+              onClick={() => navigate(`/study/${id}`)}
+            >
+              취소
+            </Button>
+            <Button
+              variant="action"
+              size="md"
+              type="submit"
+              className={styles.submitButton}
+              disabled={submitting || !isFormValid}
+            >
+              {submitting ? '수정하는 중...' : '수정하기'}
+            </Button>
+          </div>
         </div>
       </form>
     </main>

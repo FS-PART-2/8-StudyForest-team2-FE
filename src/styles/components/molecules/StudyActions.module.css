@@ -29,6 +29,15 @@
   opacity: 0.8;
 }
 
+/* 키보드 접근성: 포커스 링 추가 */
+.actionLink:focus-visible,
+.actionLinkDelete:focus-visible,
+.copyBtn:focus-visible,
+.shareClose:focus-visible {
+  outline: 2px solid var(--brand-blue, #0013a7);
+  outline-offset: 2px;
+}
+
 .separator {
   color: var(--text-gray, #818181);
   font-size: 1.6rem;

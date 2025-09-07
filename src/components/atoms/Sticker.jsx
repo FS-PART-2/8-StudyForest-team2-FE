@@ -43,6 +43,18 @@ const Sticker = ({
       className={`${styles.sticker} ${className || ''}`}
       onClick={onClick}
       aria-label={ariaLabel}
+      {...(typeof onClick === 'function'
+        ? {
+            role: 'button',
+            tabIndex: 0,
+            onKeyDown: e => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onClick(e);
+              }
+            },
+          }
+        : {})}
     >
       <div
         className={styles.circle}

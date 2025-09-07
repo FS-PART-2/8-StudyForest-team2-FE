@@ -5,7 +5,7 @@ import { instance } from '../axiosInstance';
  */
 export async function modifyStudy(
   studyId,
-  { studyName, description, background, password, passwordConfirm, isPublic },
+  { studyName, description, background, password, isPublic },
 ) {
   // PATCH 메서드로 시도 (checkPassword 제거)
   try {
@@ -13,8 +13,7 @@ export async function modifyStudy(
       name: studyName,
       content: description,
       img: background,
-      password,
-      // checkPassword: passwordConfirm, // 백엔드에서 never 타입으로 정의됨
+      password, // 실제 비밀번호 전송
       isActive: isPublic,
     });
     return res.data;
@@ -27,8 +26,7 @@ export async function modifyStudy(
           name: studyName,
           content: description,
           img: background,
-          password,
-          // checkPassword: passwordConfirm, // 백엔드에서 never 타입으로 정의됨
+          password, // 실제 비밀번호 전송
           isActive: isPublic,
         });
         return res.data;
