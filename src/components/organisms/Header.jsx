@@ -31,7 +31,11 @@ export function Header() {
               srcSet="/assets/images/logo-sm.svg"
               media="(min-width: 375px)"
             />
-            <img src="/assets/images/logo-sm.svg" alt="mindmeld 로고" />
+            <img
+              src="/assets/images/logo-sm.svg"
+              alt="mindmeld 로고"
+              className={styles.logo}
+            />
           </picture>
         </Link>
       </div>

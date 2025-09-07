@@ -53,6 +53,17 @@ export default function Card({
   const finalBackgroundImage = backgroundImage || presetData?.backgroundImage;
   const finalBackgroundColor = backgroundColor || presetData?.backgroundColor;
 
+  // 디버깅을 위한 로그
+  console.log('Card 배경 정보:', {
+    id,
+    backgroundImage,
+    backgroundColor,
+    finalBackgroundImage,
+    finalBackgroundColor,
+    preset,
+    presetData,
+  });
+
   const finalOverlayOpacity =
     overlayOpacity !== undefined
       ? overlayOpacity

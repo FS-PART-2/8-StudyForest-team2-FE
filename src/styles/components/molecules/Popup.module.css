@@ -1,0 +1,114 @@
+/* 1rem = 10px 기준 */
+
+/* ---------- Overlay ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: grid;
+  place-items: center;     /* 가운데 정렬 */
+  height: 100dvh;          /* 모바일 동적 뷰포트 대응 */
+  padding-inline: 1.6rem;  /* 극단적 작은 화면 보호 */
+  z-index: 1000;
+}
+
+/* ---------- Container (모달 박스) ---------- */
+.container {
+  background: var(--background-secondary, #fff);
+  border-radius: 0.5rem;                 /* 라운드 0.5rem */
+  box-shadow: 0 0.4rem 1.2rem rgba(0,0,0,.15);
+  padding: 4rem 2.4rem 0 2.4rem;                  /* 상하 40px, 좌우 24px */
+  display: grid;
+  grid-template-rows: 1fr auto;          /* body / footer */
+  column-gap: 0;
+  font-size: var(--font-size-base, 1.6rem);/* 버튼/본문 동일 폰트 */
+}
+
+/* PC 사이즈: 64.8rem × 36.9rem */
+.lg { 
+  width: 64.8rem;
+  padding-top: 8rem;
+  padding-bottom: 2.4rem;
+}
+
+/* Mobile: 34.4rem (높이는 내용에 맞춤) */
+.md { 
+  width: 34.4rem; 
+  padding-top: 7.3rem;
+  padding-bottom: 2rem;
+}
+
+/* ---------- Body (내용) ---------- */
+/* 내용 영역을 위/중앙/아래 1fr로 나눠 문구를 중앙 고정 */
+.body {
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;  /* 위 1fr / 메시지 auto / 아래 1fr */
+  align-items: center;
+  justify-items: center;
+  padding: 0;                        /* 고정 여백 제거 */
+  min-height: 0;
+}
+.message {
+  grid-row: 2;                       /* 가운데 행 */
+  margin: 0;
+  text-align: center;
+  color: var(--text-primary, #414141);
+  line-height: 1.5;
+}
+
+/* ---------- Footer (버튼 영역) ---------- */
+/* 버튼 영역 상단 여백: PC 4rem / 모바일 2.4rem */
+.lg .footer { margin-top: 4rem; }
+.md .footer { margin-top: 2.4rem; }
+
+/* ✅ 버튼 행을 flex로 바꿔 정확히 가운데 정렬 */
+.footer { display: flex; justify-content: center; }
+.btnRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;                       /* 버튼 간격 0.8rem */
+}
+/* 1버튼 모드도 가운데 고정(트랙 1fr 제거 효과) */
+.oneBtn .btnRow { justify-content: center; }
+
+/* ---------- Button (아톰 보정) ---------- */
+.btn {
+  border-radius: 0.5rem;             /* 버튼 라운드 0.5rem */
+  font-size: inherit !important;     /* 버튼 글씨 = 본문 크기 */
+  line-height: normal;
+  width: auto;                       /* 기본은 내용 너비 */
+}
+
+/* 버튼 높이 5.5rem 고정 */
+.btnH55 {
+  height: 5.5rem;
+  line-height: 5.5rem;               /* 텍스트만일 때 수직 정렬 보조 */
+}
+
+/* 색상: 취소 / 확인 */
+.btnGray {
+  background: var(--btn-inactive, #84888f) !important;
+  color: #fff !important;
+  border: none !important;
+}
+.btnBlue {
+  background: var(--brand-blue, #0013a7) !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+/* 버튼 폭 규칙
+   - PC(lg): 1버튼 58.8rem / 2버튼 각 28.8rem
+   - Mobile(md): 1버튼 34.4rem / 2버튼 각 14rem
+*/
+.btnW588 { width: 58.8rem; }
+.btnW288 { width: 28.8rem; }
+.btnW344 { width: 34.4rem; }
+.btnW140 { width: 14rem; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .container { padding: 2.7rem 0; }  /* 상하 27px, 좌우 0 */
+  .btnW588, .btnW288, .btnW344, .btnW140 { width: 100%; }
+}
