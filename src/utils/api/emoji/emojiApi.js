@@ -11,7 +11,8 @@ export const emojiApi = {
    */
   getEmojis: async studyId => {
     try {
-      const response = await instance.get(`/api/studies/${studyId}/emojis`);
+      const id = encodeURIComponent(String(studyId));
+      const response = await instance.get(`/api/studies/${id}/emojis`);
       return response.data;
     } catch (error) {
       console.error('이모지 목록 조회 실패:', error);
@@ -45,8 +46,10 @@ export const emojiApi = {
    */
   incrementEmoji: async (studyId, emoji) => {
     try {
+      const id = encodeURIComponent(String(studyId));
+      const e = encodeURIComponent(emoji);
       const response = await instance.patch(
-        `/api/studies/${studyId}/emojis/${emoji}/increment`,
+        `/api/studies/${id}/emojis/${e}/increment`,
       );
       return response.data;
     } catch (error) {
@@ -63,8 +66,10 @@ export const emojiApi = {
    */
   decrementEmoji: async (studyId, emoji) => {
     try {
+      const id = encodeURIComponent(String(studyId));
+      const e = encodeURIComponent(emoji);
       const response = await instance.patch(
-        `/api/studies/${studyId}/emojis/${emoji}/decrement`,
+        `/api/studies/${id}/emojis/${e}/decrement`,
       );
       return response.data;
     } catch (error) {
@@ -81,10 +86,12 @@ export const emojiApi = {
    */
   deleteEmoji: async (studyId, emoji) => {
     try {
+      const id = encodeURIComponent(String(studyId));
+      const e = encodeURIComponent(emoji);
       const response = await instance.delete(
-        `/api/studies/${studyId}/emojis/${emoji}`,
+        `/api/studies/${id}/emojis/${e}`,
       );
-      return response.data;
+      return response.status === 204 ? { deleted: true } : response.data;
     } catch (error) {
       console.error('이모지 삭제 실패:', error);
       throw error;

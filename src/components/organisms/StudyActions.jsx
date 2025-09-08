@@ -81,20 +81,12 @@ export default function StudyActions({
 
     try {
       const ok = await verifyStudyPassword(studyId, password);
-      console.log('비밀번호 검증 결과:', ok);
-
-      // 임시: 백엔드 검증이 제대로 작동하지 않으므로 프론트엔드에서 검증
-      // 실제 비밀번호는 "1234"라고 가정 (실제로는 백엔드에서 검증해야 함)
-      const isValidPassword = password === '1234';
-
-      if (isValidPassword) {
-        // StudyModify 페이지로 이동
-        navigate(`/study/${studyId}/modify`);
-        return true;
-      } else {
-        console.log('비밀번호가 일치하지 않습니다.');
+      if (!ok) {
+        console.warn('비밀번호가 일치하지 않습니다.');
         return false;
       }
+      navigate(`/study/${studyId}/modify`);
+      return true;
     } catch (error) {
       console.error('비밀번호 검증 실패:', error);
       return false;
@@ -123,11 +115,7 @@ export default function StudyActions({
       const ok = await verifyStudyPassword(studyId, password);
       console.log('비밀번호 검증 결과:', ok);
 
-      // 임시: 백엔드 검증이 제대로 작동하지 않으므로 프론트엔드에서 검증
-      // 실제 비밀번호는 "1234"라고 가정 (실제로는 백엔드에서 검증해야 함)
-      const isValidPassword = password === '1234';
-
-      if (isValidPassword) {
+      if (ok) {
         try {
           // 스터디 삭제 API 호출 (비밀번호 포함)
           await deleteStudyApi(studyId, password);

@@ -85,8 +85,8 @@ export default function Card({
   if (finalBackgroundImage) {
     const fallbackImage = getFallbackImage(finalBackgroundImage);
     if (fallbackImage) {
-      // CSS fallback: PNG 먼저, SVG 나중에 (SVG 지원 브라우저에서 SVG 사용)
-      cardStyle.backgroundImage = `url(${fallbackImage}), url(${finalBackgroundImage})`;
+      // CSS fallback: SVG 먼저, PNG 나중에 (SVG 미지원/로드 실패 시 PNG 노출)
+      cardStyle.backgroundImage = `url(${finalBackgroundImage}), url(${fallbackImage})`;
     } else {
       cardStyle.backgroundImage = `url(${finalBackgroundImage})`;
     }

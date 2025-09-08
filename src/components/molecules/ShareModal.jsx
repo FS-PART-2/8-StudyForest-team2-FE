@@ -21,6 +21,12 @@ export default function ShareModal({ isOpen, onClose, shareUrl }) {
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
       copyTimerRef.current = setTimeout(() => setShowCopyToast(false), 3000);
     }
+    return () => {
+      if (copyTimerRef.current) {
+        clearTimeout(copyTimerRef.current);
+        copyTimerRef.current = null;
+      }
+    };
   }, [showCopyToast]);
 
   const handleCopy = async () => {
