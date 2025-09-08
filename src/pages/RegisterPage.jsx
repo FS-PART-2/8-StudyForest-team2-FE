@@ -7,8 +7,7 @@ import styles from '../styles/pages/RegisterPage.module.css';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { registerSchema } from '../utils/validation/registerSchema.js';
-import { userApi } from '../utils/api/user/postRegisterApi.js';
-import Toast from '../components/atoms/Toast.jsx';
+import { postRegisterApi } from '../utils/api/user/postRegisterApi';
 
 /**
  * 회원가입 페이지
@@ -40,12 +39,12 @@ export default function RegisterPage() {
 
   const onSubmit = async data => {
     try {
-      const response = await userApi.postRegisterApi(data);
+      const response = await postRegisterApi(data);
       console.log(response);
-      Toast({ type: 'basic', message: '회원가입이 완료되었습니다.' });
       navigate('/login');
     } catch (error) {
       console.error(error);
+      return; // 에러 발생 시 navigate 실행하지 않음
     }
     console.log(data);
   };
