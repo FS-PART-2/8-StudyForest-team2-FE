@@ -28,7 +28,8 @@ export const emojiApi = {
    */
   addEmoji: async (studyId, emoji) => {
     try {
-      const response = await instance.post(`/api/studies/${studyId}/emojis`, {
+      const id = encodeURIComponent(String(studyId));
+      const response = await instance.post(`/api/studies/${id}/emojis`, {
         emoji,
       });
       return response.data;
@@ -88,9 +89,7 @@ export const emojiApi = {
     try {
       const id = encodeURIComponent(String(studyId));
       const e = encodeURIComponent(emoji);
-      const response = await instance.delete(
-        `/api/studies/${id}/emojis/${e}`,
-      );
+      const response = await instance.delete(`/api/studies/${id}/emojis/${e}`);
       return response.status === 204 ? { deleted: true } : response.data;
     } catch (error) {
       console.error('이모지 삭제 실패:', error);
