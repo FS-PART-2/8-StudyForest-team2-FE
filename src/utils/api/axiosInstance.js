@@ -1,9 +1,89 @@
 import axios from 'axios';
 
 export const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_TEST_URL, // .env 파일에 정의된 환경변수 / 변경 필요
+  baseURL: import.meta.env.VITE_API_TEST_URL,
+  withCredentials: true,
   timeout: 5000,
 });
+
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach(promiseCallback => {
+    if (error) {
+      promiseCallback.reject(error);
+    } else {
+      promiseCallback.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
+
+instance.interceptors.request.use(
+  config => {
+    return config;
+  },
+  error => Promise.reject(error),
+);
+
+// 응답 인터셉터로 공통 에러 처리 및 토큰 리프레시
+instance.interceptors.response.use(
+  response => response,
+  async error => {
+    const originalRequest = error.config;
+
+    // 401 에러이고 아직 재시도하지 않은 요청인 경우
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        // 이미 리프레시 중인 경우 큐에 추가
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then(token => {
+            originalRequest.headers['Authorization'] = `Bearer ${token}`;
+            return instance(originalRequest);
+          })
+          .catch(err => {
+            return Promise.reject(err);
+          });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        // 토큰 리프레시 시도
+        const response = await instance.post('/api/users/refresh');
+        const { accessToken } = response.data;
+
+        // 새로운 토큰을 헤더에 설정
+        instance.defaults.headers.common['Authorization'] =
+          `Bearer ${accessToken}`;
+
+        // 큐에 있는 요청들 처리
+        processQueue(null, accessToken);
+
+        // 원래 요청 재시도
+        originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+        return instance(originalRequest);
+      } catch (refreshError) {
+        // 리프레시 실패 시 로그아웃 처리
+        processQueue(refreshError, null);
+        delete instance.defaults.headers.common['Authorization'];
+
+        // 로그인 페이지로 리다이렉트를 위해 커스텀 이벤트 발생
+        window.dispatchEvent(new CustomEvent('auth:logout'));
+
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    console.error('API 에러:', error.response?.data || error.message);
+  },
+);
 
 // 응답 인터셉터로 공통 에러 처리
 instance.interceptors.response.use(
