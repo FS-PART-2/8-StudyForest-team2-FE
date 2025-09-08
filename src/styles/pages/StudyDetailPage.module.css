@@ -122,48 +122,70 @@
 /* 모바일 반응형 */
 @media (max-width: 743px) {
   .page {
-    width: 34.4rem; /* 344px */
-    height: 78.1rem; /* 781px */
-    padding: 2rem 1.6rem;
+    width: 100%; /* 모바일: 화면 너비에 맞춤 */
+    max-width: 38rem; /* 최대 너비 38rem (380px) */
+    height: auto;
+    padding: 2rem 1.6rem 2rem 1.6rem;
   }
 
-  /* 모바일에서 모바일용 액션 섹션 표시 */
-  .mobileActionsSection {
-    display: block; /* absolute positioning을 위해 block으로 변경 */
-  }
-
-  .emojiSection {
-    margin-bottom: 2rem;
-  }
-
-  .titleSection {
+  /* 모바일에서 topRow를 세로 배치 */
+  .topRow {
     flex-direction: column;
     align-items: flex-start;
     gap: 1.6rem;
-    margin-bottom: 1.6rem;
+    margin-bottom: 2rem;
   }
 
-  /* 모바일에서 PC/태블릿용 액션 섹션 숨김 */
+  /* 스터디 액션 - 오른쪽 정렬 */
   .actionsSection {
-    display: none;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
   }
 
+  /* 이모지 - 왼쪽 정렬 */
+  .emojiSection {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  /* 모바일에서 titleRow를 세로 배치 */
+  .titleRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.6rem;
+    margin-bottom: 2rem;
+  }
+
+  /* 제목 - 왼쪽 정렬 */
   .studyTitle {
     font-size: 2.4rem;
+    width: 100%;
   }
 
+  /* 네비게이션 버튼 - 왼쪽 정렬 */
   .todayButtons {
     width: 100%;
     flex-direction: row;
     gap: 0.8rem;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
+  /* 소개 - 왼쪽 정렬 */
   .introSection {
     margin-bottom: 2rem;
+    width: 100%;
   }
 
+  /* 포인트 - 왼쪽 정렬 */
   .pointsSection {
     margin-bottom: 3rem;
+    width: 100%;
+  }
+
+  /* 모바일 습관 기록표 섹션 */
+  .habitTableSection {
+    width: 100%;
+    margin-top: 2rem;
   }
 }

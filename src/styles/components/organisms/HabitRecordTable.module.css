@@ -29,25 +29,32 @@
   width: 100%; /* 화면 크기에 맞춰 늘어남 */
 }
 
-/* 태블릿 이하에서 가로 스크롤 활성화 */
-@media (max-width: 1024px) {
+/* 태블릿에서 가로 스크롤 활성화 */
+@media (max-width: 1024px) and (min-width: 744px) {
   .frame {
-    overflow-x: auto; /* 태블릿 이하에서 가로 스크롤 활성화 */
+    overflow-x: auto; /* 태블릿에서 가로 스크롤 활성화 */
   }
 
   .context {
-    min-width: 60rem; /* 태블릿 이하에서 최소 너비 보장 */
+    min-width: 60rem; /* 태블릿에서 최소 너비 보장 */
   }
 }
 
-/* 모바일에서 제목 크기 조정 */
+/* 모바일에서 제목 크기 조정 및 가로 스크롤 설정 */
 @media (max-width: 743px) {
   .title {
     font-size: 1.8rem; /* 모바일: 습관 기록표 글씨 크기 1.8rem */
   }
 
   .frame {
+    width: 100%; /* 모바일: 페이지 너비에 맞춤 */
+    max-width: 31.2rem; /* 최대 너비 제한 */
+    overflow-x: auto; /* 모바일에서 가로 스크롤 활성화 */
     padding: 2.4rem 1.5rem 2.4rem 1.6rem; /* 모바일: 위 2.4rem, 우 1.5rem, 아래 2.4rem, 좌 1.6rem */
+  }
+
+  .context {
+    min-width: 60rem; /* 모바일에서 최소 너비 보장으로 가로 스크롤 */
   }
 
   /* 빈 습관 메시지일 때는 가로 스크롤 비활성화 */
