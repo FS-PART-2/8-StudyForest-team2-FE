@@ -107,7 +107,12 @@ export function StudyPage() {
         <h1 className={styles.studyPageTitle}>스터디 둘러보기</h1>
         <div className={styles.studyListFilter}>
           <SearchBar onSubmit={handleSubmit} />
-          <Dropdown onChange={handleDropdownChange} />
+          <Dropdown
+            onChange={handleDropdownChange}
+            value={
+              studyParams.recentOrder || studyParams.pointOrder || 'recent'
+            }
+          />
         </div>
         {studyList.length > 0 ? (
           <div className={styles.studyList}>
