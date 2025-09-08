@@ -5,10 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Input from '../components/atoms/Input.jsx';
 import Button from '../components/atoms/Button.jsx';
 import PasswordInput from '../components/molecules/PasswordInput.jsx';
-import Toast from '../components/atoms/Toast.jsx';
 import { loginSchema } from '../utils/validation/loginSchema.js';
 import styles from '../styles/pages/LoginPage.module.css';
-import { useState } from 'react';
 import { useAuthStore } from '../store/authStore.js';
 
 /**
@@ -16,7 +14,6 @@ import { useAuthStore } from '../store/authStore.js';
  */
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [toast, setToast] = useState(null);
   const { login } = useAuthStore();
 
   // 폼 상태 관리
@@ -38,30 +35,15 @@ export default function LoginPage() {
     try {
       const response = await login(data);
       console.log('로그인 성공:', response);
-
       navigate('/');
     } catch (error) {
       console.error('로그인 실패:', error);
-      showToast({
-        type: 'basic',
-        message: '로그인에 실패했습니다. 다시 시도해 주세요.',
-      });
     }
   };
 
   // 회원가입 페이지로 이동
   const handleLinkToRegister = () => {
     navigate('/register');
-  };
-
-  // 토스트 표시
-  const showToast = (type, message) => {
-    setToast({ type, message });
-  };
-
-  // 토스트 숨김 핸들러
-  const handleToastHide = () => {
-    setToast(null);
   };
 
   return (
@@ -147,17 +129,6 @@ export default function LoginPage() {
           </p>
         </div>
       </form>
-
-      {toast && (
-        <div className={styles.toastContainer}>
-          <Toast
-            type={toast.type}
-            point={toast.message}
-            className={styles.toast}
-            onHide={handleToastHide}
-          />
-        </div>
-      )}
     </main>
   );
 }

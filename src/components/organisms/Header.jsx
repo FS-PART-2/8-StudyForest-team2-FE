@@ -2,7 +2,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from '../../styles/components/organisms/Header.module.css';
 import Button from '../atoms/Button';
 import { useAuthStore } from '../../store/authStore';
-import { postLogoutApi } from '../../utils/api/user/postLogoutApi';
 
 export function Header() {
   const navigate = useNavigate();
@@ -20,16 +19,8 @@ export function Header() {
   console.log(isLoggedIn, user);
 
   const handleLogout = async () => {
-    try {
-      const response = await postLogoutApi();
-      console.log(response);
-      if (response.success) {
-        logout();
-        navigate('/');
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    await logout();
+    navigate('/');
   };
 
   return (

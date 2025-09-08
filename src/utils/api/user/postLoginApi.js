@@ -8,5 +8,6 @@ export const postLoginApi = async loginData => {
     return response.data;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
