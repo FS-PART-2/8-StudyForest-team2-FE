@@ -1,15 +1,15 @@
 /* Sticker.module.css */
 /* 상하 패딩: 14px → 0.875rem, 좌우 패딩: 41px → 2.5625rem, 원 크기: 36px → 2.25rem */
 .sticker {
-  background-color: white;
-  padding: 0.875rem 2.5625rem;
+  background-color: transparent; /* 컨테이너 패딩 제거로 중앙 정렬 */
+  padding: 0; /* HabitRecordTable에서 패딩 제어 */
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
 .circle {
-  width: 2.25rem;    /* 원의 너비 (36px 변환) */
-  height: 2.25rem;   /* 원의 높이 (36px 변환) */
-  border-radius: 50%; /* 완전한 원 형태 */
+  width: 3.6rem; /* 36px (10px = 1rem 기준) */
+  height: 3.6rem; /* 36px (10px = 1rem 기준) */
+  border-radius: 50%;
 }

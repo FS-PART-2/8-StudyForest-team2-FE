@@ -35,3 +35,13 @@
   width: max-content;
   white-space: nowrap;
 }
+
+.delete {
+  background: var(--btn-inactive-dark, #525252);
+  color: #fff;
+}
+
+.copy {
+  background: var(--btn-inactive-dark, #525252);
+  color: #fff;
+}

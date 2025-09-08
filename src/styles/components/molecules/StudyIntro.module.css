@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.label {
+  color: var(--text-gray, #818181);
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.description {
+  color: var(--black-black_414141, #414141);
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+  .label,
+  .description {
+    font-size: 1.4rem;
+  }
+}

@@ -10,6 +10,7 @@ import { StudyPage } from './pages/StudyPage';
 import TestPage from './pages/TestPage';
 import FocusPage from './pages/FocusPage';
 import { StudyCreatePage } from './pages/StudyCreatePage';
+import { StudyModifyPage } from './pages/StudyModifyPage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import StudyDetailPage from './pages/StudyDetailPage';

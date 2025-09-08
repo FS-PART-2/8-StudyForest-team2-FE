@@ -1,22 +1,123 @@
-.studyDetailPage {
+/* 메인 페이지 컨테이너 */
+.page {
+  width: clamp(32rem, 96vw, 112rem); /* 반응형 폭 제어 */
+  max-width: 100%;
+  min-height: 80.9rem;
+  padding: 4rem 4.2rem 4rem 4rem; /* 오른쪽 패딩을 0.2rem 추가 */
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* 로딩 및 에러 상태 */
+.loading,
+.error {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 2rem;
+  justify-content: center;
+  min-height: 20rem;
+  font-size: 1.8rem;
+  color: var(--text-gray, #818181);
 }
 
-.studyDetailPageTitle {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+/* 상단 섹션: 이모지 카운터 + 스터디 액션 */
+.topSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2.4rem;
 }
 
-.studyDetailPageDescription {
-  font-size: 2rem;
-  color: #666;
+.emojiSection {
+  flex: 1;
+}
 
-  strong {
-    font-weight: 700;
-    color: #0013a7;
+.actionsSection {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 스터디 이름 + 오늘의 습관/집중 버튼 */
+.titleSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.6rem;
+}
+
+.studyTitle {
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: var(--text-primary, #222);
+  margin: 0;
+}
+
+.todayButtons {
+  display: flex;
+  gap: 1.2rem;
+}
+
+/* 소개 섹션 */
+.introSection {
+  margin-bottom: 2.4rem;
+}
+
+/* 포인트 섹션 */
+.pointsSection {
+  margin-bottom: 4rem;
+}
+
+/* 습관 기록표 섹션 */
+.habitTableSection {
+  width: 100%;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .page {
+    width: 100%;
+    padding: 2rem;
+    min-height: auto;
+  }
+
+  .topSection {
+    flex-direction: column;
+    gap: 1.6rem;
+    margin-bottom: 2rem;
+  }
+
+  .emojiSection,
+  .actionsSection {
+    flex: none;
+    width: 100%;
+  }
+
+  .actionsSection {
+    justify-content: flex-start;
+  }
+
+  .titleSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.6rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .studyTitle {
+    font-size: 2.4rem;
+  }
+
+  .todayButtons {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .introSection {
+    margin-bottom: 2rem;
+  }
+
+  .pointsSection {
+    margin-bottom: 3rem;
   }
 }
