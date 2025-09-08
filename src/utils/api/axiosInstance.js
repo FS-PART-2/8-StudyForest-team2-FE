@@ -3,7 +3,7 @@ import axios from 'axios';
 export const instance = axios.create({
   baseURL: import.meta.env.VITE_API_TEST_URL || 'https://eight-studyforest-team2-be.onrender.com',
   withCredentials: true,
-  timeout: 10000, // 10초 타임아웃
+  timeout: 5000,
 });
 
 // 응답 인터셉터로 공통 에러 처리
