@@ -92,44 +92,42 @@ export default function StudyDetailPage() {
 
   return (
     <div className={styles.page}>
-      {/* 모바일용 스터디 액션 (이모지 위에) */}
-      <div className={styles.mobileActionsSection}>
-        <StudyActions studyId={id} title={studyData.name} />
-      </div>
+      {/* 이모지 + 스터디 액션 (같은 row) */}
+      <div className={styles.topRow}>
+        <div className={styles.emojiSection}>
+          <EmojiCounter
+            emojiData={emojiData}
+            studyId={id}
+            onEmojiUpdate={handleEmojiUpdate}
+          />
+        </div>
 
-      {/* 이모지 카운터 */}
-      <div className={styles.emojiSection}>
-        <EmojiCounter
-          emojiData={emojiData}
-          studyId={id}
-          onEmojiUpdate={handleEmojiUpdate}
-        />
-      </div>
-
-      {/* 스터디 이름 + 스터디 액션 (PC/태블릿용) */}
-      <div className={styles.titleSection}>
-        <h1 className={styles.studyTitle}>{studyData.name}</h1>
         <div className={styles.actionsSection}>
           <StudyActions studyId={id} title={studyData.name} />
         </div>
       </div>
 
-      {/* 오늘의 습관/집중 버튼 */}
-      <div className={styles.todayButtonsSection}>
+      {/* 제목 + 네비게이션 버튼 (같은 row) */}
+      <div className={styles.titleRow}>
+        <h1 className={styles.studyTitle}>{studyData.name}</h1>
+
         <div className={styles.todayButtons}>
           <NavigationButton to={`/habit/${id}`}>오늘의 습관</NavigationButton>
           <NavigationButton to="/focus">오늘의 집중</NavigationButton>
         </div>
       </div>
 
-      {/* 소개 */}
-      <div className={styles.introSection}>
-        <StudyIntro description={studyData.content || studyData.description} />
-      </div>
+      {/* 하단 섹션: 소개 + 포인트 */}
+      <div className={styles.bottomSection}>
+        <div className={styles.introSection}>
+          <StudyIntro
+            description={studyData.content || studyData.description}
+          />
+        </div>
 
-      {/* 포인트 */}
-      <div className={styles.pointsSection}>
-        <StudyPoints points={studyData.points || 310} />
+        <div className={styles.pointsSection}>
+          <StudyPoints points={studyData.points || 310} />
+        </div>
       </div>
 
       {/* 습관 기록표 - 공개 스터디인 경우에만 표시 */}
