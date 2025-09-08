@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 export const instance = axios.create({
-  baseURL: 'https://eight-studyforest-team2-be.onrender.com', // 백엔드 온라인 URL
+  baseURL: import.meta.env.VITE_API_TEST_URL || 'https://eight-studyforest-team2-be.onrender.com',
+  withCredentials: true,
   timeout: 10000, // 10초 타임아웃
 });
 
