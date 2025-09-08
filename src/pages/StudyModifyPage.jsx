@@ -32,31 +32,71 @@ export function StudyModifyPage() {
 
   const base = import.meta.env.BASE_URL || '/';
 
+  // API에서 받아오는 배경 경로를 올바른 경로로 매핑
+  const mapBackgroundPath = originalPath => {
+    if (!originalPath) return null;
+
+    // 기존 잘못된 경로들을 올바른 경로로 매핑
+    const pathMapping = {
+      '/img/default.png': '/assets/images/card-bg-color-01.svg',
+      '/img/img-01.png': '/assets/images/card-bg-color-01.svg',
+      '/img/img-02.png': '/assets/images/card-bg-color-02.svg',
+      '/img/img-03.png': '/assets/images/card-bg-color-03.svg',
+      '/img/img-04.png': '/assets/images/card-bg-color-04.svg',
+      '/img/img-05.png': '/assets/images/card-bg-01.svg',
+      '/img/img-06.png': '/assets/images/card-bg-02.svg',
+      '/img/img-07.png': '/assets/images/card-bg-03.svg',
+      '/img/img-08.png': '/assets/images/card-bg-04.svg',
+      '/assets/images/bg-desk-1.svg': '/assets/images/card-bg-01.svg',
+      '/assets/images/bg-laptop-1.svg': '/assets/images/card-bg-02.svg',
+      '/assets/images/bg-tiles-1.svg': '/assets/images/card-bg-03.svg',
+      '/assets/images/bg-plant-1.svg': '/assets/images/card-bg-04.svg',
+    };
+
+    return pathMapping[originalPath] || originalPath;
+  };
+
   const backgrounds = useMemo(
     () => [
-      { id: 'img-01', type: 'color', value: '#E2E8F0' },
-      { id: 'img-02', type: 'color', value: '#D1FAE5' },
-      { id: 'img-03', type: 'color', value: '#E5E7EB' },
-      { id: 'img-04', type: 'color', value: '#E0E7FF' },
+      {
+        id: 'img-01',
+        type: 'image',
+        value: `${base}assets/images/card-bg-color-01.svg`,
+      },
+      {
+        id: 'img-02',
+        type: 'image',
+        value: `${base}assets/images/card-bg-color-02.svg`,
+      },
+      {
+        id: 'img-03',
+        type: 'image',
+        value: `${base}assets/images/card-bg-color-03.svg`,
+      },
+      {
+        id: 'img-04',
+        type: 'image',
+        value: `${base}assets/images/card-bg-color-04.svg`,
+      },
       {
         id: 'img-05',
         type: 'image',
-        value: `${base}assets/images/bg-desk-1.svg`,
+        value: `${base}assets/images/card-bg-01.svg`,
       },
       {
         id: 'img-06',
         type: 'image',
-        value: `${base}assets/images/bg-laptop-1.svg`,
+        value: `${base}assets/images/card-bg-02.svg`,
       },
       {
         id: 'img-07',
         type: 'image',
-        value: `${base}assets/images/bg-tiles-1.svg`,
+        value: `${base}assets/images/card-bg-03.svg`,
       },
       {
         id: 'img-08',
         type: 'image',
-        value: `${base}assets/images/bg-plant-1.svg`,
+        value: `${base}assets/images/card-bg-04.svg`,
       },
     ],
     [base],
@@ -73,8 +113,12 @@ export function StudyModifyPage() {
           setDescription(data.description || data.content || '');
           const serverBg = data.background ?? data.img ?? null; // 서버가 주는 실제 값(색상/URL) or 과거 id
           if (serverBg) {
+            const mappedBg = mapBackgroundPath(serverBg);
             const matched = backgrounds.find(
-              bg => bg.value === serverBg || bg.id === serverBg,
+              bg =>
+                bg.value === mappedBg ||
+                bg.value === serverBg ||
+                bg.id === serverBg,
             );
             setSelectedBgId(matched ? matched.id : 'img-01');
           } else {
@@ -275,20 +319,12 @@ export function StudyModifyPage() {
                   className={`${styles.bgItem} ${selected ? styles.bgItemSelected : ''}`}
                   onClick={() => setSelectedBgId(bg.id)}
                 >
-                  {bg.type === 'color' ? (
-                    <span
-                      className={styles.bgSwatch}
-                      style={{ backgroundColor: bg.value }}
-                      aria-label="색상 배경"
-                    />
-                  ) : (
-                    <img
-                      className={styles.bgImg}
-                      src={bg.value}
-                      alt="배경 이미지"
-                      loading="lazy"
-                    />
-                  )}
+                  <img
+                    className={styles.bgImg}
+                    src={bg.value}
+                    alt="배경 이미지"
+                    loading="lazy"
+                  />
                   {selected && (
                     <img
                       src={`${base}assets/icons/selected.svg`}

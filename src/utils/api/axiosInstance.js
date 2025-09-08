@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 export const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_TEST_URL, // .env 파일에 정의된 환경변수 / 변경 필요
-  timeout: 5000,
+  baseURL: 'https://eight-studyforest-team2-be.onrender.com', // 백엔드 온라인 URL
+  timeout: 10000, // 10초 타임아웃
 });
 
 // 응답 인터셉터로 공통 에러 처리

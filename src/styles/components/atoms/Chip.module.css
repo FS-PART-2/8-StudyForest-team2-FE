@@ -3,9 +3,9 @@
   align-items: center;
   justify-content: center;
 
-  width: 40rem;          /* 400px */
-  height: 5.5rem;        /* 55px */
-  padding: 0 1.6rem;
+  width: 40rem; /* PC/태블릿 400px 고정 */
+  height: 5.5rem; /* 55px */
+  padding: 0 1.6rem; /* PC/태블릿 좌우 패딩 */
   border-radius: 1rem;
   box-sizing: border-box;
 
@@ -15,36 +15,40 @@
   cursor: pointer;
   user-select: none;
   transition:
-    background-color .15s ease,
-    color .15s ease,
-    opacity .15s ease,
-    border-color .15s ease,
-    outline-color .15s ease;
+    background-color 0.15s ease,
+    color 0.15s ease,
+    opacity 0.15s ease,
+    border-color 0.15s ease,
+    outline-color 0.15s ease;
 }
 
-/* 모바일 대응 */
-@media (max-width: 480px) {
+/* 모바일 대응 (744px 이하) */
+@media (max-width: 744px) {
   .chip {
-    width: 25.6rem; /* 256px */
-    height: 5.5rem;
+    width: 25.6rem; /* 모바일 256px 고정 (원래대로) */
+    height: 5.3rem; /* 모바일 높이 53px */
+    padding: 0; /* 모바일에서 좌우 패딩 제거 */
   }
 }
 
 .unselected {
-  background: var(--background-neutral, #EEE);
+  background: var(--background-neutral, #eee);
   color: var(--text-gray, #818181);
 }
 
 .selected {
   background: var(--brand-blue, #3b82f6);
-  color: var(--background-secondary, #FFF);
+  color: var(--background-secondary, #fff);
 }
 
 .editing {
   border: 0.1rem solid var(--brand-blue, #3b82f6);
 }
 
-.disabled { opacity: .5; cursor: not-allowed; }
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 .chip:focus-visible {
   outline: 0.2rem solid var(--brand-blue, #3b82f6);

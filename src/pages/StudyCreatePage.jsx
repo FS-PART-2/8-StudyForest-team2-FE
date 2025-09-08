@@ -33,29 +33,45 @@ export function StudyCreatePage() {
 
   const backgrounds = useMemo(
     () => [
-      { id: 'img-01', type: 'color', value: '#E2E8F0' },
-      { id: 'img-02', type: 'color', value: '#D1FAE5' },
-      { id: 'img-03', type: 'color', value: '#E5E7EB' },
-      { id: 'img-04', type: 'color', value: '#E0E7FF' },
+      {
+        id: 'img-01',
+        type: 'image',
+        value: `${base}assets/images/card-bg-color-01.svg`,
+      },
+      {
+        id: 'img-02',
+        type: 'image',
+        value: `${base}assets/images/card-bg-color-02.svg`,
+      },
+      {
+        id: 'img-03',
+        type: 'image',
+        value: `${base}assets/images/card-bg-color-03.svg`,
+      },
+      {
+        id: 'img-04',
+        type: 'image',
+        value: `${base}assets/images/card-bg-color-04.svg`,
+      },
       {
         id: 'img-05',
         type: 'image',
-        value: `${base}assets/images/bg-desk-1.svg`,
+        value: `${base}assets/images/card-bg-01.svg`,
       },
       {
         id: 'img-06',
         type: 'image',
-        value: `${base}assets/images/bg-laptop-1.svg`,
+        value: `${base}assets/images/card-bg-02.svg`,
       },
       {
         id: 'img-07',
         type: 'image',
-        value: `${base}assets/images/bg-tiles-1.svg`,
+        value: `${base}assets/images/card-bg-03.svg`,
       },
       {
         id: 'img-08',
         type: 'image',
-        value: `${base}assets/images/bg-plant-1.svg`,
+        value: `${base}assets/images/card-bg-04.svg`,
       },
     ],
     [base],
@@ -134,6 +150,16 @@ export function StudyCreatePage() {
 
       const selected = backgrounds.find(bg => bg.id === selectedBgId);
       const background = selected?.value ?? selectedBgId; // id 미스매치 대비 안전장치
+
+      console.log('스터디 생성 데이터:', {
+        nickname: nickname.trim(),
+        studyName: studyName.trim(),
+        description: description.trim(),
+        background,
+        password: '***',
+        passwordConfirm: '***',
+        isPublic,
+      });
 
       const data = await createStudy({
         nickname: nickname.trim(),
@@ -278,20 +304,12 @@ export function StudyCreatePage() {
                   className={`${styles.bgItem} ${selected ? styles.bgItemSelected : ''}`}
                   onClick={() => setSelectedBgId(bg.id)}
                 >
-                  {bg.type === 'color' ? (
-                    <span
-                      className={styles.bgSwatch}
-                      style={{ backgroundColor: bg.value }}
-                      aria-label="색상 배경"
-                    />
-                  ) : (
-                    <img
-                      className={styles.bgImg}
-                      src={bg.value}
-                      alt="배경 이미지"
-                      loading="lazy"
-                    />
-                  )}
+                  <img
+                    className={styles.bgImg}
+                    src={bg.value}
+                    alt="배경 이미지"
+                    loading="lazy"
+                  />
                   {selected && (
                     <img
                       src={`${base}assets/icons/selected.svg`}
@@ -365,7 +383,13 @@ export function StudyCreatePage() {
             </span>
             <ToggleSwitch
               checked={isPublic}
-              onChange={next => setIsPublic(!!next)}
+              onChange={next => {
+                console.log('토글스위치 변경:', {
+                  이전값: isPublic,
+                  새값: !!next,
+                });
+                setIsPublic(!!next);
+              }}
               aria-labelledby="publicLabel"
             />
           </div>

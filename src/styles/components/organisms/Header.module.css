@@ -4,10 +4,13 @@
   align-items: center;
   padding: 2.5rem 20rem;
   margin-bottom: 4rem;
+  min-width: 35rem; /* 350px 이하 프리즈 */
 }
 
-.header img {
-  width: 20rem;
+.header .logo {
+  width: clamp(12rem, 24vw, 20rem);
+  min-width: 12rem; /* 360px 이하에서도 최소 크기 보장 */
+  max-width: 100%;
   height: auto;
 }
 
@@ -23,12 +26,14 @@
   color: var(--brand-blue);
 }
 
+/* 태블릿 반응형 */
 @media (max-width: 1024px) {
   .header {
     padding: 2.25rem 4.4rem;
   }
 }
 
+/* 모바일 반응형 */
 @media (max-width: 743px) {
   .header {
     padding: 2.25rem 1.6rem;

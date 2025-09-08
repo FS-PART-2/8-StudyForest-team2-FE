@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from '../../styles/components/atoms/Dropdown.module.css';
-import downIcon from '../../../public/assets/icons/down.svg';
 
 const Dropdown = ({ onChange, value = 'recent' }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,7 +46,11 @@ const Dropdown = ({ onChange, value = 'recent' }) => {
         type="button"
       >
         <span className={styles.dropdownText}>{selectedOption.label}</span>
-        <img src={downIcon} alt="드롭다운" className={styles.dropdownIcon} />
+        <img
+          src="/assets/icons/down.svg"
+          alt="드롭다운"
+          className={styles.dropdownIcon}
+        />
       </button>
 
       {isOpen && (

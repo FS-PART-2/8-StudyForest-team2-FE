@@ -6,6 +6,7 @@
   padding: 2.4rem;
   min-height: 100vh;
   background: var(--background-primary);
+  min-width: 35rem; /* 350px 이하 프리즈 */
 }
 
 .card {
@@ -192,7 +193,7 @@
 }
 
 /* 태블릿 반응형 */
-@media (max-width: 76.8rem) {
+@media (max-width: 1024px) {
   .page {
     padding: 2rem;
   }
@@ -238,7 +239,7 @@
 }
 
 /* 모바일 반응형 */
-@media (max-width: 48rem) {
+@media (max-width: 743px) {
   .page {
     padding: 1.6rem;
   }

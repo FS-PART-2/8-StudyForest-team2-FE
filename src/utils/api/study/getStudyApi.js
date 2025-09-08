@@ -19,6 +19,7 @@ const getStudyApi = async (params = {}) => {
         limit,
         keyword,
         pointOrder,
+        _t: Date.now(), // 캐시 무시를 위한 타임스탬프
       },
     });
     return response.data;

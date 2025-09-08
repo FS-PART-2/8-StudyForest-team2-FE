@@ -97,6 +97,21 @@
 } /* 48x48 */
 
 /* 중복/잔존 규칙 정리: .action/.size-ctrl-lg 중복 제거, .size-chip 삭제 */
+/* 태블릿 반응형 */
+@media (max-width: 1024px) {
+  .size-ctrl-lg {
+    width: 20rem;
+    height: 5rem;
+    font-size: 2.2rem;
+  }
+
+  .size-circle-lg {
+    width: 5.6rem;
+    height: 5.6rem;
+  }
+}
+
+/* 모바일 반응형 */
 @media (max-width: 743px) {
   .size-ctrl-lg {
     width: 14rem;
