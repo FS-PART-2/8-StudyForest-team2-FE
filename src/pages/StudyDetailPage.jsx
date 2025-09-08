@@ -117,7 +117,7 @@ export default function StudyDetailPage() {
       {/* 오늘의 습관/집중 버튼 */}
       <div className={styles.todayButtonsSection}>
         <div className={styles.todayButtons}>
-          <NavigationButton to="/habit">오늘의 습관</NavigationButton>
+          <NavigationButton to={`/habit/${id}`}>오늘의 습관</NavigationButton>
           <NavigationButton to="/focus">오늘의 집중</NavigationButton>
         </div>
       </div>

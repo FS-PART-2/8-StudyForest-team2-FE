@@ -46,18 +46,15 @@
 }
 
 .actionsSection {
-  position: relative; /* absolute positioning 기준점 */
-}
-
-.actionsSection .actions {
-  position: absolute;
-  right: 0;
-  top: 0;
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* 오늘의 습관/집중 버튼 섹션 */
 .todayButtonsSection {
   margin-bottom: 1.6rem;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .studyTitle {
@@ -70,6 +67,7 @@
 .todayButtons {
   display: flex;
   gap: 1.2rem;
+  justify-content: flex-end;
 }
 
 /* 소개 섹션 */
@@ -155,6 +153,7 @@
     width: 100%;
     flex-direction: row;
     gap: 0.8rem;
+    justify-content: flex-end;
   }
 
   .introSection {

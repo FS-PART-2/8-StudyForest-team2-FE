@@ -134,7 +134,7 @@ export default function FocusPage() {
         <div className={styles.focusHeader}>
           <h1 className={styles.title}>연우의 개발공장</h1>
           <div className={styles.nav}>
-            <NavigationButton to="/today-habits">오늘의 습관</NavigationButton>
+            <NavigationButton to="/habit">오늘의 습관</NavigationButton>
             <NavigationButton to="/">홈</NavigationButton>
           </div>
         </div>
