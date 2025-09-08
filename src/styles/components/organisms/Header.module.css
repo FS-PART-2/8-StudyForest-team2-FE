@@ -23,6 +23,13 @@
   color: var(--brand-blue);
 }
 
+.userName {
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--brand-blue);
+  margin-right: 1.6rem;
+}
+
 @media (max-width: 1024px) {
   .header {
     padding: 2.25rem 4.4rem;

@@ -5,16 +5,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Input from '../components/atoms/Input.jsx';
 import Button from '../components/atoms/Button.jsx';
 import PasswordInput from '../components/molecules/PasswordInput.jsx';
-import Toast from '../components/atoms/Toast.jsx';
 import { loginSchema } from '../utils/validation/loginSchema.js';
-import { userApi } from '../utils/api/user/postLoginApi.js';
 import styles from '../styles/pages/LoginPage.module.css';
+import { useAuthStore } from '../store/authStore.js';
 
 /**
  * 로그인 페이지
  */
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuthStore();
 
   // 폼 상태 관리
   const {
@@ -33,16 +33,11 @@ export default function LoginPage() {
   // 로그인 처리
   const onSubmit = async data => {
     try {
-      const response = await userApi.postLoginApi(data);
+      const response = await login(data);
       console.log('로그인 성공:', response);
-      Toast({ type: 'basic', message: '로그인이 완료되었습니다.' });
       navigate('/');
     } catch (error) {
       console.error('로그인 실패:', error);
-      Toast({
-        type: 'basic',
-        message: '로그인에 실패했습니다. 다시 시도해 주세요.',
-      });
     }
   };
 
