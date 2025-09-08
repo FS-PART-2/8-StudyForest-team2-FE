@@ -15,6 +15,7 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import StudyDetailPage from './pages/StudyDetailPage';
 import { useAuthStore } from './store/authStore';
+import ProfilePage from './pages/ProfilePage';
 
 export function App() {
   const { initialize } = useAuthStore();
@@ -35,6 +36,7 @@ export function App() {
             <Route path="/study/:id" element={<StudyDetailPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

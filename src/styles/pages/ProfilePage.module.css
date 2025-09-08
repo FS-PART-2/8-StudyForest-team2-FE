@@ -1,0 +1,370 @@
+/* 기준: 1rem = 10px */
+
+.page {
+  display: grid;
+  place-items: start center;
+  padding: 2.4rem;
+  min-height: 100vh;
+  background: var(--background-primary);
+}
+
+.card {
+  width: 100%;
+  max-width: 60rem;
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 0.4rem 2.4rem rgba(0, 0, 0, 0.08);
+  padding: 3.2rem 2.4rem 2.4rem;
+  margin: 2.4rem 0;
+}
+
+/* 헤더 섹션 */
+.header {
+  text-align: center;
+  margin-bottom: 3.2rem;
+  padding-bottom: 2.4rem;
+  border-bottom: 0.1rem solid var(--border-gray);
+}
+
+.title {
+  font-weight: 800;
+  color: var(--text-primary);
+  font-size: 2.8rem;
+  line-height: 1.2;
+  margin: 0 0 1.2rem;
+  background: linear-gradient(135deg, var(--brand-blue) 0%, #4338ca 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 1.6rem;
+  color: var(--text-gray);
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* 섹션 공통 */
+.section {
+  padding-bottom: 1.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.section > * + * {
+  margin-top: 1.2rem;
+}
+
+/* 라벨 */
+.label {
+  display: block;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 1.6rem;
+  margin-bottom: 1.2rem;
+}
+
+/* 인풋 통일 규칙 */
+.section :global(input),
+.section :global(textarea),
+.section :global(.wrap) {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 버튼 그룹 */
+.buttonGroup {
+  display: flex;
+  gap: 1.2rem;
+  margin: 3.2rem 0 2.4rem;
+  justify-content: center;
+}
+
+.cancelButton,
+.submitButton {
+  flex: 1;
+  height: 5.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 600;
+  transition: all 200ms ease;
+  border-radius: 1rem;
+  max-width: 20rem;
+}
+
+.cancelButton {
+  color: var(--text-gray);
+  border: 0.2rem solid var(--border-gray);
+  background: transparent;
+}
+
+.cancelButton:hover:not(:disabled) {
+  border-color: var(--text-gray);
+  color: var(--text-primary);
+  transform: translateY(-0.1rem);
+  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
+}
+
+.submitButton {
+  background: linear-gradient(135deg, var(--brand-blue) 0%, #4338ca 100%);
+  color: white;
+  border: none;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--btn-active) 0%, #3730a3 100%);
+  transform: translateY(-0.1rem);
+  box-shadow: 0 0.6rem 1.2rem rgba(0, 19, 167, 0.2);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 로그아웃 섹션 */
+.logoutSection {
+  text-align: center;
+  margin-top: 2.4rem;
+  padding-top: 2.4rem;
+  border-top: 0.1rem solid var(--border-gray);
+}
+
+.logoutButton {
+  background: none;
+  color: var(--warning-red);
+  border: 0.2rem solid var(--warning-red);
+  font-size: 1.4rem;
+  font-weight: 500;
+  padding: 1rem 2rem;
+  border-radius: 0.8rem;
+  transition: all 200ms ease;
+  cursor: pointer;
+}
+
+.logoutButton:hover:not(:disabled) {
+  background: var(--warning-red);
+  color: white;
+  transform: translateY(-0.1rem);
+  box-shadow: 0 0.4rem 0.8rem rgba(220, 38, 127, 0.2);
+}
+
+.logoutButton:focus-visible {
+  outline: 0.2rem solid var(--warning-red);
+  outline-offset: 0.2rem;
+}
+
+/* 에러 슬롯: 메시지가 없어도 높이를 미리 잡아 레이아웃 안 밀리게 */
+.errorSlot {
+  min-height: 2.4rem;
+  display: block;
+  margin-top: 0.8rem;
+}
+
+/* 에러 텍스트 */
+.error {
+  margin: 0.4rem 0 0;
+  color: var(--warning-red) !important;
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.3;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.error::before {
+  content: '⚠';
+  font-size: 1.1rem;
+}
+
+/* 인풋/텍스트에어리어 빨간 보더 */
+:where(input, textarea)[aria-invalid='true'] {
+  border-color: var(--warning-red) !important;
+  outline-color: var(--warning-red) !important;
+  box-shadow: 0 0 0 0.1rem var(--warning-red) !important;
+}
+
+/* 태블릿 반응형 */
+@media (max-width: 76.8rem) {
+  .page {
+    padding: 2rem;
+  }
+
+  .card {
+    max-width: 100%;
+    padding: 2.4rem 2rem;
+    margin: 1.6rem 0;
+    border-radius: 1rem;
+  }
+
+  .header {
+    margin-bottom: 2.4rem;
+    padding-bottom: 1.6rem;
+  }
+
+  .title {
+    font-size: 2.4rem;
+  }
+
+  .subtitle {
+    font-size: 1.4rem;
+  }
+
+  .label {
+    font-size: 1.4rem;
+  }
+
+  .buttonGroup {
+    margin: 2.4rem 0 1.6rem;
+    gap: 1rem;
+  }
+
+  .cancelButton,
+  .submitButton {
+    height: 4.8rem;
+    font-size: 1.5rem;
+  }
+
+  .logoutSection {
+    margin-top: 2rem;
+    padding-top: 2rem;
+  }
+
+  .logoutButton {
+    font-size: 1.3rem;
+  }
+}
+
+/* 모바일 반응형 */
+@media (max-width: 48rem) {
+  .page {
+    padding: 1.2rem;
+  }
+
+  .card {
+    padding: 2rem 1.6rem;
+    border-radius: 0.8rem;
+  }
+
+  .header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.2rem;
+  }
+
+  .title {
+    font-size: 2.2rem;
+  }
+
+  .section {
+    margin-bottom: 0.4rem;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+    margin: 2rem 0 1.2rem;
+    gap: 0.8rem;
+  }
+
+  .cancelButton,
+  .submitButton {
+    max-width: 100%;
+    height: 4.4rem;
+    font-size: 1.4rem;
+  }
+
+  .logoutSection {
+    margin-top: 1.6rem;
+    padding-top: 1.6rem;
+  }
+
+  .logoutButton {
+    font-size: 1.2rem;
+    padding: 0.8rem 1.6rem;
+  }
+
+  .errorSlot {
+    min-height: 2rem;
+  }
+
+  .error {
+    font-size: 1.1rem;
+  }
+}
+
+/* 접근성 개선 */
+@media (prefers-reduced-motion: reduce) {
+  .cancelButton,
+  .submitButton,
+  .logoutButton {
+    transition: none;
+  }
+
+  .cancelButton:hover:not(:disabled),
+  .submitButton:hover:not(:disabled),
+  .logoutButton:hover:not(:disabled) {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* 다크모드 지원 */
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: #1a1a1a;
+    box-shadow: 0 0.4rem 2.4rem rgba(0, 0, 0, 0.3);
+  }
+
+  .header {
+    border-bottom-color: #333;
+  }
+
+  .logoutSection {
+    border-top-color: #333;
+  }
+
+  .title {
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: #ccc;
+  }
+
+  .label {
+    color: #fff;
+  }
+
+  .cancelButton {
+    color: #ccc;
+    border-color: #444;
+  }
+
+  .cancelButton:hover:not(:disabled) {
+    border-color: #666;
+    color: #fff;
+  }
+}
+
+/* 포커스 스타일 강화 */
+.section :global(input:focus),
+.section :global(textarea:focus) {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 0.3rem rgba(0, 19, 167, 0.1);
+  outline: none;
+}
+
+/* 버튼 포커스 스타일 */
+.cancelButton:focus-visible,
+.submitButton:focus-visible {
+  outline: 0.2rem solid var(--brand-blue);
+  outline-offset: 0.2rem;
+}
