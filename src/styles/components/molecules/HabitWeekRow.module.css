@@ -1,15 +1,17 @@
 .row {
   display: grid;
-  grid-template-columns: 19.8rem 84rem; /* 왼쪽 이름칸 + 스티커 영역 고정 84rem */
+  grid-template-columns: 15.2rem 1fr; /* 습관명 고정, 요일 영역은 남은 공간 사용 */
   align-items: center;
   height: 6rem;
-  width: 100%;
+  width: 100%; /* 화면 크기에 맞춰 늘어남 */
   box-sizing: border-box;
+  min-width: 35rem; /* 350px 이하 프리즈 */
 }
 
 /* 요일 전용 행(헤더)은 높이를 더 얇게 */
 .rowHeader {
   height: 3.4rem; /* 살짝 더 얇게 */
+  margin-bottom: 1rem; /* 요일 헤더 아래 여백 */
 }
 
 .name {
@@ -20,17 +22,37 @@
   padding-right: 2rem;
   box-sizing: border-box;
 }
-.nameSpacer {
-  padding-right: 0; /* 요일 헤더용: 좌우 정렬 오프셋 제거 */
-}
+
 .nameText {
-  max-width: 100%;
+  color: var(--text-primary, #222);
+  font-size: 1.6rem;
+  font-weight: 500;
+  text-align: right;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--text-primary, #222);
-  font-weight: 600;
-  font-size: 1.4rem; /* 요청: 습관 리스트 텍스트 크기 */
+  max-width: 100%;
+}
+
+/* 태블릿에서 습관명 줄바꿈 허용 */
+@media (max-width: 1024px) {
+  .nameText {
+    white-space: normal; /* 줄바꿈 허용 */
+    text-overflow: unset; /* ... 제거 */
+    overflow: visible; /* overflow 제거 */
+    line-height: 1.3; /* 줄 간격 조정 */
+  }
+}
+
+/* 모바일에서 글씨 크기만 조정 - 레이아웃은 그대로 유지 */
+@media (max-width: 743px) {
+  .nameText {
+    font-size: 1.4rem; /* 모바일: 습관 리스트 글씨 크기 1.4rem */
+  }
+
+  .dayLabel {
+    font-size: 1.4rem; /* 모바일: 요일 글씨 크기 1.4rem */
+  }
 }
 
 .stickers {
@@ -38,8 +60,8 @@
   grid-template-columns: repeat(7, 1fr); /* 7등분 */
   justify-items: center; /* 각 칸 중앙 */
   align-items: center;
-  width: 84rem; /* 스티커 영역 고정 */
-  padding: 1.4rem 0; /* 세로 패딩만 */
+  width: 100%; /* 화면 크기에 맞춰 늘어남 */
+  padding: 1.4rem 1.4rem; /* 위아래 1.4rem, 좌우 1.4rem */
   box-sizing: border-box;
   gap: 0;
 }
@@ -50,29 +72,59 @@
   grid-template-columns: repeat(7, 1fr); /* 스티커와 동일 7등분 */
   justify-items: center; /* 텍스트 중앙 */
   align-items: center;
-  width: 84rem; /* 스티커 영역과 동일 폭 */
-  padding: 0; /* 좌우 패딩 제거 */
+  width: 100%; /* 화면 크기에 맞춰 늘어남 */
+  padding: 0 1.4rem; /* 좌우 1.4rem */
 }
 
 .dayLabel {
   color: var(--text-gray, #818181);
   font-size: 1.4rem;
+  font-weight: 500;
+  text-align: center;
 }
 
+/* 스티커 컨테이너 */
 .sticker {
   width: 3.6rem;
   height: 3.6rem;
-  border-radius: 50%;
-  background: var(--sticker-area, #e8e8e8);
-  display: inline-block;
-  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background: var(--background-secondary, #fff);
+  border: 1px solid #e8e8e8;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* 태블릿에서 스티커 크기 조정 */
+@media (max-width: 1024px) {
+  .sticker {
+    width: 2.8rem; /* 태블릿: 스티커 크기 2.8rem */
+    height: 2.8rem;
+  }
 }
 
 .sticker:hover {
-  opacity: 0.8;
+  background: var(--background-hover, #f5f5f5);
+  border-color: var(--brand-blue, #0013a7);
 }
 
-.active {
+.sticker.selected {
   background: var(--brand-blue, #0013a7);
+  border-color: var(--brand-blue, #0013a7);
+}
+
+.sticker img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+}
+
+/* 태블릿에서 스티커 이미지 크기 조정 */
+@media (max-width: 1024px) {
+  .sticker img {
+    width: 1.6rem; /* 태블릿: 스티커 이미지 크기 1.6rem */
+    height: 1.6rem;
+  }
 }

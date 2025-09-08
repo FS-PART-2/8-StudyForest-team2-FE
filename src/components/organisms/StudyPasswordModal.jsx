@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import PasswordInput from '../molecules/PasswordInput.jsx';
 import Button from '../atoms/Button.jsx';
 import Toast from '../atoms/Toast.jsx';
@@ -64,7 +65,7 @@ export default function StudyPasswordModal({
     setPassword(e.target.value);
   };
 
-  return (
+  return createPortal(
     <div className={styles.modalBackdrop} onClick={onClose}>
       <div
         className={styles.modal}
@@ -126,6 +127,7 @@ export default function StudyPasswordModal({
           <Toast type="error" />
         </div>
       )}
-    </div>
+    </div>,
+    document.body,
   );
 }

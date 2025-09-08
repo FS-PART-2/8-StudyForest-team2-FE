@@ -50,19 +50,24 @@ export default function Card({
   // 프리셋이 있으면 프리셋 사용, 없으면 직접 전달된 props 사용
   const presetData = preset ? CARD_PRESETS[preset] : null;
 
+  // 배경 우선순위: 직접 전달된 props > 프리셋 데이터
   const finalBackgroundImage = backgroundImage || presetData?.backgroundImage;
   const finalBackgroundColor = backgroundColor || presetData?.backgroundColor;
 
-  // 디버깅을 위한 로그
-  console.log('Card 배경 정보:', {
-    id,
-    backgroundImage,
-    backgroundColor,
-    finalBackgroundImage,
-    finalBackgroundColor,
-    preset,
-    presetData,
-  });
+  // SVG fallback을 위한 PNG 경로 생성
+  const getFallbackImage = svgPath => {
+    if (!svgPath) return null;
+    return svgPath.replace('.svg', '.png');
+  };
+
+  // 이미지 배경인지 색상 배경인지 판단
+  const isImageBackground = !!finalBackgroundImage;
+  const isColorBackground = !!finalBackgroundColor && !finalBackgroundImage;
+
+  // 색상 SVG인지 패턴 이미지인지 판단 (파일명으로 구분)
+  const isColorSvg =
+    finalBackgroundImage && finalBackgroundImage.includes('card-bg-color-');
+  const isPatternImage = finalBackgroundImage && !isColorSvg;
 
   const finalOverlayOpacity =
     overlayOpacity !== undefined
@@ -70,18 +75,54 @@ export default function Card({
       : presetData?.overlayOpacity || 0.6;
 
   const cardStyle = {
-    backgroundImage: finalBackgroundImage
-      ? `url(${finalBackgroundImage})`
-      : undefined,
     backgroundColor: finalBackgroundColor,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
   };
 
+  // 배경 이미지 설정 (SVG + PNG fallback)
+  if (finalBackgroundImage) {
+    const fallbackImage = getFallbackImage(finalBackgroundImage);
+    if (fallbackImage) {
+      // CSS fallback: SVG 먼저, PNG 나중에 (SVG 미지원/로드 실패 시 PNG 노출)
+      cardStyle.backgroundImage = `url(${finalBackgroundImage}), url(${fallbackImage})`;
+    } else {
+      cardStyle.backgroundImage = `url(${finalBackgroundImage})`;
+    }
+
+    // 이미지 로딩 테스트
+    const testImg = new Image();
+    testImg.onload = () =>
+      console.log('✅ 배경 이미지 로딩 성공:', finalBackgroundImage);
+    testImg.onerror = () =>
+      console.error('❌ 배경 이미지 로딩 실패:', finalBackgroundImage);
+    testImg.src = finalBackgroundImage;
+  }
+
   const overlayStyle = {
     opacity: finalBackgroundImage ? finalOverlayOpacity : 0,
   };
+
+  // 디버깅을 위한 로그
+  console.log('Card 배경 정보:', {
+    id,
+    title,
+    backgroundImage,
+    backgroundColor,
+    preset,
+    finalBackgroundImage,
+    finalBackgroundColor,
+    fallbackImage: finalBackgroundImage
+      ? getFallbackImage(finalBackgroundImage)
+      : null,
+    isImageBackground,
+    isColorBackground,
+    isColorSvg,
+    isPatternImage,
+    presetData,
+    cardStyle,
+  });
 
   const handleClick = () => {
     if (onClick) {
@@ -111,8 +152,8 @@ export default function Card({
       style={cardStyle}
       onClick={handleClick}
     >
-      {/* 이미지 배경일 때만 오버레이 표시 */}
-      {finalBackgroundImage && (
+      {/* 배경 이미지가 있을 때 오버레이 표시 */}
+      {isImageBackground && (
         <div className={styles.overlay} style={overlayStyle} />
       )}
 

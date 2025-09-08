@@ -1,19 +1,74 @@
+.dropdownContainer {
+  position: relative;
+  display: inline-block;
+}
+
 .customDropdown {
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 400;
   color: #818181;
-  padding: 0.9rem 2rem;
+  padding: 0.9rem 2rem; /* 위아래 0.9rem, 좌우 2rem */
+  padding-right: 3.2rem; /* 아이콘 공간 확보 */
   border-radius: 1rem;
-  background-color: var(--background-secondary);
+  background: var(--background-secondary, #fff);
+  border: 1px solid var(--gray-gray_DDDDDD, #ddd);
   cursor: pointer;
+  outline: none;
+  text-align: left; /* 왼쪽 정렬 */
+  width: 18rem; /* 180px */
+  height: 4.2rem; /* 42px */
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.customDropdown option {
+.dropdownText {
+  flex: 1;
+  text-align: left;
+}
+
+.dropdownIcon {
+  width: 1.3rem;
+  height: 0.7rem;
+  margin-left: 0.8rem;
+}
+
+.dropdownOptions {
+  position: absolute;
+  top: calc(100% + 0.8rem); /* 드롭다운 버튼 아래 0.8rem */
+  left: 0;
+  width: 18rem; /* 드롭다운 버튼과 동일한 너비 (180px) */
+  background: var(--background-secondary, #fff);
+  border: 1px solid var(--gray-gray_DDDDDD, #ddd);
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.option {
+  width: 100%;
+  padding: 1.2rem 2rem; /* 위아래 패딩 증가 */
+  font-size: 1.6rem;
   color: #414141;
-  border-radius: 0.625rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease;
 }
 
-.highlightedOption {
-  background-color: #f0f0f0;
+.option:hover {
+  background-color: #f5f5f5;
+}
+
+.option.selected {
+  background-color: var(--brand-blue, #0013a7);
+  color: white;
+}
+
+.customDropdown:focus {
+  outline: none;
 }
