@@ -19,7 +19,7 @@ export const useAuthStore = create(set => ({
       }
     } catch (error) {
       // 인증되지 않은 상태는 정상적인 상황이므로 에러를 조용히 처리
-      console.log('인증 초기화: 로그인되지 않은 상태');
+      console.debug('인증 초기화: 로그인되지 않은 상태');
       set({ isLoggedIn: false, user: null, isInitialized: true });
     }
   },

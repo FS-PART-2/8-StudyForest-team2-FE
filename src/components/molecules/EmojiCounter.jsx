@@ -1,5 +1,5 @@
 import EmojiPicker from 'emoji-picker-react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
 import styles from '../../styles/components/molecules/EmojiCounter.module.css';
 import Emoji from '../atoms/Emoji';
@@ -18,6 +18,11 @@ export default function EmojiCounter({ emojiData = [] }) {
   const [selectedEmojis, setSelectedEmojis] = useState(emojiData);
   const pickerRef = useRef(null); // 이모지 피커 참조
   const restPopupRef = useRef(null); // 나머지 이모지 팝업 참조
+
+  // prop 변경 시 내부 state 동기화
+  useEffect(() => {
+    setSelectedEmojis(Array.isArray(emojiData) ? emojiData : []);
+  }, [emojiData]);
 
   // 이모지를 count 기준으로 정렬하고 상위 3개와 나머지로 분리
   const sortedEmojis = [...selectedEmojis].sort((a, b) => b.count - a.count);

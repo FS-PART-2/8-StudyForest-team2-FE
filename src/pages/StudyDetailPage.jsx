@@ -105,6 +105,9 @@ export default function StudyDetailPage() {
           <h2>스터디를 찾을 수 없습니다</h2>
           <p>요청하신 스터디 ID({id})가 존재하지 않습니다.</p>
           <p>스터디 목록에서 다른 스터디를 선택해주세요.</p>
+          <div style={{ marginTop: '1rem' }}>
+            <NavigationButton to="/">스터디 목록으로 이동</NavigationButton>
+          </div>
         </div>
       </div>
     );
