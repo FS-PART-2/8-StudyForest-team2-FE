@@ -25,8 +25,14 @@ export default function DynamicStudyTitle({
   // 배경에 따른 닉네임 색상 결정
   const nicknameColor = getNicknameColor(backgroundImage);
 
-  // 스터디 이름에서 닉네임 제거
-  const cleanStudyName = studyName?.replace(`${nickname}의 `, '') || studyName;
+  // 스터디 이름에서 닉네임 제거 (접두어만 안전하게 제거)
+  const prefix = `${nickname}의 `;
+  const cleanStudyName =
+    typeof studyName === 'string' &&
+    typeof nickname === 'string' &&
+    studyName.startsWith(prefix)
+      ? studyName.slice(prefix.length)
+      : studyName;
 
   // 디테일 페이지인지 확인 (h1 태그이면 디테일 페이지)
   const isDetailPage = Tag === 'h1';

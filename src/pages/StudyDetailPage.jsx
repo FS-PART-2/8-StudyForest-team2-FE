@@ -136,7 +136,7 @@ export default function StudyDetailPage() {
           <DynamicStudyTitle
             nickname={studyData.nick}
             studyName={studyData.name}
-            backgroundImage={studyData.backgroundImage}
+            backgroundImage={studyData.img || studyData.background}
             className={styles.studyTitle}
             tag="h1"
           />
