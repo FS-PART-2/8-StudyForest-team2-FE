@@ -29,19 +29,13 @@ import { useNavigate } from 'react-router-dom';
 export default function Card({
   preset,
   id,
-  backgroundImage,
-  backgroundColor,
   overlayOpacity,
   nick,
   points = 0,
   title = '스터디 제목',
   createdAt = '2025-00-00',
   description = '스터디 설명',
-  emojiData = [
-    { emoji: '👍', count: 1 },
-    { emoji: '🔥', count: 3 },
-    { emoji: '❤️', count: 5 },
-  ],
+  emojiData = [],
   onClick,
   isSelected = false,
 }) {
@@ -51,23 +45,11 @@ export default function Card({
   const presetData = preset ? CARD_PRESETS[preset] : null;
 
   // 배경 우선순위: 직접 전달된 props > 프리셋 데이터
-  const finalBackgroundImage = backgroundImage || presetData?.backgroundImage;
-  const finalBackgroundColor = backgroundColor || presetData?.backgroundColor;
-
-  // SVG fallback을 위한 PNG 경로 생성
-  const getFallbackImage = svgPath => {
-    if (!svgPath) return null;
-    return svgPath.replace('.svg', '.png');
-  };
+  const finalBackgroundImage = presetData?.backgroundImage;
+  const finalBackgroundColor = presetData?.backgroundColor;
 
   // 이미지 배경인지 색상 배경인지 판단
   const isImageBackground = !!finalBackgroundImage;
-  const isColorBackground = !!finalBackgroundColor && !finalBackgroundImage;
-
-  // 색상 SVG인지 패턴 이미지인지 판단 (파일명으로 구분)
-  const isColorSvg =
-    finalBackgroundImage && finalBackgroundImage.includes('card-bg-color-');
-  const isPatternImage = finalBackgroundImage && !isColorSvg;
 
   const finalOverlayOpacity =
     overlayOpacity !== undefined
@@ -75,54 +57,18 @@ export default function Card({
       : presetData?.overlayOpacity || 0.6;
 
   const cardStyle = {
-    backgroundColor: finalBackgroundColor,
+    ...(finalBackgroundImage && {
+      backgroundImage: `url(${finalBackgroundImage})`,
+    }),
+    ...(finalBackgroundColor && { backgroundColor: finalBackgroundColor }),
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
   };
 
-  // 배경 이미지 설정 (SVG + PNG fallback)
-  if (finalBackgroundImage) {
-    const fallbackImage = getFallbackImage(finalBackgroundImage);
-    if (fallbackImage) {
-      // CSS fallback: SVG 먼저, PNG 나중에 (SVG 미지원/로드 실패 시 PNG 노출)
-      cardStyle.backgroundImage = `url(${finalBackgroundImage}), url(${fallbackImage})`;
-    } else {
-      cardStyle.backgroundImage = `url(${finalBackgroundImage})`;
-    }
-
-    // 이미지 로딩 테스트
-    const testImg = new Image();
-    testImg.onload = () =>
-      console.log('✅ 배경 이미지 로딩 성공:', finalBackgroundImage);
-    testImg.onerror = () =>
-      console.error('❌ 배경 이미지 로딩 실패:', finalBackgroundImage);
-    testImg.src = finalBackgroundImage;
-  }
-
   const overlayStyle = {
     opacity: finalBackgroundImage ? finalOverlayOpacity : 0,
   };
-
-  // 디버깅을 위한 로그
-  console.log('Card 배경 정보:', {
-    id,
-    title,
-    backgroundImage,
-    backgroundColor,
-    preset,
-    finalBackgroundImage,
-    finalBackgroundColor,
-    fallbackImage: finalBackgroundImage
-      ? getFallbackImage(finalBackgroundImage)
-      : null,
-    isImageBackground,
-    isColorBackground,
-    isColorSvg,
-    isPatternImage,
-    presetData,
-    cardStyle,
-  });
 
   const handleClick = () => {
     if (onClick) {
@@ -165,8 +111,8 @@ export default function Card({
             color={presetData?.titleTextColor}
             tag="h3"
           >
-            <b style={{ color: presetData?.nicknameTextColor }}>{nick}</b>의{' '}
-            {title}
+            <b style={{ color: presetData?.nicknameTextColor }}>{nick}</b>의
+            {' ' + title}
           </Text>
           <Tag points={points} size="sm" />
         </div>

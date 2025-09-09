@@ -41,6 +41,7 @@
   flex-direction: column;
   justify-content: space-between;
   color: white;
+  min-height: inherit;
 }
 
 .tagSection {
