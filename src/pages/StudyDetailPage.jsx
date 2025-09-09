@@ -167,10 +167,6 @@ export default function StudyDetailPage() {
                 });
               });
 
-              console.log('습관 데이터 변환:', {
-                원본: studyData.habitHistories,
-                변환된_데이터: habitRows,
-              });
               return habitRows;
             })()}
           />
