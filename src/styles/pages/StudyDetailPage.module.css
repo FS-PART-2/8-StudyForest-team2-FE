@@ -2,7 +2,7 @@
 .page {
   display: flex;
   flex-direction: column;
-  width: 116.8rem; /* 1168px */
+  width: clamp(35rem, 96vw, 112rem); /* 반응형 너비 */
   height: auto;
   background: var(--background-secondary, #fff);
   border-radius: 1.6rem;
