@@ -10,17 +10,17 @@ export const useAuthStore = create(set => ({
 
   initialize: async () => {
     try {
-      const { user } = await postRefreshApi();
+      const result = await postRefreshApi();
 
-      if (user) {
-        set({ isLoggedIn: true, user, isInitialized: true });
+      if (result?.user) {
+        set({ isLoggedIn: true, user: result.user, isInitialized: true });
       } else {
         set({ isLoggedIn: false, user: null, isInitialized: true });
       }
     } catch (error) {
+      localStorage.removeItem('hasLoggedIn');
       console.error('초기화 실패:', error);
       set({ isLoggedIn: false, user: null, isInitialized: true });
-      throw error;
     }
   },
 
@@ -28,6 +28,8 @@ export const useAuthStore = create(set => ({
     try {
       const response = await postLoginApi(data);
       console.log('로그인 성공:', response);
+
+      localStorage.setItem('hasLoggedIn', 'true');
 
       set({
         isLoggedIn: true,
@@ -46,6 +48,8 @@ export const useAuthStore = create(set => ({
       // 서버에 로그아웃 요청을 보내 서버 세션을 무효화합니다.
       const response = await postLogoutApi();
       console.log('로그아웃 성공:', response);
+
+      localStorage.removeItem('hasLoggedIn');
       // 클라이언트 상태 초기화
       set({
         isLoggedIn: false,
@@ -55,6 +59,7 @@ export const useAuthStore = create(set => ({
     } catch (error) {
       console.error('로그아웃 실패:', error);
       // 서버 로그아웃 실패해도 클라이언트 상태는 초기화
+      localStorage.removeItem('hasLoggedIn');
       set({
         isLoggedIn: false,
         user: null,

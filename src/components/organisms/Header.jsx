@@ -16,7 +16,6 @@ export function Header() {
   const isMainPage = location.pathname === '/';
 
   const { isLoggedIn, user, logout } = useAuthStore();
-  console.log(isLoggedIn, user);
 
   const handleLogout = async () => {
     await logout();

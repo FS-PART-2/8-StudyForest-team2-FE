@@ -22,7 +22,11 @@ export function App() {
   const { initialize } = useAuthStore();
 
   useEffect(() => {
-    initialize();
+    // localStorage에 로그인 기록이 있을 때만 initialize 실행
+    const hasLoggedIn = localStorage.getItem('hasLoggedIn');
+    if (hasLoggedIn) {
+      initialize();
+    }
   }, [initialize]);
 
   return (
