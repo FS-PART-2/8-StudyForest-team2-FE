@@ -116,11 +116,7 @@ export default function StudyDetailPage() {
       <div className={styles.topRow}>
         <div className={styles.emojiSection}>
           <EmojiCounter
-            emojiData={emojiData?.map(item => ({
-              id: item.id,
-              emoji: item.emoji?.symbol || item.symbol || '🔥',
-              count: item.count || 0,
-            })) || []}
+            emojiData={emojiData}
             studyId={id}
             onEmojiUpdate={handleEmojiUpdate}
           />
