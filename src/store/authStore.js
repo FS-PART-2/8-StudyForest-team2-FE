@@ -18,9 +18,9 @@ export const useAuthStore = create(set => ({
         set({ isLoggedIn: false, user: null, isInitialized: true });
       }
     } catch (error) {
-      console.error('초기화 실패:', error);
+      // 인증되지 않은 상태는 정상적인 상황이므로 에러를 조용히 처리
+      console.debug('인증 초기화: 로그인되지 않은 상태');
       set({ isLoggedIn: false, user: null, isInitialized: true });
-      throw error;
     }
   },
 

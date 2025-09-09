@@ -19,32 +19,31 @@ export default function StudyDetailPage() {
   const [emojiData, setEmojiData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 이모지 데이터 가져오기 함수
+  // 이모지 데이터 가져오기 함수 (API 우선, 실패 시 스터디 데이터 사용)
   const fetchEmojiData = useCallback(async () => {
     try {
+      // 먼저 이모지 API 시도
       const data = await emojiApi.getEmojis(id);
-      // 데이터 유효성 검사
       if (Array.isArray(data)) {
         setEmojiData(data);
-      } else {
-        console.warn('이모지 데이터가 배열이 아닙니다:', data);
-        setEmojiData([]);
+        return;
       }
     } catch (error) {
-      console.error('이모지 데이터 로딩 실패:', error);
-      // 404 에러인 경우 (API 미구현) 스터디 데이터에서 이모지 가져오기
+      // 404 에러인 경우 스터디 데이터에서 이모지 가져오기
       if (error.response?.status === 404) {
         console.log(
-          '이모지 API가 아직 구현되지 않았습니다. 스터디 데이터에서 이모지를 가져옵니다.',
+          '이모지 API가 구현되지 않음. 스터디 데이터에서 이모지를 가져옵니다.',
         );
-        if (studyData?.studyEmojis && Array.isArray(studyData.studyEmojis)) {
-          setEmojiData(studyData.studyEmojis);
-        } else {
-          setEmojiData([]);
-        }
       } else {
-        setEmojiData([]);
+        console.warn('이모지 API 호출 실패:', error.message);
       }
+    }
+
+    // API 실패 시 스터디 데이터에서 이모지 사용
+    if (studyData?.studyEmojis && Array.isArray(studyData.studyEmojis)) {
+      setEmojiData(studyData.studyEmojis);
+    } else {
+      setEmojiData([]);
     }
   }, [id, studyData?.studyEmojis]);
 
@@ -60,20 +59,19 @@ export default function StudyDetailPage() {
         const data = await studyApi.getStudyDetailApi(id);
         setStudyData(data);
         addRecentStudy(data);
-
-        // 스터디 데이터에서 이모지 데이터 설정 (유효성 검사 포함)
-        if (data?.studyEmojis && Array.isArray(data.studyEmojis)) {
-          setEmojiData(data.studyEmojis);
-        } else {
-          setEmojiData([]);
-        }
       } catch (error) {
-        console.error('스터디 데이터 로딩 실패:', error);
-        // 타임아웃 에러인 경우 사용자에게 알림
-        if (error.code === 'ECONNABORTED') {
-          console.error(
-            '요청 시간이 초과되었습니다. 잠시 후 다시 시도해주세요.',
-          );
+        // 404 에러인 경우 조용히 처리 (스터디가 존재하지 않음)
+        if (error.response?.status === 404) {
+          console.log('스터디를 찾을 수 없습니다.');
+          setStudyData(null);
+        } else {
+          console.error('스터디 데이터 로딩 실패:', error);
+          // 타임아웃 에러인 경우 사용자에게 알림
+          if (error.code === 'ECONNABORTED') {
+            console.error(
+              '요청 시간이 초과되었습니다. 잠시 후 다시 시도해주세요.',
+            );
+          }
         }
       } finally {
         setLoading(false);
@@ -85,12 +83,12 @@ export default function StudyDetailPage() {
     }
   }, [id, addRecentStudy]);
 
-  // 이모지 데이터 로드
+  // 이모지 데이터 로드 (스터디 데이터 로드 후)
   useEffect(() => {
-    if (id) {
+    if (id && studyData) {
       fetchEmojiData();
     }
-  }, [id, fetchEmojiData]);
+  }, [id, studyData, fetchEmojiData]);
 
   if (loading) {
     return (
@@ -103,7 +101,14 @@ export default function StudyDetailPage() {
   if (!studyData) {
     return (
       <div className={styles.page}>
-        <div className={styles.error}>스터디를 찾을 수 없습니다.</div>
+        <div className={styles.error}>
+          <h2>스터디를 찾을 수 없습니다</h2>
+          <p>요청하신 스터디 ID({id})가 존재하지 않습니다.</p>
+          <p>스터디 목록에서 다른 스터디를 선택해주세요.</p>
+          <div style={{ marginTop: '1rem' }}>
+            <NavigationButton to="/">스터디 목록으로 이동</NavigationButton>
+          </div>
+        </div>
       </div>
     );
   }
@@ -116,7 +121,13 @@ export default function StudyDetailPage() {
       <div className={styles.topRow}>
         <div className={styles.emojiSection}>
           <EmojiCounter
-            emojiData={emojiData}
+            emojiData={
+              emojiData?.map((item, index) => ({
+                id: item.id || `emoji-${index}`,
+                emoji: item.emoji?.symbol || item.symbol || '🔥',
+                count: item.count || 0,
+              })) || []
+            }
             studyId={id}
             onEmojiUpdate={handleEmojiUpdate}
           />
@@ -124,8 +135,8 @@ export default function StudyDetailPage() {
         <div className={styles.actionsSection}>
           <StudyActions
             studyId={id}
-            title={studyData.name}
-            nickname={studyData.nick}
+            title={studyData?.name || studyData?.title || ''}
+            nickname={studyData?.nick || studyData?.nickname || ''}
           />
         </div>
       </div>
@@ -134,9 +145,14 @@ export default function StudyDetailPage() {
       <div className={styles.titleRow}>
         <div className={styles.studyTitleContainer}>
           <DynamicStudyTitle
-            nickname={studyData.nick}
-            studyName={studyData.name}
-            backgroundImage={studyData.img || studyData.background}
+            nickname={studyData?.nick || studyData?.nickname || ''}
+            studyName={studyData?.name || studyData?.title || ''}
+            backgroundImage={
+              studyData?.img ||
+              studyData?.background ||
+              studyData?.backgroundImage ||
+              ''
+            }
             className={styles.studyTitle}
             tag="h1"
           />
@@ -151,19 +167,24 @@ export default function StudyDetailPage() {
       <div className={styles.bottomSection}>
         <div className={styles.introSection}>
           <StudyIntro
-            description={studyData.content || studyData.description}
+            description={studyData?.content || studyData?.description || ''}
           />
         </div>
 
         <div className={styles.pointsSection}>
           <StudyPoints
-            points={studyData.pointsSum || studyData._count?.points || 0}
+            points={
+              studyData?.pointsSum ||
+              studyData?._count?.points ||
+              studyData?.points ||
+              0
+            }
           />
         </div>
       </div>
 
       {/* 습관 기록표 - 공개 스터디인 경우에만 표시 */}
-      {studyData.isPublic !== false && (
+      {studyData?.isPublic !== false && studyData?.isActive !== false && (
         <div className={styles.habitTableSection}>
           <HabitRecordTable
             studyId={id}
@@ -171,10 +192,10 @@ export default function StudyDetailPage() {
               const habitRows = [];
 
               // habitHistories 배열을 순회하면서 각 습관을 개별 행으로 변환
-              studyData.habitHistories?.forEach(history => {
-                history.habits?.forEach(habit => {
+              studyData?.habitHistories?.forEach(history => {
+                history?.habits?.forEach(habit => {
                   // 실제 습관 날짜를 기반으로 요일 계산
-                  const habitDate = new Date(habit.date);
+                  const habitDate = new Date(habit?.date);
                   const dayOfWeek = habitDate.getDay(); // 0=일요일, 1=월요일, ..., 6=토요일
 
                   // 요일을 월요일 기준으로 변환 (월요일=0, 화요일=1, ..., 일요일=6)
@@ -192,17 +213,17 @@ export default function StudyDetailPage() {
                   ];
 
                   // 해당 요일에 습관 완료 상태 설정
-                  if (habit.isDone) {
+                  if (habit?.isDone) {
                     checks[mondayBasedDay] = true;
                   }
 
                   habitRows.push({
-                    id: habit.id,
-                    name: habit.habit || '습관',
+                    id: habit?.id,
+                    name: habit?.habit || '습관',
                     checks: checks,
-                    isDone: habit.isDone,
-                    date: habit.date,
-                    habitHistoryId: habit.habitHistoryId,
+                    isDone: habit?.isDone,
+                    date: habit?.date,
+                    habitHistoryId: habit?.habitHistoryId,
                   });
                 });
               });
