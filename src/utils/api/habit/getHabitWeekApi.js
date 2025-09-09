@@ -11,8 +11,9 @@ import { instance } from '../axiosInstance.js';
  */
 const getHabitWeekApi = async (studyId, options = {}) => {
   const { weekDate, password } = options;
+  const encodedId = encodeURIComponent(String(studyId));
 
-  const res = await instance.get(`/api/habits/week/${studyId}`, {
+  const res = await instance.get(`/api/habits/week/${encodedId}`, {
     params: {
       ...(weekDate ? { weekDate } : {}),
       ...(password ? { password } : {}),
