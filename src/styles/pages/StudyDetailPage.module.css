@@ -2,7 +2,6 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: 2.4rem;
   width: clamp(35rem, 96vw, 112rem); /* 반응형 폭 제어 - 최소 350px */
   max-width: 100%;
   min-height: 80.9rem;
@@ -63,11 +62,21 @@
   margin-bottom: 1.6rem;
 }
 
+.studyTitleContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .studyTitle {
   font-size: 3.2rem;
   font-weight: 700;
   color: var(--text-primary, #222);
   margin: 0;
+}
+
+.studyNickname {
+  color: var(--brand-blue, #007bff);
+  font-weight: 700;
 }
 
 .todayButtons {
