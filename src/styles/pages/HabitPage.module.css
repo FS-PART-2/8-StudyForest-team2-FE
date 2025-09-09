@@ -1,22 +1,10 @@
-/* HabitPage 스타일 */
-.page {
-  min-height: 100vh;
-  background: var(--background-primary, #f8f9fa);
-  padding: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-
+/* 메인 컨테이너 */
 .container {
-  width: 100%;
-  max-width: 60rem; /* 600px */
-  background: var(--background-secondary, #fff);
-  border-radius: 1.6rem;
-  padding: 4rem 2.4rem;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* 헤더 */
@@ -24,210 +12,286 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1.6rem;
+}
+.header :last-child {
+ color: var(----text-gray, #818181);
+  border-radius: 10px;
+  border: 1px solid var(--gray-gray_DDDDDD, #DDD);
 }
 
-.title {
-  font-size: 2.4rem;
-  font-weight: 600;
-  color: var(--text-primary, #1a1a1a);
-  margin: 0;
-}
-
-.navigation {
+.headerNav {
   display: flex;
-  gap: 1.6rem;
+  gap: 1.5rem;
 }
 
-/* 칩 리스트 */
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-  min-height: 20rem;
+/* 현재 시간 섹션 */
+.timeSection {
+  margin-bottom: 2.4rem;
 }
 
-.chipWrapper {
+.timeSection p:first-child {
+  margin-bottom: 0.5rem;
+}
+.timeSection p:last-child {
+  border-radius: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  padding: 0.8rem 1.2rem;
+  display: inline-block;
+}
+
+/* 메인 카드 */
+.mainCard {
+  background: white;
+  border-radius: 1rem;
+  padding: 2.5rem;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+.cardHeader {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 1.6rem;
-  position: relative;
+  margin-bottom: 2.5rem;
+  font-size: 2.4rem;
 }
 
-.deleteBtn {
-  position: absolute;
-  right: -4rem;
-  width: 2.4rem;
-  height: 2.4rem;
+.editButton {
   background: none;
   border: none;
   cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.editButton:hover {
+  background-color: #f3f4f6;
+}
+
+/* 습관 컨테이너 */
+.habitsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.activeHabit {
+  width: 100%;
+  padding: 1.2rem 2rem;
+  color: white;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  transform: translateY(0);
+  background: var(----brand-blue, #0013A7);
+  font-size: 1.6rem;
+}
+
+.activeHabit:hover {
+  transform: translateY(-2px);
+}
+
+.activeHabit:active {
+  transform: translateY(0);
+}
+
+.inactiveHabit {
+  width: 100%;
+  padding: 1.2rem 2rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-size: 1.6rem;
+}
+
+.inactiveHabit:hover {
+  border-color: #d1d5db;
+}
+
+/* 모달 스타일 */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  transition: background-color 0.2s ease;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
 }
 
-.deleteBtn:hover {
-  background-color: var(--background-hover, #f0f0f0);
+.modalContent {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 28rem;
+  max-width: 90%;
+  box-shadow: 0 20px 60px 0 rgba(0, 0, 0, 0.2);
+  transform: scale(1);
+  animation: modalAppear 0.3s ease-out;
 }
 
-.deleteIcon {
-  width: 1.6rem;
-  height: 1.6rem;
-  opacity: 0.6;
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
-.addRow {
+.modalHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  color: #1f2937;
+}
+
+/* 습관 목록 */
+.habitList {
   display: flex;
-  justify-content: center;
-  margin-top: 1rem;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
-/* 액션 버튼 */
-.actions {
+.habitItem {
   display: flex;
-  justify-content: center;
-  gap: 2.4rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border-light, #e0e0e0);
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.cancelBtn,
-.saveBtn {
-  width: 28.8rem; /* 288px */
-  padding: 1.2rem 2rem;
-  font-size: 1.6rem;
-  font-weight: 500;
-  border-radius: 0.8rem;
-  border: none;
-  cursor: pointer;
+.habitInput {
+  flex: 1;
+  padding: 0.875rem 1rem;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  text-align: center;
+  color: #374151;
+  font-size: 0.875rem;
   transition: all 0.2s ease;
 }
 
-.cancelBtn {
-  background: var(--background-secondary, #fff);
-  color: var(--text-secondary, #666);
-  border: 1px solid var(--border-light, #e0e0e0);
+.habitInput:focus {
+  outline: none;
+  background-color: white;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.cancelBtn:hover {
-  background: var(--background-hover, #f8f9fa);
+.habitInput::placeholder {
+  color: #9ca3af;
 }
 
-.saveBtn {
-  background: var(--brand-blue, #007bff);
-  color: white;
-}
-
-.saveBtn:hover {
-  background: var(--brand-blue-hover, #0056b3);
-}
-
-/* 로딩 */
-.loading {
+.removeButton {
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 1.125rem;
+  font-weight: bold;
+  cursor: pointer;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 20rem;
-  font-size: 1.6rem;
-  color: var(--text-secondary, #666);
+  justify-content: center;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
 }
 
-/* 태블릿 반응형 */
-@media (max-width: 1024px) {
-  .page {
-    padding: 1.6rem;
-  }
-
-  .container {
-    padding: 3rem 2rem;
-    gap: 2.4rem;
-  }
-
-  .title {
-    font-size: 2.2rem;
-  }
-
-  .actions {
-    gap: 2rem;
-  }
-
-  .cancelBtn,
-  .saveBtn {
-    width: 24rem;
-    padding: 1rem 1.6rem;
-  }
+.removeButton:hover {
+  color: #dc2626;
+  background-color: #fef2f2;
 }
 
-/* 모바일 반응형 */
-@media (max-width: 744px) {
-  .page {
-    padding: 1.2rem;
-    align-items: flex-start;
-    padding-top: 2rem;
-  }
+.addButton {
+  width: 100%;
+  padding: 1rem;
+  border: 2px dashed #d1d5db;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.25rem;
+  font-weight: 300;
+}
 
+.addButton:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+  color: #374151;
+}
+
+/* 모달 액션 */
+.modalActions {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.modalActions button {
+  flex: 1;
+  border-radius: 10px;
+  color: white;
+  padding: 0.8rem 1.2rem;
+
+}
+
+.modalActions button:first-child {
+  background-color:#84888F;
+}
+.modalActions button:last-child {
+  background-color:#0013A7
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
   .container {
-    width: 34.4rem;
-    min-width: 34.4rem;
-    padding: 2.5rem 1.6rem;
-    gap: 2rem;
+    padding: 1rem;
   }
-
+  
+  .mainCard {
+    padding: 1.5rem;
+  }
+  
   .header {
     flex-direction: column;
+    gap: 1rem;
     align-items: flex-start;
-    gap: 1.2rem;
   }
-
-  .title {
-    font-size: 2rem;
+  
+  .headerNav {
+    align-self: flex-end;
   }
-
-  .navigation {
-    width: 100%;
-    justify-content: center;
+  
+  .habitsContainer {
+    max-width: none;
   }
-
-  .list {
-    gap: 1.2rem;
-    align-items: center;
-  }
-
-  .chipWrapper {
-    width: 100%;
-    justify-content: center;
-    margin: 0 auto;
-  }
-
-  .deleteBtn {
-    right: -3rem;
-    width: 2rem;
-    height: 2rem;
-  }
-
-  .deleteIcon {
-    width: 1.4rem;
-    height: 1.4rem;
-  }
-
-  .addRow {
-    margin-top: 0.8rem;
-  }
-
-  .actions {
-    flex-direction: column;
-    gap: 1.2rem;
-    padding-top: 1.6rem;
-  }
-
-  .cancelBtn,
-  .saveBtn {
-    width: 100%;
-    padding: 1rem 1.6rem;
-    font-size: 1.4rem;
+  
+  .modalContent {
+    width: 24rem;
+    padding: 1.5rem;
   }
 }
