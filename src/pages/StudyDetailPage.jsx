@@ -4,6 +4,7 @@ import styles from '../styles/pages/StudyDetailPage.module.css';
 import { useRecentStudyStore } from '../store/recentStudyStore';
 import { studyApi } from '../utils/api/study/getStudyApi';
 import { emojiApi } from '../utils/api/emoji/emojiApi';
+import DynamicStudyTitle from '../components/atoms/DynamicStudyTitle';
 import EmojiCounter from '../components/molecules/EmojiCounter';
 import StudyActions from '../components/organisms/StudyActions';
 import StudyIntro from '../components/molecules/StudyIntro';
@@ -22,7 +23,13 @@ export default function StudyDetailPage() {
   const fetchEmojiData = useCallback(async () => {
     try {
       const data = await emojiApi.getEmojis(id);
-      setEmojiData(data);
+      // 데이터 유효성 검사
+      if (Array.isArray(data)) {
+        setEmojiData(data);
+      } else {
+        console.warn('이모지 데이터가 배열이 아닙니다:', data);
+        setEmojiData([]);
+      }
     } catch (error) {
       console.error('이모지 데이터 로딩 실패:', error);
       // 404 에러인 경우 (API 미구현) 스터디 데이터에서 이모지 가져오기
@@ -30,7 +37,7 @@ export default function StudyDetailPage() {
         console.log(
           '이모지 API가 아직 구현되지 않았습니다. 스터디 데이터에서 이모지를 가져옵니다.',
         );
-        if (studyData?.studyEmojis) {
+        if (studyData?.studyEmojis && Array.isArray(studyData.studyEmojis)) {
           setEmojiData(studyData.studyEmojis);
         } else {
           setEmojiData([]);
@@ -54,9 +61,11 @@ export default function StudyDetailPage() {
         setStudyData(data);
         addRecentStudy(data);
 
-        // 스터디 데이터에서 이모지 데이터 설정
-        if (data?.studyEmojis) {
+        // 스터디 데이터에서 이모지 데이터 설정 (유효성 검사 포함)
+        if (data?.studyEmojis && Array.isArray(data.studyEmojis)) {
           setEmojiData(data.studyEmojis);
+        } else {
+          setEmojiData([]);
         }
       } catch (error) {
         console.error('스터디 데이터 로딩 실패:', error);
@@ -112,19 +121,26 @@ export default function StudyDetailPage() {
             onEmojiUpdate={handleEmojiUpdate}
           />
         </div>
-
-      {/* 스터디 이름 + 스터디 액션 (PC/태블릿용) */}
-      <div className={styles.titleSection}>
-        <h1 className={styles.studyTitle}>{studyData.name}</h1>
         <div className={styles.actionsSection}>
-          <StudyActions studyId={id} title={studyData.name} />
+          <StudyActions
+            studyId={id}
+            title={studyData.name}
+            nickname={studyData.nick}
+          />
         </div>
       </div>
 
-      {/* 제목 + 네비게이션 버튼 (같은 row) */}
+      {/* 스터디 이름 + 네비게이션 버튼 (같은 row) */}
       <div className={styles.titleRow}>
-        <h1 className={styles.studyTitle}>{studyData.name}</h1>
-
+        <div className={styles.studyTitleContainer}>
+          <DynamicStudyTitle
+            nickname={studyData.nick}
+            studyName={studyData.name}
+            backgroundImage={studyData.backgroundImage}
+            className={styles.studyTitle}
+            tag="h1"
+          />
+        </div>
         <div className={styles.todayButtons}>
           <NavigationButton to={`/habit/${id}`}>오늘의 습관</NavigationButton>
           <NavigationButton to="/focus">오늘의 집중</NavigationButton>
@@ -140,7 +156,9 @@ export default function StudyDetailPage() {
         </div>
 
         <div className={styles.pointsSection}>
-          <StudyPoints points={studyData.points || 310} />
+          <StudyPoints
+            points={studyData.pointsSum || studyData._count?.points || 0}
+          />
         </div>
       </div>
 
