@@ -22,7 +22,9 @@ export function App() {
   const { initialize } = useAuthStore();
 
   useEffect(() => {
-    initialize();
+    initialize().catch(() => {
+      // 인증 초기화 실패는 정상적인 상황 (로그인되지 않은 상태)
+    });
   }, [initialize]);
 
   return (
