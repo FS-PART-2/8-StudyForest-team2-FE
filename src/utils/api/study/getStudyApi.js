@@ -11,15 +11,22 @@ const getStudyApi = async (params = {}) => {
       pointOrder,
     } = params;
 
+    const queryParams = {
+      isActive,
+      recentOrder,
+      offset,
+      limit,
+      keyword,
+      pointOrder,
+    };
+
+    // 개발 환경에서만 캐시 무시 파라미터 추가
+    if (import.meta.env.DEV) {
+      queryParams._t = Date.now();
+    }
+
     const response = await instance.get('/api/studies', {
-      params: {
-        isActive,
-        recentOrder,
-        offset,
-        limit,
-        keyword,
-        pointOrder,
-      },
+      params: queryParams,
     });
     return response.data;
   } catch (error) {
@@ -30,7 +37,8 @@ const getStudyApi = async (params = {}) => {
 
 const getStudyDetailApi = async id => {
   try {
-    const response = await instance.get(`/api/studies/${id}`);
+    const encodedId = encodeURIComponent(String(id));
+    const response = await instance.get(`/api/studies/${encodedId}`);
     return response.data;
   } catch (error) {
     console.error(error);
