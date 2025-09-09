@@ -72,12 +72,6 @@ export default function StudyActions({
   const handleEditVerify = async password => {
     if (!studyId) return false;
 
-    // 임시: 비밀번호 검증 (실제로는 백엔드에서 처리되어야 함)
-    if (!password || password.length < 4) {
-      console.log('비밀번호가 너무 짧습니다.');
-      return false;
-    }
-
     try {
       const ok = await verifyStudyPassword(studyId, password);
       if (!ok) {
@@ -103,12 +97,6 @@ export default function StudyActions({
 
   const handleDeleteVerify = async password => {
     if (!studyId) return false;
-
-    // 임시: 비밀번호 검증 (실제로는 백엔드에서 처리되어야 함)
-    if (!password || password.length < 4) {
-      console.log('비밀번호가 너무 짧습니다.');
-      return false;
-    }
 
     try {
       const ok = await verifyStudyPassword(studyId, password);
