@@ -8,7 +8,6 @@ import StudyPasswordModal from '../organisms/StudyPasswordModal.jsx';
 import ShareModal from '../molecules/ShareModal.jsx';
 import { verifyStudyPassword } from '../../utils/api/study/studyPasswordApi';
 import { deleteStudyApi } from '../../utils/api/study/deleteStudyApi';
-import { formatStudyTitle } from '../../utils/formatStudyTitle.jsx';
 
 /**
  * 스터디 상세 상단 액션(공유하기/수정하기/스터디 삭제하기)
@@ -169,7 +168,7 @@ export default function StudyActions({
         isOpen={openEditPwdModal}
         onClose={() => setOpenEditPwdModal(false)}
         onVerify={handleEditVerify}
-        studyTitle={formatStudyTitle(nickname, title)}
+        studyTitle={`${nickname}의 ${title}`}
         mode="edit"
       />
 
@@ -177,7 +176,7 @@ export default function StudyActions({
         isOpen={openDeletePwdModal}
         onClose={() => setOpenDeletePwdModal(false)}
         onVerify={handleDeleteVerify}
-        studyTitle={formatStudyTitle(nickname, title)}
+        studyTitle={`${nickname}의 ${title}`}
         mode="delete"
       />
 
