@@ -61,4 +61,11 @@ export const useAuthStore = create(set => ({
       });
     }
   },
+
+  updateUser: userData => {
+    set(state => ({
+      ...state,
+      user: userData,
+    }));
+  },
 }));

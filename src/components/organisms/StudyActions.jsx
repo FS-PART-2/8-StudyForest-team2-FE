@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Toast from '../atoms/Toast.jsx';
+import NavigationButton from '../atoms/NavigationButton.jsx';
 import styles from '../../styles/components/organisms/StudyActions.module.css';
 import StudyPasswordModal from '../organisms/StudyPasswordModal.jsx';
 import ShareModal from '../molecules/ShareModal.jsx';

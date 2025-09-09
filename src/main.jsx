@@ -14,7 +14,9 @@ import { StudyModifyPage } from './pages/StudyModifyPage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import StudyDetailPage from './pages/StudyDetailPage';
+import HabitPage from './pages/HabitPage';
 import { useAuthStore } from './store/authStore';
+import ProfilePage from './pages/ProfilePage';
 
 export function App() {
   const { initialize } = useAuthStore();
@@ -33,8 +35,10 @@ export function App() {
             <Route path="/test" element={<TestPage />} />
             <Route path="/study/new" element={<StudyCreatePage />} />
             <Route path="/study/:id" element={<StudyDetailPage />} />
+            <Route path="/habit/:id" element={<HabitPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

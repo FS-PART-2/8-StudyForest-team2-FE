@@ -53,7 +53,11 @@ export function Header() {
       <div className={styles.headerButtons}>
         {isLoggedIn ? (
           <div>
-            <span className={styles.userName}>{user.username + '님 환영'}</span>
+            <Link to="/profile">
+              <span className={styles.userName}>
+                {user.username + '님 환영'}
+              </span>
+            </Link>
             <Button
               variant="secondary"
               size="ctrl-sm"
