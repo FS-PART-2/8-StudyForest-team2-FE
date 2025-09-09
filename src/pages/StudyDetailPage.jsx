@@ -4,6 +4,7 @@ import styles from '../styles/pages/StudyDetailPage.module.css';
 import { useRecentStudyStore } from '../store/recentStudyStore';
 import { studyApi } from '../utils/api/study/getStudyApi';
 import { emojiApi } from '../utils/api/emoji/emojiApi';
+import DynamicStudyTitle from '../components/atoms/DynamicStudyTitle';
 import EmojiCounter from '../components/molecules/EmojiCounter';
 import StudyActions from '../components/organisms/StudyActions';
 import StudyIntro from '../components/molecules/StudyIntro';
@@ -22,18 +23,30 @@ export default function StudyDetailPage() {
   const fetchEmojiData = useCallback(async () => {
     try {
       const data = await emojiApi.getEmojis(id);
-      setEmojiData(data);
+      // 데이터 유효성 검사
+      if (Array.isArray(data)) {
+        setEmojiData(data);
+      } else {
+        console.warn('이모지 데이터가 배열이 아닙니다:', data);
+        setEmojiData([]);
+      }
     } catch (error) {
       console.error('이모지 데이터 로딩 실패:', error);
-      // 404 에러인 경우 (API 미구현) 빈 배열로 설정
+      // 404 에러인 경우 (API 미구현) 스터디 데이터에서 이모지 가져오기
       if (error.response?.status === 404) {
-        console.log('이모지 API가 아직 구현되지 않았습니다.');
-        setEmojiData([]);
+        console.log(
+          '이모지 API가 아직 구현되지 않았습니다. 스터디 데이터에서 이모지를 가져옵니다.',
+        );
+        if (studyData?.studyEmojis && Array.isArray(studyData.studyEmojis)) {
+          setEmojiData(studyData.studyEmojis);
+        } else {
+          setEmojiData([]);
+        }
       } else {
         setEmojiData([]);
       }
     }
-  }, [id]);
+  }, [id, studyData?.studyEmojis]);
 
   // 이모지 업데이트 콜백
   const handleEmojiUpdate = () => {
@@ -47,6 +60,13 @@ export default function StudyDetailPage() {
         const data = await studyApi.getStudyDetailApi(id);
         setStudyData(data);
         addRecentStudy(data);
+
+        // 스터디 데이터에서 이모지 데이터 설정 (유효성 검사 포함)
+        if (data?.studyEmojis && Array.isArray(data.studyEmojis)) {
+          setEmojiData(data.studyEmojis);
+        } else {
+          setEmojiData([]);
+        }
       } catch (error) {
         console.error('스터디 데이터 로딩 실패:', error);
         // 타임아웃 에러인 경우 사용자에게 알림
@@ -101,16 +121,26 @@ export default function StudyDetailPage() {
             onEmojiUpdate={handleEmojiUpdate}
           />
         </div>
-
         <div className={styles.actionsSection}>
-          <StudyActions studyId={id} title={studyData.name} />
+          <StudyActions
+            studyId={id}
+            title={studyData.name}
+            nickname={studyData.nick}
+          />
         </div>
       </div>
 
-      {/* 제목 + 네비게이션 버튼 (같은 row) */}
+      {/* 스터디 이름 + 네비게이션 버튼 (같은 row) */}
       <div className={styles.titleRow}>
-        <h1 className={styles.studyTitle}>{studyData.name}</h1>
-
+        <div className={styles.studyTitleContainer}>
+          <DynamicStudyTitle
+            nickname={studyData.nick}
+            studyName={studyData.name}
+            backgroundImage={studyData.img || studyData.background}
+            className={styles.studyTitle}
+            tag="h1"
+          />
+        </div>
         <div className={styles.todayButtons}>
           <NavigationButton to={`/habit/${id}`}>오늘의 습관</NavigationButton>
           <NavigationButton to="/focus">오늘의 집중</NavigationButton>
@@ -126,7 +156,9 @@ export default function StudyDetailPage() {
         </div>
 
         <div className={styles.pointsSection}>
-          <StudyPoints points={studyData.points || 310} />
+          <StudyPoints
+            points={studyData.pointsSum || studyData._count?.points || 0}
+          />
         </div>
       </div>
 
@@ -141,34 +173,40 @@ export default function StudyDetailPage() {
               // habitHistories 배열을 순회하면서 각 습관을 개별 행으로 변환
               studyData.habitHistories?.forEach(history => {
                 history.habits?.forEach(habit => {
-                  // 각 습관의 개별 isDone 상태를 사용
-                  // 오늘이 월요일이므로 월요일에만 체크 표시
+                  // 실제 습관 날짜를 기반으로 요일 계산
+                  const habitDate = new Date(habit.date);
+                  const dayOfWeek = habitDate.getDay(); // 0=일요일, 1=월요일, ..., 6=토요일
+
+                  // 요일을 월요일 기준으로 변환 (월요일=0, 화요일=1, ..., 일요일=6)
+                  const mondayBasedDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+                  // 7일 배열 초기화 (월요일부터 일요일까지)
                   const checks = [
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
+                    false, // 월요일
+                    false, // 화요일
+                    false, // 수요일
+                    false, // 목요일
+                    false, // 금요일
+                    false, // 토요일
+                    false, // 일요일
                   ];
 
-                  // 습관이 완료되었다면 월요일에 체크
+                  // 해당 요일에 습관 완료 상태 설정
                   if (habit.isDone) {
-                    checks[0] = true; // 월요일
+                    checks[mondayBasedDay] = true;
                   }
 
                   habitRows.push({
+                    id: habit.id,
                     name: habit.habit || '습관',
                     checks: checks,
+                    isDone: habit.isDone,
+                    date: habit.date,
+                    habitHistoryId: habit.habitHistoryId,
                   });
                 });
               });
 
-              console.log('습관 데이터 변환:', {
-                원본: studyData.habitHistories,
-                변환된_데이터: habitRows,
-              });
               return habitRows;
             })()}
           />

@@ -1,5 +1,10 @@
 // src/pages/TestPage.jsx
 import React, { useState } from 'react';
+import styles from '../styles/pages/TestPage.module.css';
+import {
+  getNicknameColor,
+  getNicknameColorClass,
+} from '../utils/getNicknameColor';
 
 // Atoms / Molecules / Organisms
 import Button from '../components/atoms/Button.jsx';
@@ -279,6 +284,203 @@ export default function TestPage() {
         onCancel={() => setOpenConfirm(false)}
         width="md" // 작은 사이즈
       />
+
+      {/* 🎨 배경별 닉네임 색상 테스트 - Card 컴포넌트 사용 */}
+      <section className={styles.testSection}>
+        <h2 className={styles.sectionTitle}>배경별 닉네임 색상 테스트</h2>
+        <p className={styles.sectionDescription}>
+          각 배경에 따라 닉네임 색상이 자동으로 변경됩니다
+        </p>
+
+        <div className={styles.cardTestGrid}>
+          {/* Card Background 01 */}
+          <div className={styles.testCardWrapper}>
+            <h3 className={styles.testCardTitle}>Card Background 01</h3>
+            <Card
+              backgroundImage="/img/img-05.png"
+              backgroundColor="/img/img-05.png"
+              nick="아리아"
+              title="코딩 공부"
+              description="매일 꾸준히 코딩 실력을 향상시켜보세요!"
+              createdAt="2025-09-09"
+              id={1}
+            />
+            <div className={styles.colorInfo}>
+              <span className={styles.colorLabel}>닉네임 색상:</span>
+              <span
+                className={styles.colorValue}
+                style={{ color: 'var(--brand-blue, #0013A7)' }}
+              >
+                var(--brand-blue, #0013A7)
+              </span>
+            </div>
+          </div>
+
+          {/* Card Background 02 */}
+          <div className={styles.testCardWrapper}>
+            <h3 className={styles.testCardTitle}>Card Background 02</h3>
+            <Card
+              backgroundImage="/img/img-06.png"
+              backgroundColor="/img/img-06.png"
+              nick="아리아"
+              title="코딩 공부"
+              description="매일 꾸준히 코딩 실력을 향상시켜보세요!"
+              createdAt="2025-09-09"
+              id={2}
+            />
+            <div className={styles.colorInfo}>
+              <span className={styles.colorLabel}>닉네임 색상:</span>
+              <span
+                className={styles.colorValue}
+                style={{ color: 'var(--text-forest, #2F5233)' }}
+              >
+                var(--text-forest, #2F5233)
+              </span>
+            </div>
+          </div>
+
+          {/* Card Background 03 */}
+          <div className={styles.testCardWrapper}>
+            <h3 className={styles.testCardTitle}>Card Background 03</h3>
+            <Card
+              backgroundImage="/img/img-07.png"
+              backgroundColor="/img/img-07.png"
+              nick="아리아"
+              title="코딩 공부"
+              description="매일 꾸준히 코딩 실력을 향상시켜보세요!"
+              createdAt="2025-09-09"
+              id={3}
+            />
+            <div className={styles.colorInfo}>
+              <span className={styles.colorLabel}>닉네임 색상:</span>
+              <span
+                className={styles.colorValue}
+                style={{ color: 'var(--text-mint, #418099)' }}
+              >
+                var(--text-mint, #418099)
+              </span>
+            </div>
+          </div>
+
+          {/* Card Background 04 */}
+          <div className={styles.testCardWrapper}>
+            <h3 className={styles.testCardTitle}>Card Background 04</h3>
+            <Card
+              backgroundImage="/img/img-08.png"
+              backgroundColor="/img/img-08.png"
+              nick="아리아"
+              title="코딩 공부"
+              description="매일 꾸준히 코딩 실력을 향상시켜보세요!"
+              createdAt="2025-09-09"
+              id={4}
+            />
+            <div className={styles.colorInfo}>
+              <span className={styles.colorLabel}>닉네임 색상:</span>
+              <span
+                className={styles.colorValue}
+                style={{ color: 'var(--text-ocean, #1A365D)' }}
+              >
+                var(--text-ocean, #1A365D)
+              </span>
+            </div>
+          </div>
+
+          {/* 색상 배경 테스트 */}
+          <div className={styles.testCardWrapper}>
+            <h3 className={styles.testCardTitle}>
+              Color Background 01 (Forest)
+            </h3>
+            <Card
+              backgroundImage="/img/img-02.png"
+              backgroundColor="/img/img-02.png"
+              nick="아리아"
+              title="코딩 공부"
+              description="매일 꾸준히 코딩 실력을 향상시켜보세요!"
+              createdAt="2025-09-09"
+              id={5}
+            />
+            <div className={styles.colorInfo}>
+              <span className={styles.colorLabel}>닉네임 색상:</span>
+              <span
+                className={styles.colorValue}
+                style={{ color: 'var(--text-forest, #2F5233)' }}
+              >
+                var(--text-forest, #2F5233)
+              </span>
+            </div>
+          </div>
+
+          <div className={styles.testCardWrapper}>
+            <h3 className={styles.testCardTitle}>Color Background 02 (Mint)</h3>
+            <Card
+              backgroundImage="/img/img-03.png"
+              backgroundColor="/img/img-03.png"
+              nick="아리아"
+              title="코딩 공부"
+              description="매일 꾸준히 코딩 실력을 향상시켜보세요!"
+              createdAt="2025-09-09"
+              id={6}
+            />
+            <div className={styles.colorInfo}>
+              <span className={styles.colorLabel}>닉네임 색상:</span>
+              <span
+                className={styles.colorValue}
+                style={{ color: 'var(--text-mint, #418099)' }}
+              >
+                var(--text-mint, #418099)
+              </span>
+            </div>
+          </div>
+
+          <div className={styles.testCardWrapper}>
+            <h3 className={styles.testCardTitle}>
+              Color Background 03 (Ocean)
+            </h3>
+            <Card
+              backgroundImage="/img/img-04.png"
+              backgroundColor="/img/img-04.png"
+              nick="아리아"
+              title="코딩 공부"
+              description="매일 꾸준히 코딩 실력을 향상시켜보세요!"
+              createdAt="2025-09-09"
+              id={7}
+            />
+            <div className={styles.colorInfo}>
+              <span className={styles.colorLabel}>닉네임 색상:</span>
+              <span
+                className={styles.colorValue}
+                style={{ color: 'var(--text-ocean, #1A365D)' }}
+              >
+                var(--text-ocean, #1A365D)
+              </span>
+            </div>
+          </div>
+
+          <div className={styles.testCardWrapper}>
+            <h3 className={styles.testCardTitle}>
+              Color Background 04 (Desk - Blue)
+            </h3>
+            <Card
+              backgroundImage="/img/img-01.png"
+              backgroundColor="/img/img-01.png"
+              nick="아리아"
+              title="코딩 공부"
+              description="매일 꾸준히 코딩 실력을 향상시켜보세요!"
+              createdAt="2025-09-09"
+              id={8}
+            />
+            <div className={styles.colorInfo}>
+              <span className={styles.colorLabel}>닉네임 색상:</span>
+              <span
+                className={styles.colorValue}
+                style={{ color: 'var(--brand-blue, #0013A7)' }}
+              >
+                var(--brand-blue, #0013A7)
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

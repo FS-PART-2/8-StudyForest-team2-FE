@@ -118,7 +118,7 @@ export default function HabitRecordTable({
                   r.activeColor || r.color || palette[idx % palette.length];
                 return (
                   <HabitWeekRow
-                    key={idx}
+                    key={r.id || `habit-${idx}`}
                     name={r.name}
                     checks={r.checks}
                     activeColor={colorToken}
