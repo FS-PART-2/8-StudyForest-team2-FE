@@ -31,12 +31,9 @@ export default function StudyDetailPage() {
         setEmojiData([]);
       }
     } catch (error) {
-      console.error('이모지 데이터 로딩 실패:', error);
-      // 404 에러인 경우 (API 미구현) 스터디 데이터에서 이모지 가져오기
+      // 404 에러인 경우 (API 미구현) 조용히 처리
       if (error.response?.status === 404) {
-        console.log(
-          '이모지 API가 아직 구현되지 않았습니다. 스터디 데이터에서 이모지를 가져옵니다.',
-        );
+        // 이모지 API가 아직 구현되지 않음 - 조용히 처리
         if (studyData?.studyEmojis && Array.isArray(studyData.studyEmojis)) {
           setEmojiData(studyData.studyEmojis);
         } else {
@@ -116,8 +113,8 @@ export default function StudyDetailPage() {
       <div className={styles.topRow}>
         <div className={styles.emojiSection}>
           <EmojiCounter
-            emojiData={emojiData?.map(item => ({
-              id: item.id,
+            emojiData={emojiData?.map((item, index) => ({
+              id: item.id || `emoji-${index}`,
               emoji: item.emoji?.symbol || item.symbol || '🔥',
               count: item.count || 0,
             })) || []}
