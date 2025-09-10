@@ -35,6 +35,7 @@ export function App() {
             <Route path="/test" element={<TestPage />} />
             <Route path="/study/new" element={<StudyCreatePage />} />
             <Route path="/study/:id" element={<StudyDetailPage />} />
+            <Route path="/study/:id/modify" element={<StudyModifyPage />} />
             <Route path="/habit/:id" element={<HabitPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />

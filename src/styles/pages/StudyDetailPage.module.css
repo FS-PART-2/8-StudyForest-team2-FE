@@ -1,14 +1,15 @@
 /* 메인 페이지 컨테이너 */
 .page {
-  width: 116.8rem; /* 1168px */
+  display: flex;
+  flex-direction: column;
+  width: clamp(35rem, 96vw, 112rem); /* 반응형 너비 */
   height: auto;
   background: var(--background-secondary, #fff);
   border-radius: 1.6rem;
   padding: 4rem 4.2rem 4rem 4rem;
   margin: 0 auto;
   box-sizing: border-box;
-  flex-direction: column;
-  gap: 2.4rem;
+  gap: 1.2rem;
 }
 
 /* 로딩 및 에러 상태 */
@@ -27,7 +28,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2.4rem;
+  margin-bottom: 1.2rem;
 }
 
 .emojiSection {
@@ -44,7 +45,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.studyTitleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .studyTitle {
@@ -52,6 +59,16 @@
   font-weight: 700;
   color: var(--text-primary, #222);
   margin: 0;
+  line-height: 1.2;
+  display: flex;
+  align-items: baseline;
+}
+
+.studyNickname {
+  color: var(--brand-blue, #007bff);
+  font-weight: 700;
+  vertical-align: baseline;
+  display: inline;
 }
 
 .todayButtons {
@@ -67,7 +84,7 @@
 
 /* 소개 섹션 */
 .introSection {
-  margin-bottom: 2.4rem;
+  margin-bottom: 2rem;
 }
 
 /* 포인트 섹션 */

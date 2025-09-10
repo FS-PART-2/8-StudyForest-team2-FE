@@ -21,6 +21,7 @@ const Dropdown = ({ onChange, value = 'recent' }) => {
 
   const handleSelect = optionValue => {
     onChange?.(optionValue);
+    console.log(optionValue);
     setIsOpen(false);
   };
 
