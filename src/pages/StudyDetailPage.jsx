@@ -192,7 +192,7 @@ export default function StudyDetailPage() {
               const habitRows = [];
 
               // 오늘 날짜를 기준으로 요일 계산 (한 번만 계산)
-              const mondayBasedDay = ((new Date()).getDay() + 6) % 7;
+              const mondayBasedDay = (new Date().getDay() + 6) % 7;
 
               // habitHistories 배열을 순회하면서 각 습관을 개별 행으로 변환
               studyData?.habitHistories?.forEach(history => {

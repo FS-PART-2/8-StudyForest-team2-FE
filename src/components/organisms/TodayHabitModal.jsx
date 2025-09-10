@@ -5,7 +5,13 @@ import Button from '../atoms/Button.jsx';
 import { instance } from '../../utils/api/axiosInstance.js';
 import styles from '../../styles/components/organisms/TodayHabitModal.module.css';
 
-export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
+export default function TodayHabitModal({
+  open,
+  onClose,
+  onSave,
+  studyId,
+  studyPassword,
+}) {
   const [chips, setChips] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [draft, setDraft] = useState('');
@@ -60,11 +66,16 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     let newChip;
 
     try {
-      // API로 습관 추가 시도 (비밀번호 없이)
+      // API로 습관 추가 시도
       const response = await instance.post(
         `/api/habits/today/${encodeURIComponent(studyId)}`,
         {
-          habit: label,
+          title: label,
+        },
+        {
+          headers: {
+            'x-study-password': studyPassword, // 사용자가 입력한 비밀번호
+          },
         },
       );
 
@@ -72,7 +83,7 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
       const serverHabit = response.data;
       newChip = {
         id: serverHabit.id,
-        label: serverHabit.habit || label,
+        label: serverHabit.title || serverHabit.habit || label,
         isDone: false,
       };
 
@@ -80,30 +91,45 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     } catch (error) {
       console.error('습관 추가 API 실패:', error);
 
-      // API 실패 시 로컬에서만 추가
-      const id = crypto.randomUUID?.() ?? `id_${Date.now()}`;
-      newChip = { id, label, isDone: false };
-
-      console.log('로컬에서만 습관 추가:', newChip);
+      // 409 Conflict 오류 처리 (중복 이름)
+      if (error.response?.status === 409) {
+        alert('이미 같은 이름의 습관이 존재합니다. 다른 이름을 사용해주세요.');
+      } else {
+        alert('습관 추가에 실패했습니다. 다시 시도해주세요.');
+      }
+      return;
     }
 
     setChips(prev => [...prev, newChip]);
     setEditingId(newChip.id);
     setDraft(newChip.label);
+
+    // 부모 컴포넌트에 변경사항 알림 (추가된 습관 데이터 전달)
+    if (onSave) {
+      const updatedChips = [...chips, newChip];
+      onSave(updatedChips);
+    }
   };
 
   // 칩 삭제 (API 호출 시도 후 로컬 스토리지에 저장)
   const deleteChip = async id => {
     try {
-      // API로 습관 삭제 시도 (비밀번호 없이)
+      // API로 습관 삭제 시도
       await instance.delete(
         `/api/habits/today/${encodeURIComponent(studyId)}/${encodeURIComponent(id)}`,
+        {
+          headers: {
+            'x-study-password': studyPassword, // 사용자가 입력한 비밀번호
+          },
+        },
       );
 
       console.log('습관이 서버에서 삭제되었습니다:', id);
     } catch (error) {
       console.error('습관 삭제 API 실패:', error);
-      console.log('로컬에서만 습관 삭제:', id);
+      // API 실패 시 에러 표시하고 삭제하지 않음
+      alert('습관 삭제에 실패했습니다. 다시 시도해주세요.');
+      return;
     }
 
     setChips(prev => prev.filter(c => c.id !== id));
@@ -111,6 +137,12 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     if (editingId === id) {
       setEditingId(null);
       setDraft('');
+    }
+
+    // 부모 컴포넌트에 변경사항 알림 (삭제된 습관 데이터 전달)
+    if (onSave) {
+      const updatedChips = chips.filter(c => c.id !== id);
+      onSave(updatedChips);
     }
   };
 
@@ -136,13 +168,28 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
       // API로 습관 이름 수정 시도
       await instance.patch(
         `/api/habits/today/${encodeURIComponent(studyId)}/${encodeURIComponent(editingId)}`,
-        { habit: value },
+        { title: value },
+        {
+          headers: {
+            'x-study-password': studyPassword, // 사용자가 입력한 비밀번호
+          },
+        },
       );
 
       console.log('습관 이름이 서버에서 수정되었습니다:', editingId, value);
     } catch (error) {
       console.error('습관 수정 API 실패:', error);
-      console.log('로컬에서만 습관 수정:', editingId, value);
+
+      // 409 Conflict 오류 처리 (중복 이름)
+      if (error.response?.status === 409) {
+        alert('이미 같은 이름의 습관이 존재합니다. 다른 이름을 사용해주세요.');
+        // 편집 모드 유지 (사용자가 다시 수정할 수 있도록)
+        setDraft(value);
+        return;
+      } else {
+        alert('습관 수정에 실패했습니다. 다시 시도해주세요.');
+      }
+      return;
     }
 
     // 로컬 상태 업데이트
@@ -152,6 +199,14 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
 
     setEditingId(null);
     setDraft('');
+
+    // 부모 컴포넌트에 변경사항 알림 (수정된 습관 데이터 전달)
+    if (onSave) {
+      const updatedChips = chips.map(c =>
+        c.id === editingId ? { ...c, label: value } : c,
+      );
+      onSave(updatedChips);
+    }
   };
 
   // 편집 취소(ESC)

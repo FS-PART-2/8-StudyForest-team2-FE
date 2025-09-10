@@ -72,18 +72,39 @@ export default function StudyActions({
   };
 
   const handleEditVerify = async password => {
-    if (!studyId) return false;
+    console.log('StudyActions: handleEditVerify 호출됨', { studyId, password });
+
+    if (!studyId) {
+      console.error('StudyActions: studyId가 없습니다.');
+      return false;
+    }
+
+    console.log('StudyActions: 비밀번호 검증 시작', { studyId, password });
 
     try {
       const ok = await verifyStudyPassword(studyId, password);
+      console.log('StudyActions: 비밀번호 검증 결과', ok);
+
       if (!ok) {
         console.warn('비밀번호가 일치하지 않습니다.');
         return false;
       }
+
+      console.log(
+        'StudyActions: StudyModifyPage로 이동',
+        `/study/${studyId}/modify`,
+      );
       navigate(`/study/${studyId}/modify`);
       return true;
     } catch (error) {
       console.error('비밀번호 검증 실패:', error);
+      console.error('에러 상세:', {
+        message: error.message,
+        code: error.code,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+      });
       return false;
     }
   };

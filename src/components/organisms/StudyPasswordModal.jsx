@@ -44,10 +44,16 @@ export default function StudyPasswordModal({
     e.preventDefault();
     if (!password || submitting) return; // 중복 제출 가드
 
+    console.log('StudyPasswordModal: handleSubmit 호출됨', {
+      password,
+      onVerify: !!onVerify,
+    });
+
     try {
       setSubmitting(true);
       setShowNetworkError(false);
       const ok = (await onVerify?.(password)) ?? false;
+      console.log('StudyPasswordModal: onVerify 결과', ok);
       if (!ok) {
         setShowMismatch(true); // 불일치 토스트
         return;
