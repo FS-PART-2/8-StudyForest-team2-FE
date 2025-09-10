@@ -16,7 +16,7 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     if (open) {
       loadHabits();
     }
-  }, [open]);
+  }, [open, studyId]);
 
   // 습관 목록 로드 함수 (StudyDetailPage와 동일한 방식)
   const loadHabits = async () => {
@@ -25,7 +25,9 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     try {
       setLoading(true);
       // StudyDetailPage와 동일한 API 사용
-      const response = await instance.get(`/api/studies/${encodeURIComponent(studyId)}`);
+      const response = await instance.get(
+        `/api/studies/${encodeURIComponent(studyId)}`,
+      );
       const studyData = response.data;
 
       // StudyDetailPage와 동일한 방식으로 습관 데이터 추출
@@ -59,9 +61,12 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
 
     try {
       // API로 습관 추가 시도 (비밀번호 없이)
-      const response = await instance.post(`/api/habits/today/${studyId}`, {
-        habit: label,
-      });
+      const response = await instance.post(
+        `/api/habits/today/${encodeURIComponent(studyId)}`,
+        {
+          habit: label,
+        },
+      );
 
       // API 성공 시 서버에서 받은 데이터 사용
       const serverHabit = response.data;
@@ -91,7 +96,9 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
   const deleteChip = async id => {
     try {
       // API로 습관 삭제 시도 (비밀번호 없이)
-      await instance.delete(`/api/habits/today/${encodeURIComponent(studyId)}/${encodeURIComponent(id)}`);
+      await instance.delete(
+        `/api/habits/today/${encodeURIComponent(studyId)}/${encodeURIComponent(id)}`,
+      );
 
       console.log('습관이 서버에서 삭제되었습니다:', id);
     } catch (error) {
@@ -99,8 +106,7 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
       console.log('로컬에서만 습관 삭제:', id);
     }
 
-    const updatedChips = chips.filter(c => c.id !== id);
-    setChips(updatedChips);
+    setChips(prev => prev.filter(c => c.id !== id));
 
     if (editingId === id) {
       setEditingId(null);
@@ -140,10 +146,9 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     }
 
     // 로컬 상태 업데이트
-    const updatedChips = chips.map(c =>
-      c.id === editingId ? { ...c, label: value } : c,
+    setChips(prev =>
+      prev.map(c => (c.id === editingId ? { ...c, label: value } : c)),
     );
-    setChips(updatedChips);
 
     setEditingId(null);
     setDraft('');
@@ -171,7 +176,9 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
         {/* 칩 영역 */}
         <div className={styles.list}>
           {loading ? (
-            <div className={styles.loading} role="status" aria-live="polite">습관 목록을 불러오는 중...</div>
+            <div className={styles.loading} role="status" aria-live="polite">
+              습관 목록을 불러오는 중...
+            </div>
           ) : (
             <>
               {chips.map(chip => (

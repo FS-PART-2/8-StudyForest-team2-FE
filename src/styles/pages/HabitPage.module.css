@@ -395,7 +395,8 @@
   }
 
   .cardHeader h2 {
-    width: 2.8rem;
+    /* 모바일에서도 전체 너비 사용 */
+    width: auto;
   }
 
   /* 네비게이션 버튼 - 왼쪽 정렬 */
