@@ -13,6 +13,12 @@
   min-width: 12rem; /* 350px 이하 프리즈 */
 }
 
+/* 홈 버튼 스타일 */
+.homeButton {
+  min-width: auto !important;
+  font-size: 1.4rem !important;
+}
+
 /* 태블릿 반응형 */
 @media (max-width: 1024px) {
   .navigationButton {

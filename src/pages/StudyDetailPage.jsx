@@ -194,9 +194,11 @@ export default function StudyDetailPage() {
               // habitHistories 배열을 순회하면서 각 습관을 개별 행으로 변환
               studyData?.habitHistories?.forEach(history => {
                 history?.habits?.forEach(habit => {
-                  // 실제 습관 날짜를 기반으로 요일 계산
-                  const habitDate = new Date(habit?.date);
-                  const dayOfWeek = habitDate.getDay(); // 0=일요일, 1=월요일, ..., 6=토요일
+                  const finalIsDone = habit?.isDone;
+
+                  // 오늘 날짜를 기준으로 요일 계산
+                  const today = new Date();
+                  const dayOfWeek = today.getDay(); // 0=일요일, 1=월요일, ..., 6=토요일
 
                   // 요일을 월요일 기준으로 변환 (월요일=0, 화요일=1, ..., 일요일=6)
                   const mondayBasedDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
@@ -212,8 +214,8 @@ export default function StudyDetailPage() {
                     false, // 일요일
                   ];
 
-                  // 해당 요일에 습관 완료 상태 설정
-                  if (habit?.isDone) {
+                  // 해당 요일에 습관 완료 상태 설정 (로컬 변경사항 반영)
+                  if (finalIsDone) {
                     checks[mondayBasedDay] = true;
                   }
 
@@ -221,7 +223,7 @@ export default function StudyDetailPage() {
                     id: habit?.id,
                     name: habit?.habit || '습관',
                     checks: checks,
-                    isDone: habit?.isDone,
+                    isDone: finalIsDone,
                     date: habit?.date,
                     habitHistoryId: habit?.habitHistoryId,
                   });
