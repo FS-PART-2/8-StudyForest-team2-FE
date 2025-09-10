@@ -7,9 +7,11 @@ import { instance } from '../axiosInstance.js';
  */
 export const getHabitListApi = async (options = {}) => {
   try {
+    const { signal, timeout, ...rest } = options;
     const response = await instance.get('/api/habits', {
-      signal: options.signal,
-      timeout: options.timeout,
+      signal,
+      timeout,
+      ...rest, // params, headers 등 확장
     });
     return response.data;
   } catch (error) {
@@ -26,9 +28,11 @@ export const getHabitListApi = async (options = {}) => {
  */
 export const createHabitApi = async (habitData, options = {}) => {
   try {
+    const { signal, timeout, ...rest } = options;
     const response = await instance.post('/api/habits', habitData, {
-      signal: options.signal,
-      timeout: options.timeout,
+      signal,
+      timeout,
+      ...rest,
     });
     return response.data;
   } catch (error) {
@@ -45,10 +49,15 @@ export const createHabitApi = async (habitData, options = {}) => {
  */
 export const deleteHabitApi = async (habitId, options = {}) => {
   try {
+    if (habitId == null) {
+      throw new Error('habitId is required');
+    }
     const encodedId = encodeURIComponent(String(habitId));
+    const { signal, timeout, ...rest } = options;
     const response = await instance.delete(`/api/habits/${encodedId}`, {
-      signal: options.signal,
-      timeout: options.timeout,
+      signal,
+      timeout,
+      ...rest,
     });
     return response.data;
   } catch (error) {

@@ -40,7 +40,7 @@ export default function HabitPageMain() {
     try {
       setLoading(true);
       // 스터디 상세 정보 API로 스터디 데이터 가져오기 (StudyDetailPage와 동일)
-      const studyResponse = await instance.get(`/api/studies/${id}`);
+      const studyResponse = await instance.get(`/api/studies/${encodeURIComponent(id)}`);
       const studyData = studyResponse.data;
       setStudyData(studyData);
 
@@ -116,8 +116,8 @@ export default function HabitPageMain() {
         <div className={styles.titleRow}>
           <div className={styles.studyTitleContainer}>
             <DynamicStudyTitle
-              nickname={studyData?.nick || '연우'}
-              studyName={studyData?.name || '개발공장'}
+              nickname={studyData?.nick}
+              studyName={studyData?.name}
               backgroundImage={studyData?.img || ''}
               className={styles.studyTitle}
               tag="h1"
@@ -148,6 +148,7 @@ export default function HabitPageMain() {
             <button
               className={styles.editButton}
               onClick={() => setIsModalOpen(true)}
+              type="button"
             >
               <Text size="sm" weight="regular" color="#9ca3af">
                 목록 수정
@@ -158,7 +159,7 @@ export default function HabitPageMain() {
           {/* 습관 목록 */}
           <div className={styles.habitsContainer}>
             {loading ? (
-              <div className={styles.loading}>습관 목록을 불러오는 중...</div>
+              <div className={styles.loading} role="status" aria-live="polite">습관 목록을 불러오는 중...</div>
             ) : habits.length > 0 ? (
               habits.map((habit, index) => (
                 <button
@@ -167,6 +168,8 @@ export default function HabitPageMain() {
                     habit.isDone ? styles.activeHabit : styles.inactiveHabit
                   }
                   onClick={() => toggleHabit(index)}
+                  aria-pressed={habit.isDone}
+                  type="button"
                 >
                   {habit.name}
                 </button>

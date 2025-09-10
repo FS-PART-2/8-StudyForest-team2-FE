@@ -12,14 +12,17 @@ export default function NavigationButton({
   to,
   children,
   variant = 'default',
+  className = '',
+  ...props
 }) {
-  const buttonClass =
-    variant === 'home'
-      ? `${styles.navigationButton} ${styles.homeButton}`
-      : styles.navigationButton;
+  const buttonClass = [
+    styles.navigationButton,
+    variant === 'home' ? styles.homeButton : '',
+    className,
+  ].filter(Boolean).join(' ');
 
   return (
-    <Link to={to} className={buttonClass}>
+    <Link to={to} className={buttonClass} {...props}>
       <span>{children}</span>
       <img src="/assets/icons/next.svg" alt="" aria-hidden="true" />
     </Link>

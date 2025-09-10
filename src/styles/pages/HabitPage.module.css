@@ -167,7 +167,7 @@
   transition: all 0.3s ease;
   text-align: center;
   transform: translateY(0);
-  background: var(----brand-blue, #0013a7);
+  background: var(--brand-blue, #0013a7);
   font-size: 1.6rem;
 }
 
@@ -390,6 +390,7 @@
   }
 
   .cardHeader {
+    display: grid;
     grid-template-columns: 1fr auto 1fr;
   }
 

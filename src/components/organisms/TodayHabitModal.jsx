@@ -25,7 +25,7 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     try {
       setLoading(true);
       // StudyDetailPage와 동일한 API 사용
-      const response = await instance.get(`/api/studies/${studyId}`);
+      const response = await instance.get(`/api/studies/${encodeURIComponent(studyId)}`);
       const studyData = response.data;
 
       // StudyDetailPage와 동일한 방식으로 습관 데이터 추출
@@ -91,7 +91,7 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
   const deleteChip = async id => {
     try {
       // API로 습관 삭제 시도 (비밀번호 없이)
-      await instance.delete(`/api/habits/today/${studyId}/${id}`);
+      await instance.delete(`/api/habits/today/${encodeURIComponent(studyId)}/${encodeURIComponent(id)}`);
 
       console.log('습관이 서버에서 삭제되었습니다:', id);
     } catch (error) {
@@ -129,13 +129,8 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     try {
       // API로 습관 이름 수정 시도
       await instance.patch(
-        `/api/habits/today/${studyId}/${editingId}`,
+        `/api/habits/today/${encodeURIComponent(studyId)}/${encodeURIComponent(editingId)}`,
         { habit: value },
-        {
-          headers: {
-            'x-password': '1234',
-          },
-        },
       );
 
       console.log('습관 이름이 서버에서 수정되었습니다:', editingId, value);
@@ -176,7 +171,7 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
         {/* 칩 영역 */}
         <div className={styles.list}>
           {loading ? (
-            <div className={styles.loading}>습관 목록을 불러오는 중...</div>
+            <div className={styles.loading} role="status" aria-live="polite">습관 목록을 불러오는 중...</div>
           ) : (
             <>
               {chips.map(chip => (

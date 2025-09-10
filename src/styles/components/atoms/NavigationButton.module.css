@@ -15,8 +15,8 @@
 
 /* 홈 버튼 스타일 */
 .homeButton {
-  min-width: auto !important;
-  font-size: 1.4rem !important;
+  min-width: auto;
+  font-size: 1.4rem;
 }
 
 /* 태블릿 반응형 */

@@ -191,17 +191,13 @@ export default function StudyDetailPage() {
             rows={(() => {
               const habitRows = [];
 
+              // 오늘 날짜를 기준으로 요일 계산 (한 번만 계산)
+              const mondayBasedDay = ((new Date()).getDay() + 6) % 7;
+
               // habitHistories 배열을 순회하면서 각 습관을 개별 행으로 변환
               studyData?.habitHistories?.forEach(history => {
                 history?.habits?.forEach(habit => {
                   const finalIsDone = habit?.isDone;
-
-                  // 오늘 날짜를 기준으로 요일 계산
-                  const today = new Date();
-                  const dayOfWeek = today.getDay(); // 0=일요일, 1=월요일, ..., 6=토요일
-
-                  // 요일을 월요일 기준으로 변환 (월요일=0, 화요일=1, ..., 일요일=6)
-                  const mondayBasedDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
 
                   // 7일 배열 초기화 (월요일부터 일요일까지)
                   const checks = [
@@ -215,9 +211,7 @@ export default function StudyDetailPage() {
                   ];
 
                   // 해당 요일에 습관 완료 상태 설정 (로컬 변경사항 반영)
-                  if (finalIsDone) {
-                    checks[mondayBasedDay] = true;
-                  }
+                  checks[mondayBasedDay] = !!finalIsDone;
 
                   habitRows.push({
                     id: habit?.id,
