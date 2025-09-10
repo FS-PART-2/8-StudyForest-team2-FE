@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import Button from '../components/atoms/Button';
 import Chip from '../components/atoms/Chip';
 import Text from '../components/atoms/Text';
@@ -7,14 +7,11 @@ import NavigationButton from '../components/atoms/NavigationButton';
 import DynamicStudyTitle from '../components/atoms/DynamicStudyTitle';
 import TodayHabitModal from '../components/organisms/TodayHabitModal';
 import { instance } from '../utils/api/axiosInstance';
-import { habitUpdateApi } from '../utils/api/habit/updateHabitApi';
 import styles from '../styles/pages/HabitPage.module.css';
 
 // 메인 HabitPage 컴포넌트
 export default function HabitPageMain() {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [studyData, setStudyData] = useState(null);
@@ -35,9 +32,9 @@ export default function HabitPageMain() {
     if (id) {
       loadStudyHabits();
     }
-  }, [id]);
+  }, [id, loadStudyHabits]);
 
-  const loadStudyHabits = async () => {
+  const loadStudyHabits = useCallback(async () => {
     try {
       setLoading(true);
       // 스터디 상세 정보 API로 스터디 데이터 가져오기 (StudyDetailPage와 동일)
@@ -68,7 +65,7 @@ export default function HabitPageMain() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   // 시간을 한국어 형식으로 포맷팅
   const formatTime = date => {

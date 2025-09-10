@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import Chip from '../atoms/Chip.jsx';
 import Button from '../atoms/Button.jsx';
@@ -16,10 +16,10 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     if (open) {
       loadHabits();
     }
-  }, [open, studyId]);
+  }, [open, loadHabits]);
 
   // 습관 목록 로드 함수 (StudyDetailPage와 동일한 방식)
-  const loadHabits = async () => {
+  const loadHabits = useCallback(async () => {
     if (!studyId) return;
 
     try {
@@ -50,7 +50,7 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [studyId]);
 
   if (!open) return null;
 
