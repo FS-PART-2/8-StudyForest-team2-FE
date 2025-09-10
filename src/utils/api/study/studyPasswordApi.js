@@ -18,7 +18,7 @@ export async function verifyStudyPassword(studyId, password, options = {}) {
   const id = encodeURIComponent(String(studyId));
   const url = `/api/studies/${id}`;
 
-  console.log('studyPasswordApi: 비밀번호 검증 요청', {
+  console.log('studyPasswordApi: 비밀번호 검증 요청 (PATCH API 활용)', {
     studyId,
     encodedId: id,
     url,
@@ -26,18 +26,18 @@ export async function verifyStudyPassword(studyId, password, options = {}) {
   });
 
   try {
-    // 헤더 방식으로 비밀번호 검증 (HabitPage와 일관성 유지)
-    const { data } = await instance.get(url, {
-      headers: {
-        'x-study-password': password,
-      },
+    // PATCH 메소드로 비밀번호 검증 (실제 수정하지 않고 검증만)
+    const config = {
       signal: options.signal,
       timeout: options.timeout,
-    });
+    };
+
+    // 실제로는 수정하지 않고 검증만 하기 위해 빈 데이터로 PATCH 요청
+    const { data } = await instance.patch(url, { password }, config);
 
     console.log('studyPasswordApi: API 응답 성공', { hasData: !!data });
-    // 데이터가 정상적으로 반환되면 비밀번호가 맞는 것
-    return !!data;
+    // PATCH 요청이 성공하면 비밀번호가 맞는 것
+    return true;
   } catch (err) {
     console.error('studyPasswordApi: API 요청 실패', {
       message: err.message,
@@ -52,11 +52,16 @@ export async function verifyStudyPassword(studyId, password, options = {}) {
       console.log('studyPasswordApi: 인증 오류 - 비밀번호 불일치');
       return false;
     }
-    // 404 에러는 스터디가 존재하지 않거나 비밀번호가 틀린 것
-    if (err?.response?.status === 404) {
+    // 400 에러는 잘못된 요청 (비밀번호 불일치 포함)
+    if (err?.response?.status === 400) {
       console.log(
-        'studyPasswordApi: 404 오류 - 스터디 없음 또는 비밀번호 불일치',
+        'studyPasswordApi: 400 오류 - 비밀번호 불일치 또는 잘못된 요청',
       );
+      return false;
+    }
+    // 404 에러는 스터디가 존재하지 않음
+    if (err?.response?.status === 404) {
+      console.log('studyPasswordApi: 404 오류 - 스터디 없음');
       return false;
     }
     // 기타 네트워크 오류는 예외로 전파

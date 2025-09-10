@@ -159,7 +159,7 @@
 /* 토스트 컨테이너 */
 .toastContainer {
   position: fixed;
-  bottom: 4rem;
+  bottom: 14rem; /* 10rem 더 올림 */
   left: 50%;
   opacity: 0;
   transform: translateX(-50%);

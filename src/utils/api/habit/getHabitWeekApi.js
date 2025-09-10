@@ -6,8 +6,7 @@ import { instance } from '../axiosInstance.js';
  * @param {number|string} studyId
  * @param {{ weekDate?: string, password?: string }} options
  *
- * 서버가 어디서 비밀번호를 받는지 몰라도 되도록
- * 쿼리(password, studyPassword) + 헤더(x-study-password, x-password) 모두 보냅니다.
+ * GET 메소드이므로 쿼리 파라미터로 비밀번호 전송 (기존 API 사용)
  */
 const getHabitWeekApi = async (studyId, options = {}) => {
   const { weekDate, password } = options;
@@ -17,9 +16,7 @@ const getHabitWeekApi = async (studyId, options = {}) => {
     params: {
       ...(weekDate ? { weekDate } : {}),
       ...(password ? { password } : {}),
-      ...(password ? { studyPassword: password } : {}),
     },
-    // CORS 문제를 피하기 위해 헤더 제거
   });
 
   return res.data;

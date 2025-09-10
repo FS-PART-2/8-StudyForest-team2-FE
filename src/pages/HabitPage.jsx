@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Button from '../components/atoms/Button';
 import Chip from '../components/atoms/Chip';
 import Text from '../components/atoms/Text';
@@ -14,11 +14,16 @@ import styles from '../styles/pages/HabitPage.module.css';
 export default function HabitPageMain() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [studyData, setStudyData] = useState(null);
   const [habits, setHabits] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // StudyDetailPage에서 전달받은 비밀번호와 스터디 데이터
+  const verifiedPassword = location.state?.verifiedPassword;
+  const passedStudyData = location.state?.studyData;
 
   // 현재 시간 업데이트
   useEffect(() => {
@@ -29,12 +34,41 @@ export default function HabitPageMain() {
     return () => clearInterval(timer);
   }, []);
 
-  // 스터디 습관 데이터 로드
+  // 비밀번호 검증 확인 및 스터디 데이터 로드
   useEffect(() => {
-    if (id) {
-      loadStudyHabits();
+    if (!verifiedPassword) {
+      // 비밀번호가 없으면 StudyDetailPage로 리다이렉트
+      navigate(`/study/${id}`);
+      return;
     }
-  }, [id]);
+
+    if (id) {
+      // 전달받은 스터디 데이터가 있으면 사용, 없으면 API에서 로드
+      if (passedStudyData) {
+        setStudyData(passedStudyData);
+        loadHabitsFromStudyData(passedStudyData);
+      } else {
+        loadStudyHabits();
+      }
+    }
+  }, [id, verifiedPassword, passedStudyData, navigate]);
+
+  // 전달받은 스터디 데이터에서 습관 추출
+  const loadHabitsFromStudyData = studyData => {
+    let habitList = [];
+    if (studyData?.habitHistories && studyData.habitHistories.length > 0) {
+      const latestHistory = studyData.habitHistories[0];
+      if (latestHistory.habits) {
+        habitList = latestHistory.habits.map(habit => ({
+          id: habit.id,
+          name: habit.habit || habit.name,
+          isDone: habit.isDone || false,
+        }));
+      }
+    }
+    console.log('전달받은 스터디 데이터에서 습관 목록:', habitList);
+    setHabits(habitList);
+  };
 
   const loadStudyHabits = async () => {
     try {
@@ -45,22 +79,7 @@ export default function HabitPageMain() {
       );
       const studyData = studyResponse.data;
       setStudyData(studyData);
-
-      // StudyDetailPage와 동일한 방식으로 습관 데이터 추출
-      let habitList = [];
-      if (studyData?.habitHistories && studyData.habitHistories.length > 0) {
-        const latestHistory = studyData.habitHistories[0];
-        if (latestHistory.habits) {
-          habitList = latestHistory.habits.map(habit => ({
-            id: habit.id,
-            name: habit.habit || habit.name,
-            isDone: habit.isDone || false,
-          }));
-        }
-      }
-
-      console.log('습관 목록:', habitList);
-      setHabits(habitList);
+      loadHabitsFromStudyData(studyData);
     } catch (error) {
       console.error('습관 목록 로드 실패:', error);
       setHabits([]);
@@ -117,14 +136,14 @@ export default function HabitPageMain() {
     );
     setHabits(updatedHabits);
 
-    // API로 서버에 상태 업데이트 시도
+    // API로 서버에 상태 업데이트 시도 (비밀번호 헤더 포함)
     try {
       await instance.patch(
         `/api/habits/${encodeURIComponent(habit.id)}/toggle`,
         {},
         {
           headers: {
-            'x-study-password': '1234', // 테스트용 비밀번호
+            'x-study-password': verifiedPassword,
           },
         },
       );
@@ -240,7 +259,7 @@ export default function HabitPageMain() {
           }}
           onSave={handleUpdateHabits}
           studyId={id}
-          studyPassword="1234"
+          studyPassword={verifiedPassword}
         />
       </div>
     </div>

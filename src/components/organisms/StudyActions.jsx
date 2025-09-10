@@ -28,6 +28,7 @@ export default function StudyActions({
   studyId,
   title,
   nickname,
+  backgroundImage,
   className,
   onShare,
   onEdit,
@@ -72,14 +73,20 @@ export default function StudyActions({
   };
 
   const handleEditVerify = async password => {
-    console.log('StudyActions: handleEditVerify 호출됨', { studyId, password });
+    console.log('StudyActions: handleEditVerify 호출됨', {
+      studyId,
+      password: password ? '***' : 'empty',
+    });
 
     if (!studyId) {
       console.error('StudyActions: studyId가 없습니다.');
       return false;
     }
 
-    console.log('StudyActions: 비밀번호 검증 시작', { studyId, password });
+    console.log('StudyActions: 비밀번호 검증 시작', {
+      studyId,
+      password: password ? '***' : 'empty',
+    });
 
     try {
       const ok = await verifyStudyPassword(studyId, password);
@@ -87,13 +94,15 @@ export default function StudyActions({
 
       if (!ok) {
         console.warn('비밀번호가 일치하지 않습니다.');
-        return false;
+        return false; // false 반환 → StudyPasswordModal에서 토스트 표시, 모달 유지
       }
 
       console.log(
         'StudyActions: StudyModifyPage로 이동',
         `/study/${studyId}/modify`,
       );
+      // 비밀번호가 맞을 때만 모달 닫기
+      setOpenEditPwdModal(false);
       navigate(`/study/${studyId}/modify`);
       return true;
     } catch (error) {
@@ -105,7 +114,7 @@ export default function StudyActions({
         statusText: error.response?.statusText,
         data: error.response?.data,
       });
-      return false;
+      return false; // false 반환 → StudyPasswordModal에서 네트워크 에러 토스트 표시, 모달 유지
     }
   };
 
@@ -189,16 +198,20 @@ export default function StudyActions({
         isOpen={openEditPwdModal}
         onClose={() => setOpenEditPwdModal(false)}
         onVerify={handleEditVerify}
-        studyTitle={`${nickname}의 ${title}`}
         mode="edit"
+        nickname={nickname}
+        studyName={title}
+        backgroundImage={backgroundImage}
       />
 
       <StudyPasswordModal
         isOpen={openDeletePwdModal}
         onClose={() => setOpenDeletePwdModal(false)}
         onVerify={handleDeleteVerify}
-        studyTitle={`${nickname}의 ${title}`}
         mode="delete"
+        nickname={nickname}
+        studyName={title}
+        backgroundImage={backgroundImage}
       />
 
       {/* 토스트 알림 */}

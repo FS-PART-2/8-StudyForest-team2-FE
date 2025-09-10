@@ -74,7 +74,7 @@ export default function TodayHabitModal({
         },
         {
           headers: {
-            'x-study-password': studyPassword, // 사용자가 입력한 비밀번호
+            'x-study-password': studyPassword,
           },
         },
       );
@@ -100,15 +100,13 @@ export default function TodayHabitModal({
       return;
     }
 
-    setChips(prev => [...prev, newChip]);
+    setChips(prev => {
+      const next = [...prev, newChip];
+      onSave?.(next);
+      return next;
+    });
     setEditingId(newChip.id);
     setDraft(newChip.label);
-
-    // 부모 컴포넌트에 변경사항 알림 (추가된 습관 데이터 전달)
-    if (onSave) {
-      const updatedChips = [...chips, newChip];
-      onSave(updatedChips);
-    }
   };
 
   // 칩 삭제 (API 호출 시도 후 로컬 스토리지에 저장)
@@ -119,7 +117,7 @@ export default function TodayHabitModal({
         `/api/habits/today/${encodeURIComponent(studyId)}/${encodeURIComponent(id)}`,
         {
           headers: {
-            'x-study-password': studyPassword, // 사용자가 입력한 비밀번호
+            'x-study-password': studyPassword,
           },
         },
       );
@@ -132,17 +130,15 @@ export default function TodayHabitModal({
       return;
     }
 
-    setChips(prev => prev.filter(c => c.id !== id));
+    setChips(prev => {
+      const next = prev.filter(c => c.id !== id);
+      onSave?.(next);
+      return next;
+    });
 
     if (editingId === id) {
       setEditingId(null);
       setDraft('');
-    }
-
-    // 부모 컴포넌트에 변경사항 알림 (삭제된 습관 데이터 전달)
-    if (onSave) {
-      const updatedChips = chips.filter(c => c.id !== id);
-      onSave(updatedChips);
     }
   };
 
@@ -171,7 +167,7 @@ export default function TodayHabitModal({
         { title: value },
         {
           headers: {
-            'x-study-password': studyPassword, // 사용자가 입력한 비밀번호
+            'x-study-password': studyPassword,
           },
         },
       );
@@ -193,20 +189,16 @@ export default function TodayHabitModal({
     }
 
     // 로컬 상태 업데이트
-    setChips(prev =>
-      prev.map(c => (c.id === editingId ? { ...c, label: value } : c)),
-    );
+    setChips(prev => {
+      const next = prev.map(c =>
+        c.id === editingId ? { ...c, label: value } : c,
+      );
+      onSave?.(next);
+      return next;
+    });
 
     setEditingId(null);
     setDraft('');
-
-    // 부모 컴포넌트에 변경사항 알림 (수정된 습관 데이터 전달)
-    if (onSave) {
-      const updatedChips = chips.map(c =>
-        c.id === editingId ? { ...c, label: value } : c,
-      );
-      onSave(updatedChips);
-    }
   };
 
   // 편집 취소(ESC)

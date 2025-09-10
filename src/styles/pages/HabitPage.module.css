@@ -114,13 +114,8 @@
   max-height: 40rem;
   overflow-y: auto;
   padding-right: 1rem;
-  /* 스크롤바 숨기기 */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-.habitsContainer::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  /* 스크롤바를 컨테이너 밖으로 밀어내기 */
+  margin-right: -1.7rem; /* 스크롤바 너비만큼 음수 마진 */
 }
 
 .emptyHabits {

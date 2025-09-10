@@ -51,7 +51,7 @@
 /* 토스트 컨테이너 */
 .toastContainer {
   position: fixed;
-  bottom: 10rem; /* 30rem → 10rem으로 수정 */
+  bottom: 20rem; /* 10rem 더 올림 */
   left: 50%;
   transform: translateX(-50%);
   z-index: 2000;
