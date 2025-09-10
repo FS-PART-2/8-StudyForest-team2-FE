@@ -5,13 +5,7 @@ import Button from '../atoms/Button.jsx';
 import { instance } from '../../utils/api/axiosInstance.js';
 import styles from '../../styles/components/organisms/TodayHabitModal.module.css';
 
-export default function TodayHabitModal({
-  open,
-  onClose,
-  onSave,
-  studyId,
-  studyPassword,
-}) {
+export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
   const [chips, setChips] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [draft, setDraft] = useState('');
@@ -72,11 +66,6 @@ export default function TodayHabitModal({
         {
           title: label,
         },
-        {
-          headers: {
-            'x-study-password': studyPassword,
-          },
-        },
       );
 
       // API 성공 시 서버에서 받은 데이터 사용
@@ -115,11 +104,6 @@ export default function TodayHabitModal({
       // API로 습관 삭제 시도
       await instance.delete(
         `/api/habits/today/${encodeURIComponent(studyId)}/${encodeURIComponent(id)}`,
-        {
-          headers: {
-            'x-study-password': studyPassword,
-          },
-        },
       );
 
       console.log('습관이 서버에서 삭제되었습니다:', id);
@@ -165,11 +149,6 @@ export default function TodayHabitModal({
       await instance.patch(
         `/api/habits/today/${encodeURIComponent(studyId)}/${encodeURIComponent(editingId)}`,
         { title: value },
-        {
-          headers: {
-            'x-study-password': studyPassword,
-          },
-        },
       );
 
       console.log('습관 이름이 서버에서 수정되었습니다:', editingId, value);
