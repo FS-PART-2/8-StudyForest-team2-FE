@@ -35,7 +35,7 @@ export function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<StudyPage />} />
-            <Route path="/focus" element={<FocusPage />} />
+            <Route path="/focus/:id" element={<FocusPage />} />
             <Route path="/test" element={<TestPage />} />
             <Route path="/study/new" element={<StudyCreatePage />} />
             <Route path="/study/:id" element={<StudyDetailPage />} />
