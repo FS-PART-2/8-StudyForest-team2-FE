@@ -1,157 +1,196 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Chip from '../components/atoms/Chip.jsx';
-import Button from '../components/atoms/Button.jsx';
-import NavigationButton from '../components/atoms/NavigationButton.jsx';
+import Button from '../components/atoms/Button';
+import Chip from '../components/atoms/Chip';
+import Text from '../components/atoms/Text';
+import NavigationButton from '../components/atoms/NavigationButton';
+import DynamicStudyTitle from '../components/atoms/DynamicStudyTitle';
+import TodayHabitModal from '../components/organisms/TodayHabitModal';
+import { instance } from '../utils/api/axiosInstance';
+import { habitUpdateApi } from '../utils/api/habit/updateHabitApi';
 import styles from '../styles/pages/HabitPage.module.css';
 
-export default function HabitPage() {
+// 메인 HabitPage 컴포넌트
+export default function HabitPageMain() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [chips, setChips] = useState([]);
-  const [editingId, setEditingId] = useState(null);
-  const [draft, setDraft] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [studyData, setStudyData] = useState(null);
+  const [habits, setHabits] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // 스터디 ID가 없으면 홈으로 리다이렉트
+  // 현재 시간 업데이트
   useEffect(() => {
-    if (!id) {
-      navigate('/');
-      return;
-    }
-    // TODO: API에서 습관 데이터 로드
-    setLoading(false);
-  }, [id, navigate]);
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
 
-  // 새 칩 추가
-  const addChip = () => {
-    const chipId = crypto.randomUUID?.() ?? `id_${Date.now()}`;
-    const label = '새 습관';
-    setChips(prev => [...prev, { id: chipId, label }]);
-    // 추가 직후 편집 모드로 진입
-    setEditingId(chipId);
-    setDraft(label);
+    return () => clearInterval(timer);
+  }, []);
+
+  // 스터디 습관 데이터 로드
+  useEffect(() => {
+    if (id) {
+      loadStudyHabits();
+    }
+  }, [id]);
+
+  const loadStudyHabits = async () => {
+    try {
+      setLoading(true);
+      // 스터디 상세 정보 API로 스터디 데이터 가져오기 (StudyDetailPage와 동일)
+      const studyResponse = await instance.get(`/api/studies/${encodeURIComponent(id)}`);
+      const studyData = studyResponse.data;
+      setStudyData(studyData);
+
+      // StudyDetailPage와 동일한 방식으로 습관 데이터 추출
+      let habitList = [];
+      if (studyData?.habitHistories && studyData.habitHistories.length > 0) {
+        const latestHistory = studyData.habitHistories[0];
+        if (latestHistory.habits) {
+          habitList = latestHistory.habits.map(habit => ({
+            id: habit.id,
+            name: habit.habit || habit.name,
+            isDone: habit.isDone || false,
+          }));
+        }
+      }
+
+      console.log('습관 목록:', habitList);
+      setHabits(habitList);
+    } catch (error) {
+      console.error('습관 목록 로드 실패:', error);
+      setHabits([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // 칩 삭제
-  const deleteChip = chipId => {
-    setChips(prev => prev.filter(c => c.id !== chipId));
-    if (editingId === chipId) {
-      setEditingId(null);
-      setDraft('');
-    }
+  // 시간을 한국어 형식으로 포맷팅
+  const formatTime = date => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    const period = hours >= 12 ? '오후' : '오전';
+    const hour12 = hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
+
+    return `${year}-${month}-${day} ${period} ${hour12}:${minutes}`;
   };
 
-  // 편집 시작
-  const startEdit = chipId => {
-    const cur = chips.find(c => c.id === chipId);
-    setEditingId(chipId);
-    setDraft(cur?.label ?? '');
+  const handleUpdateHabits = () => {
+    // 모달에서 습관이 수정되었으므로 데이터를 다시 로드
+    loadStudyHabits();
+    console.log('습관 목록이 업데이트되었습니다');
   };
 
-  // 편집 확정(Enter)
-  const confirmEdit = valueFromChip => {
-    if (!editingId) return;
-    const value = (valueFromChip ?? draft ?? '').trim();
-    if (!value) {
-      // 빈 값이면 원복
-      setEditingId(null);
-      setDraft('');
-      return;
-    }
-    setChips(prev =>
-      prev.map(c => (c.id === editingId ? { ...c, label: value } : c)),
+  const toggleHabit = async index => {
+    const habit = habits[index];
+    if (!habit || !habit.id) return;
+
+    // 로컬 상태 업데이트
+    const newIsDone = !habit.isDone;
+    const updatedHabits = habits.map((h, i) =>
+      i === index ? { ...h, isDone: newIsDone } : h,
     );
-    setEditingId(null);
-    setDraft('');
-  };
+    setHabits(updatedHabits);
 
-  // 편집 취소(ESC)
-  const cancelEdit = () => {
-    setEditingId(null);
-    setDraft('');
-  };
-
-  // 저장
-  const handleSave = () => {
-    // TODO: API로 습관 데이터 저장
-    console.log('습관 저장:', chips);
-    navigate(`/study/${id}`);
-  };
-
-  // 취소
-  const handleCancel = () => {
-    navigate(`/study/${id}`);
-  };
-
-  if (loading) {
-    return (
-      <div className={styles.page}>
-        <div className={styles.loading}>로딩 중...</div>
-      </div>
+    console.log(
+      `습관 "${habit.name}" ${newIsDone ? '완료' : '미완료'}로 업데이트됨`,
     );
-  }
+  };
 
   return (
-    <div className={styles.page}>
-      <div className={styles.container}>
-        {/* 헤더 */}
-        <div className={styles.header}>
-          <h1 className={styles.title}>오늘의 습관</h1>
-          <div className={styles.navigation}>
-            <NavigationButton to={`/study/${id}`}>
-              스터디로 돌아가기
+    <div
+      style={{
+        minHeight: '100vh',
+        backgroundColor: '#f8f9fa',
+        padding: '2rem 0',
+      }}
+    >
+      <div className={styles.page}>
+        {/* 제목 + 네비게이션 버튼 (같은 row) */}
+        <div className={styles.titleRow}>
+          <div className={styles.studyTitleContainer}>
+            <DynamicStudyTitle
+              nickname={studyData?.nick}
+              studyName={studyData?.name}
+              backgroundImage={studyData?.img || ''}
+              className={styles.studyTitle}
+              tag="h1"
+            />
+          </div>
+          <div className={styles.todayButtons}>
+            <NavigationButton to="/focus">오늘의 집중</NavigationButton>
+            <NavigationButton to="/" variant="home">
+              홈
             </NavigationButton>
           </div>
         </div>
 
-        {/* 칩 영역 */}
-        <div className={styles.list}>
-          {chips.map(chip => (
-            <div key={chip.id} className={styles.chipWrapper}>
-              <Chip
-                label={editingId === chip.id ? draft : chip.label}
-                selected={editingId === chip.id}
-                editing={editingId === chip.id}
-                onClick={() => startEdit(chip.id)}
-                onChange={v => setDraft(v)}
-                onConfirm={(_, v) => confirmEdit(v)}
-                onCancel={cancelEdit}
-              />
-              <button
-                className={styles.deleteBtn}
-                onClick={() => deleteChip(chip.id)}
-                aria-label="삭제"
-                title="삭제"
-              >
-                <img
-                  src="/assets/icons/delete.svg"
-                  alt=""
-                  className={styles.deleteIcon}
-                />
-              </button>
-            </div>
-          ))}
+        {/* 현재 시간 */}
+        <div className={styles.timeSection}>
+          <Text size="lg" weight="medium" color="#9ca3af">
+            현재 시간
+          </Text>
+          <Text size="lg" weight="regular" color="#1f2937">
+            {formatTime(currentTime)}
+          </Text>
+        </div>
 
-          {/* Add chip */}
-          <div className={styles.addRow}>
-            <Chip variant="add" onClick={addChip} aria-label="새 칩 추가" />
+        {/* 메인 카드 */}
+        <div className={styles.mainCard}>
+          <div className={styles.cardHeader}>
+            <h2>오늘의 습관</h2>
+            <button
+              className={styles.editButton}
+              onClick={() => setIsModalOpen(true)}
+              type="button"
+            >
+              <Text size="sm" weight="regular" color="#9ca3af">
+                목록 수정
+              </Text>
+            </button>
+          </div>
+
+          {/* 습관 목록 */}
+          <div className={styles.habitsContainer}>
+            {loading ? (
+              <div className={styles.loading} role="status" aria-live="polite">습관 목록을 불러오는 중...</div>
+            ) : habits.length > 0 ? (
+              habits.map((habit, index) => (
+                <button
+                  key={habit.id || index}
+                  className={
+                    habit.isDone ? styles.activeHabit : styles.inactiveHabit
+                  }
+                  onClick={() => toggleHabit(index)}
+                  aria-pressed={habit.isDone}
+                  type="button"
+                >
+                  {habit.name}
+                </button>
+              ))
+            ) : (
+              <div className={styles.emptyHabits}>
+                <div className={styles.emptyTitle}>아직 습관이 없어요</div>
+                <div className={styles.emptySubtitle}>
+                  목록 수정을 눌러 습관을 생성해보세요
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* 버튼 */}
-        <div className={styles.actions}>
-          <Button
-            size="cancel"
-            className={styles.cancelBtn}
-            onClick={handleCancel}
-          >
-            취소
-          </Button>
-          <Button size="cancel" className={styles.saveBtn} onClick={handleSave}>
-            수정 완료
-          </Button>
-        </div>
+        <TodayHabitModal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleUpdateHabits}
+          studyId={id}
+        />
       </div>
     </div>
   );

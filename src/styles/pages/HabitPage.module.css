@@ -1,233 +1,433 @@
-/* HabitPage 스타일 */
+/* 메인 페이지 컨테이너 */
 .page {
-  min-height: 100vh;
-  background: var(--background-primary, #f8f9fa);
-  padding: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.container {
-  width: 100%;
-  max-width: 60rem; /* 600px */
-  background: var(--background-secondary, #fff);
-  border-radius: 1.6rem;
-  padding: 4rem 2.4rem;
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  width: 116.8rem;
+  height: 78.3rem;
+  background: var(--background-secondary, #fff);
+  border-radius: 1.6rem;
+  padding: 4rem 4.2rem 4rem 4rem;
+  margin: 0 auto;
+  box-sizing: border-box;
+  gap: 1.2rem;
 }
 
-/* 헤더 */
-.header {
+/* 제목 + 네비게이션 버튼 (같은 row) */
+.titleRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1.6rem;
+  margin-bottom: 1.2rem;
 }
 
-.title {
-  font-size: 2.4rem;
-  font-weight: 600;
-  color: var(--text-primary, #1a1a1a);
-  margin: 0;
-}
-
-.navigation {
+.studyTitleContainer {
   display: flex;
-  gap: 1.6rem;
-}
-
-/* 칩 리스트 */
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-  min-height: 20rem;
-}
-
-.chipWrapper {
-  display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 1.6rem;
+}
+
+.studyTitle {
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: var(--text-primary, #222);
+  margin: 0;
+  line-height: 1.2;
+  display: flex;
+  align-items: baseline;
+}
+
+.todayButtons {
+  display: flex;
+  gap: 1.2rem;
+}
+
+/* 현재 시간 섹션 */
+.timeSection {
+  margin-bottom: 2.4rem;
+  font-size: 1.8rem;
+}
+
+.timeSection p:first-child {
+  margin-bottom: 0.5rem;
+}
+.timeSection p:last-child {
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.8rem 1.2rem;
+  display: inline-block;
+}
+
+/* 메인 카드 */
+.mainCard {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 50rem) 1fr;
+  background: white;
+  border-radius: 1rem;
+  padding: 2.5rem;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  position: relative;
+  gap: 0;
+  width: 108.8rem;
+  height: 55.1rem;
+}
+
+.cardHeader {
+  grid-column: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.4rem;
   position: relative;
 }
 
-.deleteBtn {
+.cardHeader h2 {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.editButton {
   position: absolute;
-  right: -4rem;
-  width: 2.4rem;
-  height: 2.4rem;
+  right: 0;
   background: none;
   border: none;
   cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 1.4rem;
+}
+
+.editButton:hover {
+  background-color: #f3f4f6;
+}
+
+/* 습관 컨테이너 */
+.habitsContainer {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  min-height: 40rem;
+  max-height: 40rem;
+  overflow-y: auto;
+  padding-right: 1rem;
+  /* 스크롤바 숨기기 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.habitsContainer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.emptyHabits {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  height: 40rem;
+}
+
+.emptyTitle {
+  font-size: 2rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.emptySubtitle {
+  font-size: 2rem;
+  font-weight: 400;
+  color: #9ca3af;
+}
+
+.loading {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  transition: background-color 0.2s ease;
-}
-
-.deleteBtn:hover {
-  background-color: var(--background-hover, #f0f0f0);
-}
-
-.deleteIcon {
-  width: 1.6rem;
-  height: 1.6rem;
-  opacity: 0.6;
-}
-
-.addRow {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-}
-
-/* 액션 버튼 */
-.actions {
-  display: flex;
-  justify-content: center;
-  gap: 2.4rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border-light, #e0e0e0);
-}
-
-.cancelBtn,
-.saveBtn {
-  width: 28.8rem; /* 288px */
-  padding: 1.2rem 2rem;
   font-size: 1.6rem;
-  font-weight: 500;
-  border-radius: 0.8rem;
+  color: #6b7280;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.activeHabit {
+  width: 100%;
+  height: 5.5rem;
+  padding: 1.3rem 2rem;
+  color: white;
   border: none;
+  border-radius: 1rem;
   cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  transform: translateY(0);
+  background: var(--brand-blue, #0013a7);
+  font-size: 1.6rem;
+}
+
+.activeHabit:hover {
+  transform: translateY(-2px);
+}
+
+.activeHabit:active {
+  transform: translateY(0);
+}
+
+.inactiveHabit {
+  width: 100%;
+  height: 5.5rem;
+  padding: 1.3rem 2rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-size: 1.6rem;
+}
+
+.inactiveHabit:hover {
+  border-color: #d1d5db;
+}
+
+/* 모달 스타일 */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 28rem;
+  max-width: 90%;
+  box-shadow: 0 20px 60px 0 rgba(0, 0, 0, 0.2);
+  transform: scale(1);
+  animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modalHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  color: #1f2937;
+}
+
+/* 습관 목록 */
+.habitList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.habitItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.habitInput {
+  flex: 1;
+  padding: 0.875rem 1rem;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  text-align: center;
+  color: #374151;
+  font-size: 0.875rem;
   transition: all 0.2s ease;
 }
 
-.cancelBtn {
-  background: var(--background-secondary, #fff);
-  color: var(--text-secondary, #666);
-  border: 1px solid var(--border-light, #e0e0e0);
+.habitInput:focus {
+  outline: none;
+  background-color: white;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.cancelBtn:hover {
-  background: var(--background-hover, #f8f9fa);
+.habitInput::placeholder {
+  color: #9ca3af;
 }
 
-.saveBtn {
-  background: var(--brand-blue, #007bff);
-  color: white;
-}
-
-.saveBtn:hover {
-  background: var(--brand-blue-hover, #0056b3);
-}
-
-/* 로딩 */
-.loading {
+.removeButton {
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 1.125rem;
+  font-weight: bold;
+  cursor: pointer;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 20rem;
-  font-size: 1.6rem;
-  color: var(--text-secondary, #666);
+  justify-content: center;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+.removeButton:hover {
+  color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.addButton {
+  width: 100%;
+  padding: 1rem;
+  border: 2px dashed #d1d5db;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+.addButton:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+  color: #374151;
+}
+
+/* 모달 액션 */
+.modalActions {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.modalActions button {
+  flex: 1;
+  border-radius: 10px;
+  color: white;
+  padding: 0.8rem 1.2rem;
+}
+
+.modalActions button:first-child {
+  background-color: #84888f;
+}
+.modalActions button:last-child {
+  background-color: #0013a7;
 }
 
 /* 태블릿 반응형 */
 @media (max-width: 1024px) {
   .page {
-    padding: 1.6rem;
+    width: 64.8rem;
+    height: 79.9rem;
+    padding: 2.4rem;
   }
 
-  .container {
-    padding: 3rem 2rem;
-    gap: 2.4rem;
+  .studyTitle {
+    font-size: 2.8rem;
   }
 
-  .title {
-    font-size: 2.2rem;
+  .todayButtons {
+    gap: 1rem;
   }
 
-  .actions {
-    gap: 2rem;
-  }
-
-  .cancelBtn,
-  .saveBtn {
-    width: 24rem;
-    padding: 1rem 1.6rem;
+  .mainCard {
+    width: 60rem; /* 태블릿에서 60rem으로 설정 */
   }
 }
 
 /* 모바일 반응형 */
-@media (max-width: 744px) {
+@media (max-width: 743px) {
   .page {
-    padding: 1.2rem;
-    align-items: flex-start;
-    padding-top: 2rem;
-  }
-
-  .container {
     width: 34.4rem;
-    min-width: 34.4rem;
-    padding: 2.5rem 1.6rem;
-    gap: 2rem;
+    height: 78.1rem;
+    padding: 2rem 1.6rem;
+    border-radius: 0;
+    margin: 0;
   }
 
-  .header {
+  /* 제목 섹션 - 세로 배치 */
+  .titleRow {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1.2rem;
+    gap: 1.6rem;
+    margin-bottom: 2rem;
   }
 
-  .title {
-    font-size: 2rem;
-  }
-
-  .navigation {
+  .studyTitle {
+    font-size: 2.4rem;
     width: 100%;
-    justify-content: center;
   }
 
-  .list {
-    gap: 1.2rem;
-    align-items: center;
+  .cardHeader {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
   }
 
-  .chipWrapper {
+  .cardHeader h2 {
+    /* 모바일에서도 전체 너비 사용 */
+    width: auto;
+  }
+
+  /* 네비게이션 버튼 - 왼쪽 정렬 */
+  .todayButtons {
     width: 100%;
-    justify-content: center;
-    margin: 0 auto;
+    flex-direction: row;
+    gap: 0.8rem;
+    justify-content: flex-start;
   }
 
-  .deleteBtn {
-    right: -3rem;
-    width: 2rem;
-    height: 2rem;
+  .mainCard {
+    padding: 2rem 1.6rem;
+    width: 31.2rem;
+    height: 50.3rem;
   }
 
-  .deleteIcon {
-    width: 1.4rem;
-    height: 1.4rem;
+  .cardHeader {
+    font-size: 1.8rem;
+    margin-bottom: 3.9rem;
   }
 
-  .addRow {
-    margin-top: 0.8rem;
-  }
-
-  .actions {
-    flex-direction: column;
-    gap: 1.2rem;
-    padding-top: 1.6rem;
-  }
-
-  .cancelBtn,
-  .saveBtn {
-    width: 100%;
-    padding: 1rem 1.6rem;
+  .editButton {
     font-size: 1.4rem;
+  }
+
+  .timeSection {
+    font-size: 1.4rem;
+  }
+
+  .modalContent {
+    width: 24rem;
+    padding: 1.5rem;
   }
 }

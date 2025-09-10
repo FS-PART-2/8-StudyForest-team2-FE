@@ -10,7 +10,6 @@ import {
 import Button from '../components/atoms/Button.jsx';
 import Chip from '../components/atoms/Chip.jsx';
 import EmojiCounter from '../components/molecules/EmojiCounter';
-import TodayHabitModal from '../components/organisms/TodayHabitModal.jsx';
 import StudyPasswordModal from '../components/organisms/StudyPasswordModal.jsx';
 import Card from '../components/organisms/Card.jsx';
 import SearchBar from '../components/molecules/SearchBar.jsx'; // 주석 해제
@@ -75,16 +74,6 @@ export default function TestPage() {
   };
 
   /** ------------------------------
-   *  TodayHabitModal demo
-   *  ------------------------------ */
-  const [openHabitModal, setOpenHabitModal] = useState(false);
-  const [items, setItems] = useState([]);
-  const addItem = () => setItems(prev => [...prev, '새 습관']);
-  const deleteItem = idx => setItems(prev => prev.filter((_, i) => i !== idx));
-  const handleHabitClose = () => setOpenHabitModal(false);
-  const handleHabitSave = () => setOpenHabitModal(false);
-
-  /** ------------------------------
    *  StudyPasswordModal demo
    *  ------------------------------ */
   const [isOpenStudyModal, setIsOpenStudyModal] = useState(false);
@@ -142,13 +131,6 @@ export default function TestPage() {
   return (
     <div style={{ display: 'grid', gap: '2rem', padding: '1.6rem' }}>
       <header style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-        <Button
-          variant="action"
-          size="lg"
-          onClick={() => setOpenHabitModal(true)}
-        >
-          오늘의 습관 모달
-        </Button>
         <Button
           variant="outline"
           size="lg"
@@ -243,16 +225,6 @@ export default function TestPage() {
           <Card preset="SOLID_GRAY" />
         </div>
       </section>
-
-      {/* TodayHabit Modal */}
-      <TodayHabitModal
-        open={openHabitModal}
-        items={items}
-        onAdd={addItem}
-        onDelete={deleteItem}
-        onClose={handleHabitClose}
-        onSave={handleHabitSave}
-      />
 
       {/* Study Password Modal */}
       <StudyPasswordModal
