@@ -7,7 +7,7 @@ export const postRefreshApi = async () => {
     });
 
     // 응답 데이터 구조 안전하게 접근
-    const responseData = response.data?.data;
+    const responseData = response.data?.data || response.data;
 
     if (!responseData) {
       console.warn('토큰 갱신 응답에 데이터가 없습니다.');
@@ -24,15 +24,15 @@ export const postRefreshApi = async () => {
     // Authorization 헤더 설정
     instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
-    console.log('refresh 성공:', response.data);
+    console.log('refresh 성공');
 
     return { accessToken, user };
   } catch (error) {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      delete instance.defaults.headers.common['Authorization']; // 401 (권한 없음) , 403 (권한 부족으로 인해 접근을 거부한 상태) 에러 시 헤더 제거
       return null;
     }
     console.error(error);
-    delete instance.defaults.headers.common['Authorization'];
 
     // 에러를 throw하지 않고 null 반환
     return null;

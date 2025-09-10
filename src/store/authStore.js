@@ -27,7 +27,7 @@ export const useAuthStore = create(set => ({
   login: async data => {
     try {
       const response = await postLoginApi(data);
-      console.log('로그인 성공:', response);
+      console.log('로그인 성공');
 
       localStorage.setItem('hasLoggedIn', 'true');
 
