@@ -1,15 +1,32 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Button from '../components/atoms/Button';
 import Toast from '../components/atoms/Toast';
 import useTimer from '../hooks/useTimer';
-// import { instance } from '../utils/api/axiosInstance';
 import NavigationButton from '../components/atoms/NavigationButton';
 import styles from '../styles/pages/FocusPage.module.css';
+import { useParams } from 'react-router-dom';
+import { studyApi } from '../utils/api/study/getStudyApi';
+import { patchFocusTimeApi } from '../utils/api/focus/patchFocusTimeApi';
 
 const initialMinutes = 30;
 
 export default function FocusPage() {
+  const { id } = useParams();
+  const [focusData, setFocusData] = useState({});
   const timer = useTimer(initialMinutes);
+
+  useEffect(() => {
+    const fetchStudyData = async () => {
+      try {
+        const data = await studyApi.getStudyDetailApi(id);
+        setFocusData(data);
+      } catch (error) {
+        console.error('스터디 데이터 로딩 실패:', error);
+      }
+    };
+    fetchStudyData();
+  }, [id]);
+
   const minutesValue =
     timer.isRunning || timer.isPaused
       ? timer.displaySeconds < 0
@@ -34,13 +51,6 @@ export default function FocusPage() {
   const minutesInputRef = useRef(null);
   const secondsInputRef = useRef(null);
 
-  // 타이머 완료 체크
-  // useEffect(() => {
-  //   if (timer.isCompleted) {
-  //     showToast('success', '🎉 집중 시간이 완료되었습니다!');
-  //   }
-  // }, [timer.isCompleted]);
-
   // 시작 버튼 클릭
   const handleStart = () => {
     timer.start();
@@ -59,7 +69,6 @@ export default function FocusPage() {
 
   // 완료 버튼 클릭 (포인트 획득)
   const handleStop = async () => {
-    console.log('timer', timer);
     const totalTimeInMinutes = timer.minutes + timer.seconds / 60; // 총 시간(분), 초는 60초에 1분
     const basePoints = 3; // 기본 3포인트
     const additionalPoints = Math.floor(totalTimeInMinutes / 10); // 추가 포인트 : 10분당 1포인트, 소수점은 버림
@@ -67,11 +76,14 @@ export default function FocusPage() {
 
     try {
       // 서버에 포인트 전송
-      // await focusApi.postFocusTimeApi({
-      //   // focusTime: totalTimeInMinutes,
-      //   points: totalPoints,
-      // });
+      await patchFocusTimeApi(id, {
+        totalPoints,
+      });
 
+      setFocusData({
+        ...focusData,
+        point: focusData.point + totalPoints,
+      });
       showToast('point', totalPoints);
     } catch (error) {
       console.error('포인트 전송 실패:', error);
@@ -104,17 +116,25 @@ export default function FocusPage() {
     timer.validateTime();
   };
 
-  // 엔터키로 분 편집 완료
+  // 분 input 키 이벤트 처리
   const handleMinutesKeyDown = e => {
     if (e.key === 'Enter') {
       handleMinutesBlur();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      // secondsInputRef.current?.focus();
+      secondsInputRef.current?.select();
     }
   };
 
-  // 엔터키로 초 편집 완료
+  // 초 input 키 이벤트 처리
   const handleSecondsKeyDown = e => {
     if (e.key === 'Enter') {
       handleSecondsBlur();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      // minutesInputRef.current?.focus();
+      minutesInputRef.current?.select();
     }
   };
 
@@ -132,18 +152,20 @@ export default function FocusPage() {
     <main className={styles.focusPage}>
       <div className={styles.container}>
         <div className={styles.focusHeader}>
-          <h1 className={styles.title}>연우의 개발공장</h1>
+          <h1 className={styles.title}>
+            {focusData.nick} {focusData.name}
+          </h1>
           <div className={styles.nav}>
-            <NavigationButton to="/habit">오늘의 습관</NavigationButton>
+            <NavigationButton to={`/habit/${id}`}>오늘의 습관</NavigationButton>
             <NavigationButton to="/">홈</NavigationButton>
           </div>
         </div>
 
         <div className={styles.pointContainer}>
-          <p className={styles.pointBadgeText}>현재까지 획득한 포인트</p>
+          <p className={styles.focusContentTitle}>현재까지 획득한 포인트</p>
           <div className={styles.pointBadge}>
             <span className={styles.pointIcon}>🌿</span>
-            <span className={styles.pointText}>310P 획득</span>
+            <span className={styles.pointText}>{focusData.point}P 획득</span>
           </div>
         </div>
 
@@ -151,6 +173,18 @@ export default function FocusPage() {
           <h2 className={styles.timerTitle}>오늘의 집중</h2>
 
           <div className={styles.timeDisplay}>
+            <div className={styles.timeDisplayItemWrapper}>
+              {timer.isRunning && (
+                <div className={styles.timeDisplayItem}>
+                  <img src={'/assets/icons/clock.svg'} alt="clock" />
+                  <span className={styles.timeDisplayText}>
+                    {timer.minutes.toString().padStart(2, '0')}:
+                    {timer.seconds.toString().padStart(2, '0')}
+                  </span>
+                </div>
+              )}
+            </div>
+
             <div className={styles.mainTime}>
               <input
                 ref={minutesInputRef}

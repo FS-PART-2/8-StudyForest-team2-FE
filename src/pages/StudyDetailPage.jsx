@@ -159,7 +159,7 @@ export default function StudyDetailPage() {
         </div>
         <div className={styles.todayButtons}>
           <NavigationButton to={`/habit/${id}`}>오늘의 습관</NavigationButton>
-          <NavigationButton to="/focus">오늘의 집중</NavigationButton>
+          <NavigationButton to={`/focus/${id}`}>오늘의 집중</NavigationButton>
         </div>
       </div>
 
