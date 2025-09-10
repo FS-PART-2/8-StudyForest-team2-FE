@@ -1,0 +1,76 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-width: 35rem; /* 350px 이하 프리즈 */
+}
+
+.label {
+  color: var(--text-gray, #818181);
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.pointsCard {
+  position: relative;
+  width: fit-content;
+  min-width: 11.6rem;
+  height: 3.5rem;
+  padding: 1.5rem 2rem 1.4rem 1.3rem;
+  background: rgba(121, 121, 121, 0.8);
+  border: none;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pointsContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  position: relative;
+  z-index: 1;
+}
+
+.pointIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+/* point.svg는 원래 색상 그대로 유지 */
+
+.points {
+  color: white; /* 포인트 텍스트를 흰색으로 변경 */
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 743px) {
+  .label,
+  .points {
+    font-size: 1.4rem;
+  }
+
+  .pointsCard {
+    width: fit-content;
+    min-width: 9.6rem;
+    height: 2.9rem;
+    padding: 0 1rem;
+  }
+
+  .pointIcon {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .pointIcon img {
+    width: 20px;
+    height: 20px;
+  }
+}

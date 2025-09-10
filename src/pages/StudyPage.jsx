@@ -28,8 +28,8 @@ export function StudyPage() {
     const fetchData = async () => {
       try {
         const data = await studyApi.getStudyApi(studyParams);
+        console.log(data);
         setStudyList(data.studies);
-        console.log(data.studies);
       } catch (error) {
         console.error(error);
       }
@@ -82,17 +82,24 @@ export function StudyPage() {
         {/* 스터디 리스트 */}
         {recentStudies.length > 0 ? (
           <div className={styles.studyList}>
-            {recentStudies.map(study => (
-              <Card
-                key={study.id}
-                preset={'img-04'}
-                nick={study.nick}
-                title={study.name}
-                createdAt={study?.createdAt?.split('T')[0]}
-                description={study.content}
-                id={study.id}
-              />
-            ))}
+            {recentStudies.map(study => {
+              return (
+                <Card
+                  key={study.id}
+                  preset={study.img}
+                  nick={study.nick}
+                  title={study.name}
+                  points={study.point || 0}
+                  createdAt={study?.createdAt?.split('T')[0]}
+                  description={study.content}
+                  id={study.id}
+                  emojiData={study.studyEmojis?.map(item => ({
+                    emoji: item.emoji?.symbol || item.symbol || '🔥',
+                    count: item.count || 0,
+                  })) || []}
+                />
+              );
+            })}
           </div>
         ) : (
           <div className={styles.studyListEmpty}>
@@ -106,22 +113,33 @@ export function StudyPage() {
         <h1 className={styles.studyPageTitle}>스터디 둘러보기</h1>
         <div className={styles.studyListFilter}>
           <SearchBar onSubmit={handleSubmit} />
-          <Dropdown onChange={handleDropdownChange} />
+          <Dropdown
+            onChange={handleDropdownChange}
+            value={
+              studyParams.recentOrder || studyParams.pointOrder || 'recent'
+            }
+          />
         </div>
         {studyList.length > 0 ? (
           <div className={styles.studyList}>
-            {studyList.map(study => (
-              <Card
-                key={study.id}
-                preset={'img-04'}
-                nick={study.nick}
-                title={study.name}
-                points={study?.points[0]?.value || 0}
-                createdAt={study?.createdAt?.split('T')[0]}
-                description={study.content}
-                id={study.id}
-              />
-            ))}
+            {studyList.map(study => {
+              return (
+                <Card
+                  key={study.id}
+                  preset={study.img}
+                  id={study.id}
+                  nick={study.nick}
+                  title={study.name}
+                  points={study.point || 0}
+                  createdAt={study?.createdAt?.split('T')[0]}
+                  description={study.content}
+                  emojiData={study.studyEmojis?.map(item => ({
+                    emoji: item.emoji?.symbol || item.symbol || '🔥',
+                    count: item.count || 0,
+                  })) || []}
+                />
+              );
+            })}
           </div>
         ) : (
           <div className={styles.studyListEmpty}>
@@ -131,7 +149,15 @@ export function StudyPage() {
       </section>
 
       <div className={styles.studyListMore}>
-        <Button onClick={handleStudyMore} variant="action" size="lg">
+        <Button
+          onClick={handleStudyMore}
+          variant="outline"
+          shape="circle"
+          size="lg"
+          disabled={
+            studyList.length < studyParams.limit || studyList.length === 0
+          }
+        >
           더보기
         </Button>
       </div>

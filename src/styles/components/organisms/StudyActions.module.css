@@ -1,0 +1,58 @@
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  gap: clamp(1rem, 1.2vw, 1.5rem); /* 모바일 1rem → PC 1.5rem */
+  width: auto; /* 내용에 맞는 크기만 차지 */
+  min-width: clamp(20rem, 30vw, 35rem); /* 반응형 최소 너비 */
+  white-space: nowrap; /* 글씨 줄바꿈 방지 */
+}
+
+.actionLink {
+  color: var(--brand-blue, #0013a7);
+  cursor: pointer;
+  font-size: clamp(1.4rem, 1.5vw, 1.6rem); /* 모바일 1.4rem → PC 1.6rem */
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.actionLink:hover {
+  opacity: 0.8;
+}
+
+.actionLinkDelete {
+  color: var(--btn-inactive, #818181);
+  cursor: pointer;
+  font-size: clamp(1.4rem, 1.5vw, 1.6rem); /* 모바일 1.4rem → PC 1.6rem */
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.actionLinkDelete:hover {
+  opacity: 0.8;
+}
+
+/* 키보드 접근성: 포커스 링 추가 */
+.actionLink:focus-visible,
+.actionLinkDelete:focus-visible,
+.copyBtn:focus-visible,
+.shareClose:focus-visible {
+  outline: 2px solid var(--brand-blue, #0013a7);
+  outline-offset: 2px;
+}
+
+.separator {
+  color: var(--text-gray, #818181);
+  font-size: clamp(1.4rem, 1.5vw, 1.6rem); /* 모바일 1.4rem → PC 1.6rem */
+  user-select: none;
+  padding: 0 1.2rem; /* 좌우 패딩 1.2rem */
+}
+
+/* 토스트 컨테이너 */
+.toastContainer {
+  position: fixed;
+  bottom: 10rem; /* 30rem → 10rem으로 수정 */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+}

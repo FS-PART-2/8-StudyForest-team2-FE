@@ -6,6 +6,7 @@
   padding: 2.4rem;
   min-height: 100vh;
   background: var(--background-primary);
+  min-width: 35rem; /* 350px 이하 프리즈 */
 }
 
 .card {

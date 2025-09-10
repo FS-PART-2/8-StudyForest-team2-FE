@@ -12,7 +12,7 @@ export async function createStudy({
   passwordConfirm,
   isPublic,
 }) {
-  const res = await instance.post('/api/studies', {
+  const requestData = {
     nick: nickname,
     name: studyName,
     content: description,
@@ -20,6 +20,16 @@ export async function createStudy({
     password,
     checkPassword: passwordConfirm,
     isActive: isPublic,
+  };
+
+  console.log('API 요청 데이터:', {
+    ...requestData,
+    password: '***',
+    checkPassword: '***',
+    isPublic,
+    isActive: isPublic,
   });
+
+  const res = await instance.post('/api/studies', requestData);
   return res.data; // { id, ... }
 }

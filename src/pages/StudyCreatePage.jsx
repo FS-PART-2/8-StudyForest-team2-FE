@@ -1,12 +1,12 @@
 // src/pages/StudyCreatePage.jsx
-import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Input from "../components/atoms/Input.jsx";
-import Button from "../components/atoms/Button.jsx";
-import ToggleSwitch from "../components/atoms/ToggleSwitch.jsx";
-import PasswordInput from "../components/molecules/PasswordInput.jsx";
-import { createStudy } from "../utils/api/study/createStudyApi.js";
-import styles from "../styles/pages/StudyCreatePage.module.css";
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Input from '../components/atoms/Input.jsx';
+import Button from '../components/atoms/Button.jsx';
+import ToggleSwitch from '../components/atoms/ToggleSwitch.jsx';
+import PasswordInput from '../components/molecules/PasswordInput.jsx';
+import { createStudy } from '../utils/api/study/createStudyApi.js';
+import styles from '../styles/pages/StudyCreatePage.module.css';
 
 /**
  * 스터디 만들기 페이지 (Named Export)
@@ -15,38 +15,71 @@ export function StudyCreatePage() {
   const navigate = useNavigate();
 
   // 🔒 폭 제어용 래퍼 클래스 (PC 600px / Mobile 312px)
-  const FIELD_WRAP_CLASS = "mm-field-600-312";
+  const FIELD_WRAP_CLASS = 'mm-field-600-312';
 
   // ── 폼 상태 ───────────────────────────────────────────────────────────────
-  const [nickname, setNickname] = useState("");
-  const [studyName, setStudyName] = useState("");
-  const [description, setDescription] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [nickname, setNickname] = useState('');
+  const [studyName, setStudyName] = useState('');
+  const [description, setDescription] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [isPublic, setIsPublic] = useState(true);
-  const [selectedBgId, setSelectedBgId] = useState("img-01");
+  const [selectedBgId, setSelectedBgId] = useState('img-01');
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   // ─────────────────────────────────────────────────────────────────────────
 
-  const base = import.meta.env.BASE_URL || "/";
+  const base = import.meta.env.BASE_URL || '/';
 
   const backgrounds = useMemo(
     () => [
-      { id: "img-01", type: "color", value: "#E2E8F0" },
-      { id: "img-02", type: "color", value: "#D1FAE5" },
-      { id: "img-03", type: "color", value: "#E5E7EB" },
-      { id: "img-04", type: "color", value: "#E0E7FF" },
-      { id: "img-05", type: "image", value: `${base}assets/images/bg-desk-1.svg` },
-      { id: "img-06", type: "image", value: `${base}assets/images/bg-laptop-1.svg` },
-      { id: "img-07", type: "image", value: `${base}assets/images/bg-tiles-1.svg` },
-      { id: "img-08", type: "image", value: `${base}assets/images/bg-plant-1.svg` },
+      {
+        id: 'img-01',
+        type: 'image',
+        value: `${base}assets/images/card-bg-color-01.svg`,
+      },
+      {
+        id: 'img-02',
+        type: 'image',
+        value: `${base}assets/images/card-bg-color-02.svg`,
+      },
+      {
+        id: 'img-03',
+        type: 'image',
+        value: `${base}assets/images/card-bg-color-03.svg`,
+      },
+      {
+        id: 'img-04',
+        type: 'image',
+        value: `${base}assets/images/card-bg-color-04.svg`,
+      },
+      {
+        id: 'img-05',
+        type: 'image',
+        value: `${base}assets/images/card-bg-01.svg`,
+      },
+      {
+        id: 'img-06',
+        type: 'image',
+        value: `${base}assets/images/card-bg-02.svg`,
+      },
+      {
+        id: 'img-07',
+        type: 'image',
+        value: `${base}assets/images/card-bg-03.svg`,
+      },
+      {
+        id: 'img-08',
+        type: 'image',
+        value: `${base}assets/images/card-bg-04.svg`,
+      },
     ],
-    [base]
+    [base],
   );
 
   // 실시간 불일치
-  const mismatchNow = passwordConfirm.length > 0 && password !== passwordConfirm;
+  const mismatchNow =
+    passwordConfirm.length > 0 && password !== passwordConfirm;
 
   // 필수 필드 검증
   const isFormValid = nickname.trim() && studyName.trim() && password.trim();
@@ -54,11 +87,11 @@ export function StudyCreatePage() {
   // 유효성 검사
   const validate = () => {
     const next = {};
-    if (!nickname.trim()) next.nickname = "*닉네임을 입력해주세요";
-    if (!studyName.trim()) next.studyName = "*스터디 이름을 입력해주세요";
-    if (!password.trim()) next.password = "*비밀번호를 입력해주세요";
+    if (!nickname.trim()) next.nickname = '*닉네임을 입력해주세요';
+    if (!studyName.trim()) next.studyName = '*스터디 이름을 입력해주세요';
+    if (!password.trim()) next.password = '*비밀번호를 입력해주세요';
     if (passwordConfirm && password !== passwordConfirm) {
-      next.passwordConfirm = "*비밀번호가 일치하지 않습니다";
+      next.passwordConfirm = '*비밀번호가 일치하지 않습니다';
     }
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -68,36 +101,46 @@ export function StudyCreatePage() {
   const validateField = (fieldName, value) => {
     console.log('validateField called:', fieldName, value);
     const next = { ...errors };
-    
+
     if (fieldName === 'nickname') {
       if (!value.trim()) {
-        next.nickname = "*닉네임을 입력해주세요";
+        next.nickname = '*닉네임을 입력해주세요';
       } else {
         delete next.nickname;
       }
     }
-    
+
     if (fieldName === 'studyName') {
       if (!value.trim()) {
-        next.studyName = "*스터디 이름을 입력해주세요";
+        next.studyName = '*스터디 이름을 입력해주세요';
       } else {
         delete next.studyName;
       }
     }
-    
+
     if (fieldName === 'password') {
       if (!value.trim()) {
-        next.password = "*비밀번호를 입력해주세요";
+        next.password = '*비밀번호를 입력해주세요';
       } else {
         delete next.password;
       }
     }
-    
+
+    if (fieldName === 'passwordConfirm') {
+      if (!value.trim()) {
+        next.passwordConfirm = '*비밀번호 확인을 입력해주세요';
+      } else if (value !== password) {
+        next.passwordConfirm = '*비밀번호가 일치하지 않습니다';
+      } else {
+        delete next.passwordConfirm;
+      }
+    }
+
     setErrors(next);
   };
 
   // 제출
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     if (submitting) return;
     if (!validate()) return;
@@ -105,7 +148,18 @@ export function StudyCreatePage() {
     try {
       setSubmitting(true);
 
-      const background = selectedBgId;
+      const selected = backgrounds.find(bg => bg.id === selectedBgId);
+      const background = selected?.value ?? selectedBgId; // id 미스매치 대비 안전장치
+
+      console.log('스터디 생성 데이터:', {
+        nickname: nickname.trim(),
+        studyName: studyName.trim(),
+        description: description.trim(),
+        background,
+        password: '***',
+        passwordConfirm: '***',
+        isPublic,
+      });
 
       const data = await createStudy({
         nickname: nickname.trim(),
@@ -118,16 +172,17 @@ export function StudyCreatePage() {
       });
 
       const newId = data?.id ?? data?.studyId ?? data?.result?.id;
-      if (newId) navigate(`/studies/${newId}`);
-      else alert("생성은 성공했지만 ID를 받지 못했어요.");
+      if (newId) navigate(`/study/${newId}`);
+      else alert('생성은 성공했지만 ID를 받지 못했어요.');
     } catch (err) {
       const serverCode = err?.response?.data?.code;
       const serverMsg = err?.response?.data?.message;
-      const fallbackMsg = err?.message || "알 수 없는 오류";
-      if (serverCode === "PASSWORD_MISMATCH") alert("비밀번호가 일치하지 않습니다.");
+      const fallbackMsg = err?.message || '알 수 없는 오류';
+      if (serverCode === 'PASSWORD_MISMATCH')
+        alert('비밀번호가 일치하지 않습니다.');
       else alert(`스터디 생성 실패: ${serverMsg || fallbackMsg}`);
       // eslint-disable-next-line no-console
-      console.error("[createStudy:error]", err);
+      console.error('[createStudy:error]', err);
     } finally {
       setSubmitting(false);
     }
@@ -154,66 +209,82 @@ export function StudyCreatePage() {
         }
       `}</style>
 
-      <form className={`${styles.card} mm-form-600`} onSubmit={handleSubmit} noValidate>
+      <form
+        className={`${styles.card} mm-form-600`}
+        onSubmit={handleSubmit}
+        noValidate
+      >
         <h1 className={styles.title}>스터디 만들기</h1>
 
         {/* 닉네임 */}
         <section className={styles.section}>
-          <label className={styles.label} htmlFor="nickname">닉네임</label>
+          <label className={styles.label} htmlFor="nickname">
+            닉네임
+          </label>
           <div className={FIELD_WRAP_CLASS}>
             <Input
               id="nickname"
               placeholder="닉네임을 입력해 주세요"
               value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-              onBlur={(e) => validateField('nickname', e.target.value)}
+              onChange={e => setNickname(e.target.value)}
+              onBlur={e => validateField('nickname', e.target.value)}
               size="lg"
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               aria-invalid={!!errors.nickname}
-              aria-describedby={errors.nickname ? "nickname-error" : undefined}
+              aria-describedby={errors.nickname ? 'nickname-error' : undefined}
             />
           </div>
           <div className={styles.errorSlot}>
             {errors.nickname && (
-              <p id="nickname-error" className={styles.error}>{errors.nickname}</p>
+              <p id="nickname-error" className={styles.error}>
+                {errors.nickname}
+              </p>
             )}
           </div>
         </section>
 
         {/* 스터디 이름 */}
         <section className={styles.section}>
-          <label className={styles.label} htmlFor="studyName">스터디 이름</label>
+          <label className={styles.label} htmlFor="studyName">
+            스터디 이름
+          </label>
           <div className={FIELD_WRAP_CLASS}>
             <Input
               id="studyName"
               placeholder="스터디 이름을 입력해 주세요"
               value={studyName}
-              onChange={(e) => setStudyName(e.target.value)}
-              onBlur={(e) => validateField('studyName', e.target.value)}
+              onChange={e => setStudyName(e.target.value)}
+              onBlur={e => validateField('studyName', e.target.value)}
               size="lg"
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               aria-invalid={!!errors.studyName}
-              aria-describedby={errors.studyName ? "studyName-error" : undefined}
+              aria-describedby={
+                errors.studyName ? 'studyName-error' : undefined
+              }
             />
           </div>
           <div className={styles.errorSlot}>
             {errors.studyName && (
-              <p id="studyName-error" className={styles.error}>{errors.studyName}</p>
+              <p id="studyName-error" className={styles.error}>
+                {errors.studyName}
+              </p>
             )}
           </div>
         </section>
 
         {/* 소개 */}
         <section className={styles.section}>
-          <label className={styles.label} htmlFor="description">소개</label>
+          <label className={styles.label} htmlFor="description">
+            소개
+          </label>
           <div className={FIELD_WRAP_CLASS}>
             <textarea
               id="description"
               className={`${styles.inputReset} ${styles.textarea}`}
               placeholder="소개 멘트를 작성해 주세요"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              style={{ width: "100%", resize: "none" }}
+              onChange={e => setDescription(e.target.value)}
+              style={{ width: '100%', resize: 'none' }}
             />
           </div>
           <div className={styles.errorSlot}></div>
@@ -223,28 +294,25 @@ export function StudyCreatePage() {
         <section className={styles.section}>
           <p className={styles.label}>배경을 선택해주세요</p>
           <div className={styles.grid}>
-            {backgrounds.map((bg) => {
+            {backgrounds.map(bg => {
               const selected = bg.id === selectedBgId;
               return (
                 <button
                   key={bg.id}
                   type="button"
                   aria-pressed={selected}
-                  className={`${styles.bgItem} ${selected ? styles.bgItemSelected : ""}`}
+                  className={`${styles.bgItem} ${selected ? styles.bgItemSelected : ''}`}
                   onClick={() => setSelectedBgId(bg.id)}
                 >
-                  {bg.type === "color" ? (
-                    <span
-                      className={styles.bgSwatch}
-                      style={{ backgroundColor: bg.value }}
-                      aria-label="색상 배경"
-                    />
-                  ) : (
-                    <img className={styles.bgImg} src={bg.value} alt="배경 이미지" loading="lazy" />
-                  )}
+                  <img
+                    className={styles.bgImg}
+                    src={bg.value}
+                    alt="배경 이미지"
+                    loading="lazy"
+                  />
                   {selected && (
                     <img
-                      src="/assets/icons/selected.svg"
+                      src={`${base}assets/icons/selected.svg`}
                       alt=""
                       aria-hidden
                       className={styles.checkIcon}
@@ -262,18 +330,20 @@ export function StudyCreatePage() {
           <div className={FIELD_WRAP_CLASS}>
             <PasswordInput
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onBlur={(e) => validateField('password', e.target.value)}
+              onChange={e => setPassword(e.target.value)}
+              onBlur={e => validateField('password', e.target.value)}
               onSubmit={handleSubmit}
               placeholder="비밀번호를 입력해 주세요"
               label="비밀번호"
               aria-invalid={!!errors.password}
-              aria-describedby={errors.password ? "password-error" : undefined}
+              aria-describedby={errors.password ? 'password-error' : undefined}
             />
           </div>
           <div className={styles.errorSlot}>
             {errors.password && (
-              <p id="password-error" className={styles.error}>{errors.password}</p>
+              <p id="password-error" className={styles.error}>
+                {errors.password}
+              </p>
             )}
           </div>
         </section>
@@ -283,13 +353,16 @@ export function StudyCreatePage() {
           <div className={FIELD_WRAP_CLASS}>
             <PasswordInput
               value={passwordConfirm}
-              onChange={(e) => setPasswordConfirm(e.target.value)}
+              onChange={e => setPasswordConfirm(e.target.value)}
+              onBlur={e => validateField('passwordConfirm', e.target.value)}
               onSubmit={handleSubmit}
               placeholder="비밀번호를 다시 한 번 입력해 주세요"
               label="비밀번호 확인"
               aria-invalid={!!errors.passwordConfirm || mismatchNow}
               aria-describedby={
-                errors.passwordConfirm || mismatchNow ? "passwordConfirm-error" : undefined
+                errors.passwordConfirm || mismatchNow
+                  ? 'passwordConfirm-error'
+                  : undefined
               }
             />
           </div>
@@ -305,10 +378,18 @@ export function StudyCreatePage() {
         {/* 공개 여부 */}
         <section className={styles.section}>
           <div className={styles.toggleRow}>
-            <span id="publicLabel" className={styles.label}>스터디 공개 여부</span>
+            <span id="publicLabel" className={styles.label}>
+              스터디 공개 여부
+            </span>
             <ToggleSwitch
               checked={isPublic}
-              onChange={(next) => setIsPublic(!!next)}
+              onChange={next => {
+                console.log('토글스위치 변경:', {
+                  이전값: isPublic,
+                  새값: !!next,
+                });
+                setIsPublic(!!next);
+              }}
               aria-labelledby="publicLabel"
             />
           </div>
@@ -324,7 +405,7 @@ export function StudyCreatePage() {
             className={styles.submitButton}
             disabled={submitting || mismatchNow || !isFormValid}
           >
-            {submitting ? "만드는 중..." : "만들기"}
+            {submitting ? '만드는 중...' : '만들기'}
           </Button>
         </div>
       </form>

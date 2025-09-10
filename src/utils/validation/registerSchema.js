@@ -16,10 +16,11 @@ export const registerSchema = z
     password: z
       .string()
       .min(1, '비밀번호를 입력해주세요')
-      .min(6, '비밀번호는 6자 이상이어야 합니다')
+      .min(8, '비밀번호는 8자 이상이어야 합니다')
+      .max(30, '비밀번호는 30자 이하로 입력해주세요')
       .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{6,}$/,
-        '비밀번호는 영문 대문자, 소문자, 숫자를 포함하여 6자 이상이어야 합니다',
+        /^(?=.*[a-z])(?=.*\d)[a-z\d@$!%*?&]{8,30}$/,
+        '비밀번호는 영문 소문자, 숫자를 포함하여 8자 이상 30자 이하로 입력해주세요',
       ),
 
     passwordConfirm: z.string().min(1, '비밀번호 확인을 입력해주세요'),
@@ -27,7 +28,6 @@ export const registerSchema = z
     nick: z
       .string()
       .min(1, '닉네임을 입력해주세요')
-      .min(2, '닉네임은 2자 이상 입력해주세요')
       .max(10, '닉네임은 10자 이하로 입력해주세요'),
   })
   .refine(data => data.password === data.passwordConfirm, {

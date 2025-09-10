@@ -3,7 +3,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 2.5rem 20rem;
-  margin-bottom: 4rem;
+  margin: 0 auto 4rem;
+  min-width: 35rem; /* 350px 이하 프리즈 */
+}
+
+.header .logo {
+  width: clamp(12rem, 24vw, 20rem);
+  max-width: 100%;
+  height: auto;
 }
 
 .headerButtons {
@@ -18,12 +25,21 @@
   color: var(--brand-blue);
 }
 
+.userName {
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--brand-blue);
+  margin-right: 1.6rem;
+}
+
+/* 태블릿 반응형 */
 @media (max-width: 1024px) {
   .header {
     padding: 2.25rem 4.4rem;
   }
 }
 
+/* 모바일 반응형 */
 @media (max-width: 743px) {
   .header {
     padding: 2.25rem 1.6rem;

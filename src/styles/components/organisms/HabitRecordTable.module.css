@@ -1,0 +1,141 @@
+/* 기록표 바깥 프레임 - clamp 반응형 */
+.frame {
+  width: clamp(
+    31.2rem,
+    100vw,
+    107.2rem
+  ); /* 모바일 31.2rem → PC 107.2rem 자연스럽게 */
+  min-width: 35rem; /* 350px 이하 프리즈 */
+  height: 46.3rem;
+  padding: 2.4rem;
+  border-radius: 1rem;
+  box-sizing: border-box;
+  background: var(--background-secondary, #fff);
+  border: 1px solid #e8e8e8;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* emptyMessage absolute positioning 기준점 */
+  overflow-x: hidden; /* 기본적으로 가로 스크롤 비활성화 */
+  overflow-y: hidden;
+  margin: 0; /* 마진 제거 */
+}
+
+/* 내부 컨텐츠는 화면 크기에 따라 자연스럽게 조정 */
+.context {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%; /* 화면 크기에 맞춰 늘어남 */
+}
+
+/* 태블릿에서 가로 스크롤 활성화 */
+@media (max-width: 1024px) and (min-width: 744px) {
+  .frame {
+    overflow-x: auto; /* 태블릿에서 가로 스크롤 활성화 */
+  }
+
+  .context {
+    min-width: 60rem; /* 모바일에서 최소 너비 보장으로 가로 스크롤 */
+  }
+}
+
+/* 모바일에서 제목 크기 조정 및 가로 스크롤 설정 */
+@media (max-width: 743px) {
+  .title {
+    font-size: 1.8rem; /* 모바일: 습관 기록표 글씨 크기 1.8rem */
+  }
+
+  .frame {
+    width: 100%; /* 모바일: 페이지 너비에 맞춤 */
+    max-width: 31.2rem; /* 최대 너비 제한 */
+    min-width: 0; /* base의 min-width:35rem 무력화 */
+    overflow-x: auto; /* 모바일에서 가로 스크롤 활성화 */
+    padding: 2.4rem 1.5rem 2.4rem 1.6rem; /* 모바일: 위 2.4rem, 우 1.5rem, 아래 2.4rem, 좌 1.6rem */
+  }
+
+  .context {
+    min-width: 60rem; /* 모바일에서 최소 너비 보장으로 가로 스크롤 */
+  }
+
+  /* 빈 습관 메시지일 때는 가로 스크롤 비활성화 */
+  .context:has(.emptyMessage) {
+    overflow: hidden; /* 빈 메시지일 때 가로 스크롤 비활성화 */
+    min-width: auto; /* 최소 너비 제거 */
+  }
+}
+
+.title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--text-primary, #222);
+  padding-bottom: 2rem; /* 타이틀 하단 여백 조정 */
+}
+
+/* 컨텍스트 영역 - 습관 유무에 따라 내용이 변경됨 */
+.context {
+  flex: 1; /* 남은 공간을 모두 사용 */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* 스크롤바가 컨텍스트 영역 내부에 나타나도록 */
+}
+
+/* 고정된 요일 헤더 */
+.fixedHeader {
+  flex-shrink: 0; /* 고정 크기 유지 */
+  background: var(--background-secondary, #fff);
+  border-bottom: 1px solid #e8e8e8;
+  z-index: 1;
+  margin-bottom: 1rem;
+  padding-right: 0.8rem; /* 스크롤바 공간과 맞춤 */
+}
+
+/* 스크롤 가능한 습관 리스트 영역 */
+.scrollableContent {
+  flex: 1; /* 남은 공간을 모두 사용 */
+  overflow-y: auto; /* 세로 스크롤만 허용 */
+  overflow-x: hidden; /* 가로 스크롤은 차단 */
+  scrollbar-gutter: stable; /* 스크롤바 공간 미리 확보 */
+  padding-right: 0.8rem; /* 스크롤바와의 간격 */
+  padding-bottom: 0.5rem; /* 하단 여백 */
+}
+
+/* 커스텀 스크롤바 스타일 */
+.scrollableContent::-webkit-scrollbar {
+  width: 0.8rem;
+}
+
+.scrollableContent::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0.4rem;
+}
+
+.scrollableContent::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 0.4rem;
+}
+
+.scrollableContent::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 빈 습관 메시지 - 바깥 컨테이너 기준 가운데 정렬 */
+.emptyMessage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-gray, #818181);
+  font-size: 1.6rem;
+  text-align: center;
+  gap: 0.8rem;
+  z-index: 1;
+}
+
+.emptyMessage p {
+  margin: 0;
+}

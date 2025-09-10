@@ -9,13 +9,21 @@
   z-index: 1000;
 }
 
+/* 모바일에서 오버레이 정렬 변경 */
+@media (max-width: 743px) {
+  .overlay {
+    place-items: start center; /* 상단 중앙 정렬 */
+    padding-top: 10rem; /* 습관목록 아래로 위치 */
+  }
+}
+
 /* 모달 박스: 600 x 781, 패딩 위아래40 좌우24 */
 .modal {
-  width: 60rem;        /* 600px */
-  height: 78.1rem;     /* 781px */
+  width: 60rem; /* 600px */
+  height: 78.1rem; /* 781px */
   background: var(--background-secondary, #fff);
   border-radius: 1.6rem;
-  padding: 4rem 2.4rem;  /* 40 / 24 */
+  padding: 4rem 2.4rem; /* 40 / 24 */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -37,9 +45,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;          /* 칩 사이 20px */
+  gap: 2rem; /* 칩 사이 20px */
   padding: 2rem 0;
-  max-height: 58rem;  /* 대략 8개 나타나도록 */
+  max-height: 58rem; /* 대략 8개 나타나도록 */
 }
 
 /* 칩(가운데) + 삭제 버튼(오른쪽 44px 위치) */
@@ -56,8 +64,8 @@
   right: -5.5rem;
   top: 50%;
   transform: translateY(-50%);
-  width: 4.8rem;          /* 48px */
-  height: 4.8rem;         /* 48px */
+  width: 4.8rem; /* 48px */
+  height: 4.8rem; /* 48px */
   border: none;
   border-radius: 50%;
   background: var(--background-neutral, #eee);
@@ -68,7 +76,7 @@
 }
 
 .deleteIcon {
-  width: 3.2rem;    /* 32px (X 아이콘) */
+  width: 3.2rem; /* 32px (X 아이콘) */
   height: 3.2rem;
   pointer-events: none;
 }
@@ -83,12 +91,13 @@
 .actions {
   display: flex;
   justify-content: center;
-  gap: 2.4rem;  /* 24px */
+  gap: 2.4rem; /* 24px */
+  border-top: none; /* 구분선 제거 */
 }
 
 /* 취소 버튼: 비활성 컬러, 폭 288px */
 .cancelBtn {
-  width: 28.8rem;                     /* 288px */
+  width: 28.8rem; /* 288px */
   background: var(--btn-inactive) !important;
   color: var(--text-secondary, #4b4b4b);
   font-size: 1.8rem;
@@ -97,8 +106,67 @@
 
 /* 수정 완료 버튼: brand-blue, 폭 288px */
 .saveBtn {
-  width: 28.8rem;                     /* 288px */
-  background: var(--brand-blue, #0013A7) !important;
+  width: 28.8rem; /* 288px */
+  background: var(--brand-blue, #0013a7) !important;
   color: #fff;
   font-size: 1.8rem;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 744px) {
+  .modal {
+    width: 34.4rem; /* 모바일 344px 고정 */
+    height: 74.1rem; /* 모바일 741px 고정 */
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .list {
+    align-items: center; /* 좌우 중앙정렬 */
+    padding: 0; /* 좌우 패딩 제거 */
+  }
+
+  .chipWrapper {
+    display: flex;
+    justify-content: center; /* 좌우 가운데 정렬 */
+    align-items: center;
+    width: 100%;
+    margin: 0 auto 0 -2rem; /* 가운데 정렬에서 왼쪽으로 2rem 이동 */
+  }
+
+  .addRow {
+    display: flex;
+    justify-content: center; /* 추가 버튼 가운데 정렬 */
+  }
+
+  /* 칩이 있을 때만 추가 버튼을 왼쪽으로 이동 */
+  .list:has(.chipWrapper) .addRow {
+    transform: translateX(-2rem); /* 칩과 동일하게 왼쪽으로 2rem 이동 */
+  }
+
+  .deleteBtn {
+    right: -2rem; /* 칩과 삭제 버튼 간격 조정 (오른쪽으로 1.5rem 추가 이동) */
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .deleteIcon {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  .title {
+    font-size: clamp(2rem, 2.4vw, 2.4rem);
+    text-align: center; /* 정 가운데 정렬 */
+    padding-bottom: 1rem; /* 아래 패딩 추가 */
+  }
+
+  .actions {
+    gap: 1rem;
+  }
+
+  .cancelBtn,
+  .saveBtn {
+    padding: 1rem 1rem; /* 버튼 패딩 조정 */
+  }
 }

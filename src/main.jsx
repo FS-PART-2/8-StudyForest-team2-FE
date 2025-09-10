@@ -1,4 +1,4 @@
-import { StrictMode } from 'react';
+import { StrictMode, useEffect } from 'react';
 import './styles/reset.css';
 import './styles/common.css';
 import { createRoot } from 'react-dom/client';
@@ -10,25 +10,46 @@ import { StudyPage } from './pages/StudyPage';
 import TestPage from './pages/TestPage';
 import FocusPage from './pages/FocusPage';
 import { StudyCreatePage } from './pages/StudyCreatePage';
+import { StudyModifyPage } from './pages/StudyModifyPage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import StudyDetailPage from './pages/StudyDetailPage';
+import HabitPage from './pages/HabitPage';
+import { useAuthStore } from './store/authStore';
+import ProfilePage from './pages/ProfilePage';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<StudyPage />} />
-          <Route path="/focus" element={<FocusPage />} />
-          <Route path="/test" element={<TestPage />} />
-          <Route path="/study/new" element={<StudyCreatePage />} />
-          <Route path="/study/:id" element={<StudyDetailPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
-        </Route>
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </BrowserRouter>
-  </StrictMode>,
-);
+export function App() {
+  const { initialize } = useAuthStore();
+
+  useEffect(() => {
+    // localStorage에 로그인 기록이 있을 때만 initialize 실행
+    const hasLoggedIn = localStorage.getItem('hasLoggedIn');
+    if (hasLoggedIn) {
+      initialize();
+    }
+  }, [initialize]);
+
+  return (
+    <StrictMode>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<StudyPage />} />
+            <Route path="/focus" element={<FocusPage />} />
+            <Route path="/test" element={<TestPage />} />
+            <Route path="/study/new" element={<StudyCreatePage />} />
+            <Route path="/study/:id" element={<StudyDetailPage />} />
+            <Route path="/study/:id/modify" element={<StudyModifyPage />} />
+            <Route path="/habit/:id" element={<HabitPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </BrowserRouter>
+    </StrictMode>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);

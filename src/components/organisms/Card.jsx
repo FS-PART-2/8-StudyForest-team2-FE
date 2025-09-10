@@ -29,19 +29,13 @@ import { useNavigate } from 'react-router-dom';
 export default function Card({
   preset,
   id,
-  backgroundImage,
-  backgroundColor,
   overlayOpacity,
   nick,
   points = 0,
   title = '스터디 제목',
   createdAt = '2025-00-00',
   description = '스터디 설명',
-  emojiData = [
-    { emoji: '👍', count: 1 },
-    { emoji: '🔥', count: 3 },
-    { emoji: '❤️', count: 5 },
-  ],
+  emojiData = [],
   onClick,
   isSelected = false,
 }) {
@@ -50,8 +44,12 @@ export default function Card({
   // 프리셋이 있으면 프리셋 사용, 없으면 직접 전달된 props 사용
   const presetData = preset ? CARD_PRESETS[preset] : null;
 
-  const finalBackgroundImage = backgroundImage || presetData?.backgroundImage;
-  const finalBackgroundColor = backgroundColor || presetData?.backgroundColor;
+  // 배경 우선순위: 직접 전달된 props > 프리셋 데이터
+  const finalBackgroundImage = presetData?.backgroundImage;
+  const finalBackgroundColor = presetData?.backgroundColor;
+
+  // 이미지 배경인지 색상 배경인지 판단
+  const isImageBackground = !!finalBackgroundImage;
 
   const finalOverlayOpacity =
     overlayOpacity !== undefined
@@ -59,10 +57,10 @@ export default function Card({
       : presetData?.overlayOpacity || 0.6;
 
   const cardStyle = {
-    backgroundImage: finalBackgroundImage
-      ? `url(${finalBackgroundImage})`
-      : undefined,
-    backgroundColor: finalBackgroundColor,
+    ...(finalBackgroundImage && {
+      backgroundImage: `url(${finalBackgroundImage})`,
+    }),
+    ...(finalBackgroundColor && { backgroundColor: finalBackgroundColor }),
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -100,8 +98,8 @@ export default function Card({
       style={cardStyle}
       onClick={handleClick}
     >
-      {/* 이미지 배경일 때만 오버레이 표시 */}
-      {finalBackgroundImage && (
+      {/* 배경 이미지가 있을 때 오버레이 표시 */}
+      {isImageBackground && (
         <div className={styles.overlay} style={overlayStyle} />
       )}
 
@@ -113,8 +111,8 @@ export default function Card({
             color={presetData?.titleTextColor}
             tag="h3"
           >
-            <b style={{ color: presetData?.nicknameTextColor }}>{nick}</b>의{' '}
-            {title}
+            <b style={{ color: presetData?.nicknameTextColor }}>{nick}</b>의
+            {' ' + title}
           </Text>
           <Tag points={points} size="sm" />
         </div>

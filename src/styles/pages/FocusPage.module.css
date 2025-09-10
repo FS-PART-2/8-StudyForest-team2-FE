@@ -6,6 +6,7 @@
   position: relative;
   background-color: var(--background-secondary);
   border-radius: 1rem;
+  min-width: 35rem; /* 350px 이하 프리즈 */
 }
 
 .container {
@@ -185,7 +186,8 @@
   }
 }
 
-@media (max-width: 1199px) {
+/* 태블릿 반응형 */
+@media (max-width: 1024px) {
   .focusPage {
     width: calc(100% - 4.8rem);
     padding: 4rem 2.4rem;
@@ -208,6 +210,7 @@
   }
 }
 
+/* 모바일 반응형 */
 @media (max-width: 743px) {
   .focusPage {
     width: calc(100% - 3.2rem);

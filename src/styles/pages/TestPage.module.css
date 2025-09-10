@@ -1,0 +1,105 @@
+/* TestPage 스타일 */
+
+/* 배경별 닉네임 색상 테스트 섹션 */
+.testSection {
+  margin: 4rem 0;
+  padding: 2rem;
+  background: var(--background-secondary, #fff);
+  border-radius: 1.6rem;
+  border: 2px solid var(--border-primary, #e0e0e0);
+}
+
+.sectionTitle {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a1a);
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+.sectionDescription {
+  font-size: 1.4rem;
+  color: var(--text-secondary, #666);
+  text-align: center;
+  margin: 0 0 3rem 0;
+}
+
+.cardTestGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.testCardWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.testCardTitle {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-secondary, #666);
+  margin: 0;
+  text-align: center;
+}
+
+.colorInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.2rem;
+  background: var(--background-primary, #f8f9fa);
+  border-radius: 0.8rem;
+  border: 1px solid var(--border-secondary, #e9ecef);
+  min-width: 280px;
+}
+
+.colorLabel {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-secondary, #666);
+}
+
+.colorValue {
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  padding: 0.6rem 1rem;
+  background: var(--background-secondary, #fff);
+  border-radius: 0.4rem;
+  border: 1px solid var(--border-primary, #e0e0e0);
+  text-align: center;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .cardTestGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .testSection {
+    margin: 2rem 0;
+    padding: 1.5rem;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .sectionDescription {
+    font-size: 1.2rem;
+  }
+
+  .testCardWrapper {
+    gap: 1rem;
+  }
+
+  .colorInfo {
+    min-width: 250px;
+  }
+}

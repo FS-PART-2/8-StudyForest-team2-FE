@@ -4,15 +4,16 @@
   display: grid;
   place-items: start center;
   padding: 2.4rem; /* 24px */
+  min-width: 35rem; /* 350px 이하 프리즈 */
 }
 
 .card {
   width: 100%;
-  max-width: 64.8rem;   /* 648px */
+  max-width: 64.8rem; /* 648px */
   background: #fff;
   border-radius: 1rem; /* 5px */
-  box-shadow: 0 0.4rem 1.2rem rgba(0,0,0,0.06);
-  padding: 2.4rem;       /* 모든 면에 동일한 24px 패딩 */
+  box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.06);
+  padding: 2.4rem; /* 모든 면에 동일한 24px 패딩 */
 }
 
 .title {
@@ -20,24 +21,26 @@
   color: var(--text-primary, #414141);
   text-align: left;
   border-radius: 1rem;
-  font-size: 2.4rem;     /* 24px */
+  font-size: 2.4rem; /* 24px */
   line-height: 1.2;
-  margin: 0 0 2.4rem;    /* 아래 24px */
-  padding-top: 1.0rem;
+  margin: 0 0 2.4rem; /* 아래 24px */
+  padding-top: 1rem;
 }
 
 /* 섹션 공통: 간격 줄임 */
-.section { 
+.section {
   padding-bottom: 1.6rem;
   margin-bottom: 0.8rem;
 }
-.section > * + * { margin-top: 1.2rem; }
+.section > * + * {
+  margin-top: 1.2rem;
+}
 
 /* 라벨 (간격 줄임) */
 .label {
   color: var(--text-primary, #414141);
   font-weight: 500;
-  font-size: 1.6rem; 
+  font-size: 1.6rem;
   margin-bottom: 1.2rem; /* 16px → 12px로 줄임 */
 }
 
@@ -63,11 +66,13 @@
 }
 
 .inputReset:focus {
-  border-color: #0013A7;
-  box-shadow: 0 0 0 0.3rem rgba(0,19,167,0.15); /* 3px */
+  border-color: #0013a7;
+  box-shadow: 0 0 0 0.3rem rgba(0, 19, 167, 0.15); /* 3px */
 }
 
-.textarea { min-height: 9.6rem; /* 96px */ }
+.textarea {
+  min-height: 9.6rem; /* 96px */
+}
 
 /* 배경 선택 그리드: PC/모바일 모두 간격 16px 고정 */
 .grid {
@@ -76,8 +81,11 @@
   gap: 1.6rem; /* 16px */
 }
 
-@media (max-width: 48rem) { /* 480px */
-  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 48rem) {
+  /* 480px */
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* 카드(정사각형) 크기는 그대로 유지 */
@@ -85,19 +93,26 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
-  max-width: 15rem;   /* 150px */
-  max-height: 15rem;  /* 150px */
+  max-width: 15rem; /* 150px */
+  max-height: 15rem; /* 150px */
   border-radius: 0.8rem;
   overflow: hidden;
-  border: 0.1rem solid #E5E7EB;
+  border: 0.1rem solid #e5e7eb;
   display: grid;
   place-items: center;
   cursor: pointer;
-  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    border-color 120ms ease;
   background: #fff;
 }
 
-.bgSwatch { width: 100%; height: 100%; display: block; }
+.bgSwatch {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 .bgImg {
   width: 100%;
   height: 100%;
@@ -105,7 +120,9 @@
   display: block;
 }
 
-.bgItemSelected::after { display: none; }
+.bgItemSelected::after {
+  display: none;
+}
 
 .checkIcon {
   position: absolute;
@@ -115,38 +132,76 @@
   width: 2.8rem;
   height: 2.8rem;
   pointer-events: none;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,.15));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
 }
 
-.checkIcon svg { width: 3.2rem; height: 3.2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,.35)); }
+.checkIcon svg {
+  width: 3.2rem;
+  height: 3.2rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+}
 
 /* 공개 여부 행 */
-.toggleRow { display: flex; align-items: center; justify-content: space-between; }
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
 /* CTA */
-.cta { margin-top: 1.2rem; display: flex; justify-content: center; }
-.submitButton { 
-  width: 62.8rem; 
+.cta {
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: center;
+}
+.submitButton {
+  width: 62.8rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-@media (max-width: 76.8rem) {
-  .card { max-width: 31.2rem; min-height: 108.1rem; padding: 2.4rem; }
-  .title { font-size: 2.4rem; }
-  .label { font-size: 1.6rem; }
-  .submitButton { 
-    width: 100%; 
+/* 태블릿 반응형 */
+@media (max-width: 1024px) {
+  .card {
+    max-width: 50rem;
+    padding: 2.4rem;
+  }
+  .title {
+    font-size: 2.2rem;
+  }
+  .label {
+    font-size: 1.5rem;
+  }
+  .submitButton {
+    width: 100%;
+    height: 5.5rem;
+  }
+}
+
+/* 모바일 반응형 */
+@media (max-width: 743px) {
+  .card {
+    max-width: 31.2rem;
+    min-height: 108.1rem;
+    padding: 2.4rem;
+  }
+  .title {
+    font-size: 2.4rem;
+  }
+  .label {
+    font-size: 1.6rem;
+  }
+  .submitButton {
+    width: 100%;
     height: 6rem;
-    /* 중앙정렬은 위에서 이미 설정됨 */
   }
 }
 
 @media (hover: hover) and (pointer: fine) {
   .bgItem:hover {
     transform: translateY(-1px) scale(1.005); /* -1px, 0.5% 확대만 */
-    box-shadow: 0 0.6rem 1.2rem rgba(0,0,0,.08);
+    box-shadow: 0 0.6rem 1.2rem rgba(0, 0, 0, 0.08);
   }
 }
 
@@ -155,7 +210,7 @@
   transform: translateY(-1px) scale(1.005);
   box-shadow:
     0 0 0 3px rgba(0, 19, 167, 0.18),
-    0 0.6rem 1.2rem rgba(0,0,0,.08);
+    0 0.6rem 1.2rem rgba(0, 0, 0, 0.08);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -184,7 +239,42 @@
 }
 
 /* 인풋/텍스트에어리어 빨간 보더 (모듈 경계 방지) */
-:where(input, textarea)[aria-invalid="true"] {
+:where(input, textarea)[aria-invalid='true'] {
   border-color: var(--warning-red, #dc2626) !important;
   outline-color: var(--warning-red, #dc2626) !important;
+}
+
+/* 버튼 그룹 스타일 - TodayHabitModal과 동일 */
+.buttonGroup {
+  display: flex;
+  gap: 2.4rem; /* 24px - TodayHabitModal과 동일 */
+  justify-content: center;
+  align-items: center;
+}
+
+.cancelButton {
+  width: 28.8rem; /* 288px - TodayHabitModal과 동일 */
+  background: var(--btn-inactive) !important;
+  color: #fff !important;
+  font-size: 1.8rem;
+}
+
+.submitButton {
+  width: 28.8rem; /* 288px - TodayHabitModal과 동일 */
+  background: var(--brand-blue, #0013a7) !important;
+  color: #fff !important;
+  font-size: 1.8rem;
+}
+
+@media (max-width: 768px) {
+  .buttonGroup {
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+
+  .cancelButton,
+  .submitButton {
+    width: 100%;
+    max-width: 28.8rem; /* 모바일에서도 최대 288px 유지 */
+  }
 }

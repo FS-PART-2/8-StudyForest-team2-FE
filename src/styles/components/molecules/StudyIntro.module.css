@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-width: 35rem; /* 350px 이하 프리즈 */
+}
+
+.label {
+  color: var(--text-gray, #818181);
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.description {
+  color: var(--black-black_414141, #414141);
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 태블릿 반응형 */
+@media (max-width: 1024px) {
+  .label,
+  .description {
+    font-size: 1.6rem;
+  }
+}
+
+/* 모바일 반응형 */
+@media (max-width: 743px) {
+  .container {
+    width: 31.2rem;
+  }
+
+  .label,
+  .description {
+    font-size: 1.4rem;
+  }
+}
