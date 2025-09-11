@@ -7,7 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Layout } from './components/organisms/Layout';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { StudyPage } from './pages/StudyPage';
-import TestPage from './pages/TestPage';
+// import TestPage from './pages/TestPage'; // 프로덕션에서 제거
 import FocusPage from './pages/FocusPage';
 import { StudyCreatePage } from './pages/StudyCreatePage';
 import { StudyModifyPage } from './pages/StudyModifyPage';
@@ -36,7 +36,7 @@ export function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<StudyPage />} />
             <Route path="/focus/:id" element={<FocusPage />} />
-            <Route path="/test" element={<TestPage />} />
+            {/* <Route path="/test" element={<TestPage />} /> 프로덕션에서 제거 */}
             <Route path="/study/new" element={<StudyCreatePage />} />
             <Route path="/study/:id" element={<StudyDetailPage />} />
             <Route path="/study/:id/modify" element={<StudyModifyPage />} />
@@ -52,4 +52,12 @@ export function App() {
   );
 }
 
-createRoot(document.getElementById('root')).render(<App />);
+// React 18 createRoot 중복 호출 방지
+const rootElement = document.getElementById('root');
+if (rootElement && !rootElement._reactRoot) {
+  const root = createRoot(rootElement);
+  rootElement._reactRoot = root;
+  root.render(<App />);
+} else if (rootElement && rootElement._reactRoot) {
+  rootElement._reactRoot.render(<App />);
+}

@@ -13,13 +13,31 @@ export default function NavigationButton({
   children,
   variant = 'default',
   className = '',
+  onClick,
   ...props
 }) {
   const buttonClass = [
     styles.navigationButton,
     variant === 'home' ? styles.homeButton : '',
     className,
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  // onClick이 있으면 button으로, 없으면 Link로 렌더링
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        className={buttonClass}
+        onClick={onClick}
+        {...props}
+      >
+        <span>{children}</span>
+        <img src="/assets/icons/next.svg" alt="" aria-hidden="true" />
+      </button>
+    );
+  }
 
   return (
     <Link to={to} className={buttonClass} {...props}>
