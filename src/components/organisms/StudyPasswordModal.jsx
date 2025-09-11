@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom';
 import PasswordInput from '../molecules/PasswordInput.jsx';
 import Button from '../atoms/Button.jsx';
 import Toast from '../atoms/Toast.jsx';
-import DynamicStudyTitle from '../atoms/DynamicStudyTitle.jsx';
 import styles from '../../styles/components/organisms/StudyPasswordModal.module.css';
 import { verifyStudyPassword } from '../../utils/api/study/studyPasswordApi';
 
@@ -13,9 +12,6 @@ export default function StudyPasswordModal({
   onVerify, // (pw) => Promise<boolean> | boolean  (검증 실패: false, 네트워크 오류: throw)
   studyTitle = '스터디', // 동적 제목을 위한 prop 추가
   mode = 'edit', // 'edit' 또는 'delete'
-  nickname,
-  studyName,
-  backgroundImage,
 }) {
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -48,22 +44,15 @@ export default function StudyPasswordModal({
     e.preventDefault();
     if (!password || submitting) return; // 중복 제출 가드
 
-    console.log('StudyPasswordModal: handleSubmit 호출됨', {
-      onVerify: !!onVerify,
-    });
-
     try {
       setSubmitting(true);
       setShowNetworkError(false);
-      setShowMismatch(false); // 이전 토스트 숨김
       const ok = (await onVerify?.(password)) ?? false;
-      console.log('StudyPasswordModal: onVerify 결과', ok);
       if (!ok) {
-        setShowMismatch(true); // 불일치 토스트 표시
-        return; // 모달 유지
+        setShowMismatch(true); // 불일치 토스트
+        return;
       }
-      // 비밀번호가 맞으면 onVerify에서 모달 닫기 처리
-      // onClose는 호출하지 않음 (StudyActions에서 처리)
+      onClose?.();
     } catch {
       setShowNetworkError(true); // 네트워크/서버 오류 토스트
     } finally {
@@ -86,23 +75,11 @@ export default function StudyPasswordModal({
         aria-labelledby="studyPasswordTitle"
         aria-describedby="studyPasswordDesc"
       >
-        <DynamicStudyTitle
-          nickname={nickname}
-          studyName={studyName}
-          backgroundImage={backgroundImage}
-          className={styles.title}
-          tag="h1"
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-        />
+        <h2 id="studyPasswordTitle" className={styles.title}>
+          {studyTitle}
+        </h2>
         <p id="studyPasswordDesc" className={styles.subTitle}>
-          습관 관리를 위해 스터디 비밀번호를 입력해주세요.
+          권한이 필요해요!
         </p>
 
         {/* 모바일 폭 제어 wrapper */}
@@ -127,9 +104,7 @@ export default function StudyPasswordModal({
                   ? '확인 중...'
                   : mode === 'delete'
                     ? '삭제하기'
-                    : mode === 'habit'
-                      ? '오늘의 습관 확인하러 가기'
-                      : '수정하러 가기'}
+                    : '수정하러 가기'}
               </Button>
             </div>
           </form>

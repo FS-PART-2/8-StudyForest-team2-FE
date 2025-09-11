@@ -1,10 +1,9 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useEffect, useState, useCallback } from 'react';
 import styles from '../styles/pages/StudyDetailPage.module.css';
 import { useRecentStudyStore } from '../store/recentStudyStore';
 import { studyApi } from '../utils/api/study/getStudyApi';
 import { emojiApi } from '../utils/api/emoji/emojiApi';
-import { verifyStudyPassword } from '../utils/api/study/studyPasswordApi';
 import DynamicStudyTitle from '../components/atoms/DynamicStudyTitle';
 import EmojiCounter from '../components/molecules/EmojiCounter';
 import StudyActions from '../components/organisms/StudyActions';
@@ -12,16 +11,13 @@ import StudyIntro from '../components/molecules/StudyIntro';
 import StudyPoints from '../components/molecules/StudyPoints';
 import HabitRecordTable from '../components/organisms/HabitRecordTable';
 import NavigationButton from '../components/atoms/NavigationButton';
-import StudyPasswordModal from '../components/organisms/StudyPasswordModal';
 
 export default function StudyDetailPage() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const addRecentStudy = useRecentStudyStore(state => state.addRecentStudy);
   const [studyData, setStudyData] = useState(null);
   const [emojiData, setEmojiData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
   // 이모지 데이터 가져오기 함수 (API 우선, 실패 시 스터디 데이터 사용)
   const fetchEmojiData = useCallback(async () => {
@@ -31,12 +27,6 @@ export default function StudyDetailPage() {
       if (Array.isArray(data)) {
         setEmojiData(data);
         return;
-      }
-      // data가 null인 경우 (404 에러로 인한 fallback)
-      if (data === null) {
-        console.log(
-          '이모지 API가 구현되지 않음. 스터디 데이터에서 이모지를 가져옵니다.',
-        );
       }
     } catch (error) {
       // 404 에러인 경우 스터디 데이터에서 이모지 가져오기
@@ -60,34 +50,6 @@ export default function StudyDetailPage() {
   // 이모지 업데이트 콜백
   const handleEmojiUpdate = () => {
     fetchEmojiData();
-  };
-
-  // 오늘의 습관 버튼 클릭 핸들러
-  const handleHabitClick = () => {
-    setIsPasswordModalOpen(true);
-  };
-
-  // 비밀번호 검증 핸들러
-  const handlePasswordVerify = async password => {
-    try {
-      const isValid = await verifyStudyPassword(id, password);
-      if (isValid) {
-        setIsPasswordModalOpen(false);
-        // 비밀번호 검증 성공 시 HabitPage로 이동 (비밀번호를 state로 전달)
-        navigate(`/habit/${id}`, {
-          state: {
-            verifiedPassword: password,
-            studyData: studyData,
-          },
-        });
-        return true;
-      }
-      return false;
-    } catch (error) {
-      console.error('비밀번호 검증 실패:', error);
-      // 네트워크 오류는 예외를 다시 throw하여 모달에서 처리하도록 함
-      throw error;
-    }
   };
 
   useEffect(() => {
@@ -175,12 +137,6 @@ export default function StudyDetailPage() {
             studyId={id}
             title={studyData?.name || studyData?.title || ''}
             nickname={studyData?.nick || studyData?.nickname || ''}
-            backgroundImage={
-              studyData?.img ||
-              studyData?.background ||
-              studyData?.backgroundImage ||
-              ''
-            }
           />
         </div>
       </div>
@@ -202,9 +158,7 @@ export default function StudyDetailPage() {
           />
         </div>
         <div className={styles.todayButtons}>
-          <NavigationButton onClick={handleHabitClick}>
-            오늘의 습관
-          </NavigationButton>
+          <NavigationButton to={`/habit/${id}`}>오늘의 습관</NavigationButton>
           <NavigationButton to={`/focus/${id}`}>오늘의 집중</NavigationButton>
         </div>
       </div>
@@ -238,7 +192,7 @@ export default function StudyDetailPage() {
               const habitRows = [];
 
               // 오늘 날짜를 기준으로 요일 계산 (한 번만 계산)
-              const mondayBasedDay = (new Date().getDay() + 6) % 7;
+              const mondayBasedDay = ((new Date()).getDay() + 6) % 7;
 
               // habitHistories 배열을 순회하면서 각 습관을 개별 행으로 변환
               studyData?.habitHistories?.forEach(history => {
@@ -275,22 +229,6 @@ export default function StudyDetailPage() {
           />
         </div>
       )}
-
-      {/* 비밀번호 입력 모달 */}
-      <StudyPasswordModal
-        isOpen={isPasswordModalOpen}
-        onClose={() => setIsPasswordModalOpen(false)}
-        onVerify={handlePasswordVerify}
-        mode="habit"
-        nickname={studyData?.nick || studyData?.nickname || ''}
-        studyName={studyData?.name || studyData?.title || ''}
-        backgroundImage={
-          studyData?.img ||
-          studyData?.background ||
-          studyData?.backgroundImage ||
-          ''
-        }
-      />
     </div>
   );
 }

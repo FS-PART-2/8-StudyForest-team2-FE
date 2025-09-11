@@ -78,7 +78,7 @@ export default function TestPage() {
    *  ------------------------------ */
   const [isOpenStudyModal, setIsOpenStudyModal] = useState(false);
   const handleVerify = async password => {
-    // 비밀번호 검증 로직 제거 (항상 true 반환)
+    if (password !== '1234') return false;
     setIsOpenStudyModal(false);
     return true;
   };

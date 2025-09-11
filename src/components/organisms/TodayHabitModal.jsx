@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Chip from '../atoms/Chip.jsx';
 import Button from '../atoms/Button.jsx';
@@ -16,10 +16,10 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     if (open) {
       loadHabits();
     }
-  }, [open, loadHabits]);
+  }, [open, studyId]);
 
   // 습관 목록 로드 함수 (StudyDetailPage와 동일한 방식)
-  const loadHabits = useCallback(async () => {
+  const loadHabits = async () => {
     if (!studyId) return;
 
     try {
@@ -50,7 +50,7 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     } finally {
       setLoading(false);
     }
-  }, [studyId]);
+  };
 
   if (!open) return null;
 
@@ -60,11 +60,11 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     let newChip;
 
     try {
-      // API로 습관 추가 시도
+      // API로 습관 추가 시도 (비밀번호 없이)
       const response = await instance.post(
         `/api/habits/today/${encodeURIComponent(studyId)}`,
         {
-          title: label,
+          habit: label,
         },
       );
 
@@ -72,7 +72,7 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
       const serverHabit = response.data;
       newChip = {
         id: serverHabit.id,
-        label: serverHabit.title || serverHabit.habit || label,
+        label: serverHabit.habit || label,
         isDone: false,
       };
 
@@ -80,20 +80,14 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     } catch (error) {
       console.error('습관 추가 API 실패:', error);
 
-      // 409 Conflict 오류 처리 (중복 이름)
-      if (error.response?.status === 409) {
-        alert('이미 같은 이름의 습관이 존재합니다. 다른 이름을 사용해주세요.');
-      } else {
-        alert('습관 추가에 실패했습니다. 다시 시도해주세요.');
-      }
-      return;
+      // API 실패 시 로컬에서만 추가
+      const id = crypto.randomUUID?.() ?? `id_${Date.now()}`;
+      newChip = { id, label, isDone: false };
+
+      console.log('로컬에서만 습관 추가:', newChip);
     }
 
-    setChips(prev => {
-      const next = [...prev, newChip];
-      onSave?.(next);
-      return next;
-    });
+    setChips(prev => [...prev, newChip]);
     setEditingId(newChip.id);
     setDraft(newChip.label);
   };
@@ -101,7 +95,7 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
   // 칩 삭제 (API 호출 시도 후 로컬 스토리지에 저장)
   const deleteChip = async id => {
     try {
-      // API로 습관 삭제 시도
+      // API로 습관 삭제 시도 (비밀번호 없이)
       await instance.delete(
         `/api/habits/today/${encodeURIComponent(studyId)}/${encodeURIComponent(id)}`,
       );
@@ -109,16 +103,10 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
       console.log('습관이 서버에서 삭제되었습니다:', id);
     } catch (error) {
       console.error('습관 삭제 API 실패:', error);
-      // API 실패 시 에러 표시하고 삭제하지 않음
-      alert('습관 삭제에 실패했습니다. 다시 시도해주세요.');
-      return;
+      console.log('로컬에서만 습관 삭제:', id);
     }
 
-    setChips(prev => {
-      const next = prev.filter(c => c.id !== id);
-      onSave?.(next);
-      return next;
-    });
+    setChips(prev => prev.filter(c => c.id !== id));
 
     if (editingId === id) {
       setEditingId(null);
@@ -148,33 +136,19 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
       // API로 습관 이름 수정 시도
       await instance.patch(
         `/api/habits/today/${encodeURIComponent(studyId)}/${encodeURIComponent(editingId)}`,
-        { title: value },
+        { habit: value },
       );
 
       console.log('습관 이름이 서버에서 수정되었습니다:', editingId, value);
     } catch (error) {
       console.error('습관 수정 API 실패:', error);
-
-      // 409 Conflict 오류 처리 (중복 이름)
-      if (error.response?.status === 409) {
-        alert('이미 같은 이름의 습관이 존재합니다. 다른 이름을 사용해주세요.');
-        // 편집 모드 유지 (사용자가 다시 수정할 수 있도록)
-        setDraft(value);
-        return;
-      } else {
-        alert('습관 수정에 실패했습니다. 다시 시도해주세요.');
-      }
-      return;
+      console.log('로컬에서만 습관 수정:', editingId, value);
     }
 
     // 로컬 상태 업데이트
-    setChips(prev => {
-      const next = prev.map(c =>
-        c.id === editingId ? { ...c, label: value } : c,
-      );
-      onSave?.(next);
-      return next;
-    });
+    setChips(prev =>
+      prev.map(c => (c.id === editingId ? { ...c, label: value } : c)),
+    );
 
     setEditingId(null);
     setDraft('');

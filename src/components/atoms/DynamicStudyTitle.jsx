@@ -11,7 +11,6 @@ import { getNicknameColor } from '../../utils/getNicknameColor';
  * @param {string} props.className - 추가 CSS 클래스
  * @param {string} props.tag - HTML 태그 (기본값: 'h1')
  * @param {Object} props.style - 추가 인라인 스타일
- * @param {boolean} props.isOneLine - 한 줄 표시 여부 (기본값: false, 두 줄)
  * @returns {JSX.Element}
  */
 export default function DynamicStudyTitle({
@@ -21,7 +20,6 @@ export default function DynamicStudyTitle({
   className = '',
   tag: Tag = 'h1',
   style = {},
-  isOneLine = false,
   ...props
 }) {
   // 배경에 따른 닉네임 색상 결정
@@ -36,12 +34,8 @@ export default function DynamicStudyTitle({
       ? studyName.slice(prefix.length)
       : studyName;
 
-  // 한 줄 표시 여부 결정
-  // 1. isOneLine prop이 명시적으로 true인 경우
-  // 2. h1 태그인 경우 (디테일 페이지)
-  // 3. style에 whiteSpace: 'nowrap'이 있는 경우
-  const shouldShowOneLine =
-    isOneLine || Tag === 'h1' || (style && style.whiteSpace === 'nowrap');
+  // 디테일 페이지인지 확인 (h1 태그이면 디테일 페이지)
+  const isDetailPage = Tag === 'h1';
 
   return (
     <Tag
@@ -49,16 +43,16 @@ export default function DynamicStudyTitle({
       style={{
         ...style,
         display: 'flex',
-        flexDirection: shouldShowOneLine ? 'row' : 'column',
-        alignItems: shouldShowOneLine ? 'center' : 'flex-start',
+        flexDirection: isDetailPage ? 'row' : 'column',
+        alignItems: isDetailPage ? 'center' : 'flex-start',
         lineHeight: '1.5',
-        flexWrap: shouldShowOneLine ? 'nowrap' : 'wrap',
+        flexWrap: isDetailPage ? 'nowrap' : 'wrap',
       }}
       {...props}
     >
       {nickname && cleanStudyName ? (
-        shouldShowOneLine ? (
-          // 한 줄로 표시 (디테일 페이지 또는 모달)
+        isDetailPage ? (
+          // 디테일 페이지: 한 줄로 표시
           <>
             <span
               style={{
