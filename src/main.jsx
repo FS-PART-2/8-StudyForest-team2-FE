@@ -1,4 +1,4 @@
-import { StrictMode, useEffect } from 'react';
+import { StrictMode } from 'react';
 import './styles/reset.css';
 import './styles/common.css';
 import { createRoot } from 'react-dom/client';
@@ -15,20 +15,9 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import StudyDetailPage from './pages/StudyDetailPage';
 import HabitPage from './pages/HabitPage';
-import { useAuthStore } from './store/authStore';
 import ProfilePage from './pages/ProfilePage';
 
 export function App() {
-  const { initialize } = useAuthStore();
-
-  useEffect(() => {
-    // localStorage에 로그인 기록이 있을 때만 initialize 실행
-    const hasLoggedIn = localStorage.getItem('hasLoggedIn');
-    if (hasLoggedIn) {
-      initialize();
-    }
-  }, [initialize]);
-
   return (
     <StrictMode>
       <BrowserRouter>
@@ -52,12 +41,5 @@ export function App() {
   );
 }
 
-// React 18 createRoot 중복 호출 방지
-const rootElement = document.getElementById('root');
-if (rootElement && !rootElement._reactRoot) {
-  const root = createRoot(rootElement);
-  rootElement._reactRoot = root;
-  root.render(<App />);
-} else if (rootElement && rootElement._reactRoot) {
-  rootElement._reactRoot.render(<App />);
-}
+const root = createRoot(document.getElementById('root'));
+root.render(<App />);
