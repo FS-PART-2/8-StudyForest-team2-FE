@@ -1,10 +1,6 @@
 // src/pages/TestPage.jsx
 import React, { useState } from 'react';
 import styles from '../styles/pages/TestPage.module.css';
-import {
-  getNicknameColor,
-  getNicknameColorClass,
-} from '../utils/getNicknameColor';
 
 // Atoms / Molecules / Organisms
 import Button from '../components/atoms/Button.jsx';
@@ -77,11 +73,11 @@ export default function TestPage() {
    *  StudyPasswordModal demo
    *  ------------------------------ */
   const [isOpenStudyModal, setIsOpenStudyModal] = useState(false);
-  const handleVerify = async password => {
-    // 비밀번호 검증 로직 제거 (항상 true 반환)
-    setIsOpenStudyModal(false);
-    return true;
-  };
+  // const handleVerify = async password => {
+  //   // 비밀번호 검증 로직 제거 (항상 true 반환)
+  //   setIsOpenStudyModal(false);
+  //   return true;
+  // };
 
   /** ------------------------------
    *  SearchBar demo
@@ -97,36 +93,36 @@ export default function TestPage() {
   /** ------------------------------
    *  HabitWeekRow demo
    *  ------------------------------ */
-  const habitTestData = [
-    {
-      name: '독서하기',
-      checks: [true, true, false, true, false, true, false],
-      activeColor: '#4CAF50',
-    },
-    {
-      name: '운동하기',
-      checks: {
-        mon: true,
-        tue: false,
-        wed: true,
-        thu: true,
-        fri: false,
-        sat: true,
-        sun: false,
-      },
-      activeColor: '#FF9800',
-    },
-    {
-      name: '코딩하기',
-      checks: [true, true, true, true, true, false, false],
-      activeColor: '#2196F3',
-    },
-    {
-      name: '명상하기',
-      checks: [false, false, false, false, false, false, false],
-      activeColor: '#9C27B0',
-    },
-  ];
+  // const habitTestData = [
+  //   {
+  //     name: '독서하기',
+  //     checks: [true, true, false, true, false, true, false],
+  //     activeColor: '#4CAF50',
+  //   },
+  //   {
+  //     name: '운동하기',
+  //     checks: {
+  //       mon: true,
+  //       tue: false,
+  //       wed: true,
+  //       thu: true,
+  //       fri: false,
+  //       sat: true,
+  //       sun: false,
+  //     },
+  //     activeColor: '#FF9800',
+  //   },
+  //   {
+  //     name: '코딩하기',
+  //     checks: [true, true, true, true, true, false, false],
+  //     activeColor: '#2196F3',
+  //   },
+  //   {
+  //     name: '명상하기',
+  //     checks: [false, false, false, false, false, false, false],
+  //     activeColor: '#9C27B0',
+  //   },
+  // ];
 
   return (
     <div style={{ display: 'grid', gap: '2rem', padding: '1.6rem' }}>
@@ -230,7 +226,7 @@ export default function TestPage() {
       <StudyPasswordModal
         isOpen={isOpenStudyModal}
         onClose={() => setIsOpenStudyModal(false)}
-        onVerify={handleVerify}
+        // onVerify={handleVerify}
       />
 
       {/* ✅ Popup: 1버튼(알럿) */}

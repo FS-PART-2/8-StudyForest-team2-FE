@@ -2,7 +2,7 @@ import styles from '../../styles/components/organisms/Card.module.css';
 import Tag from '../atoms/Tag';
 import Text from '../atoms/Text';
 import Emoji from '../atoms/Emoji';
-import { CARD_PRESETS } from '../../utils/constants/cardPresets';
+import { CARD_PRESETS } from '../../utils/ui/cardPresets';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -111,10 +111,14 @@ export default function Card({
             color={presetData?.titleTextColor}
             tag="h3"
           >
-            <b style={{ color: presetData?.nicknameTextColor }}>{nick}</b>의
-            {' ' + title}
+            <b
+              className={styles.nickname}
+              style={{ color: presetData?.nicknameTextColor }}
+            >
+              {nick}
+            </b>
+            <div className={styles.title}>{title}</div>
           </Text>
-          <Tag points={points} size="sm" />
         </div>
 
         <div className={styles.textSection}>
@@ -137,14 +141,18 @@ export default function Card({
         </div>
 
         <div className={styles.emojiSection}>
-          {emojiData.map((item, index) => (
-            <Emoji
-              key={index}
-              size="sm"
-              emoji={item.emoji}
-              count={item.count}
-            />
-          ))}
+          <div>
+            {emojiData.map((item, index) => (
+              <Emoji
+                key={index}
+                size="sm"
+                emoji={item.emoji}
+                count={item.count}
+              />
+            ))}
+          </div>
+
+          <Tag points={points} size="sm" />
         </div>
       </div>
     </div>
