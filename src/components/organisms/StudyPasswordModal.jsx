@@ -42,6 +42,16 @@ export default function StudyPasswordModal({
   //   return () => window.removeEventListener('keydown', onKeyDown);
   // }, [isOpen, onClose]);
 
+  // 모달 열릴 때 body 스크롤 락
+  useEffect(() => {
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleSubmit = async e => {
@@ -86,6 +96,7 @@ export default function StudyPasswordModal({
         aria-describedby="studyPasswordDesc"
       >
         <DynamicStudyTitle
+          id="studyPasswordTitle"
           nickname={nickname}
           studyName={studyName}
           backgroundImage={backgroundImage}
@@ -113,6 +124,7 @@ export default function StudyPasswordModal({
               onSubmit={handleSubmit}
               placeholder="비밀번호를 입력해 주세요"
               disabled={submitting}
+              autoFocus
             />
 
             <div className={styles.actions}>
@@ -134,7 +146,7 @@ export default function StudyPasswordModal({
           </form>
 
           {/* PC: 우상단 absolute / 모바일: 버튼 아래 중앙 (CSS에서 분기) */}
-          <button className={styles.exit} onClick={onClose}>
+          <button type="button" className={styles.exit} onClick={onClose}>
             나가기
           </button>
         </div>

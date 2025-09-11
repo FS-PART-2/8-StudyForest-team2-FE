@@ -36,19 +36,13 @@ const getStudyBackground = studyData =>
   getStudyField(studyData, 'backgroundImage', '');
 
 const getStudyPoints = studyData => {
-  console.log('getStudyPoints - studyData:', studyData);
-  console.log('getStudyPoints - studyData.point:', studyData?.point);
-  console.log('getStudyPoints - studyData.points:', studyData?.points);
-  console.log('getStudyPoints - studyData.pointsSum:', studyData?.pointsSum);
-
   const result =
-    studyData?.point ||
-    studyData?.points ||
-    studyData?.pointsSum ||
-    studyData?._count?.points ||
+    studyData?.point ??
+    studyData?.points ??
+    studyData?.pointsSum ??
+    studyData?._count?.points ??
     0;
-  console.log('getStudyPoints - final result:', result);
-  return result;
+  return typeof result === 'number' ? result : Number(result) || 0;
 };
 
 export default function StudyDetailPage() {
@@ -190,14 +184,15 @@ export default function StudyDetailPage() {
       password: password ? '***' : 'empty',
     });
     try {
-      const isValid = await verifyStudyPassword(id, password);
+      const isValid = await verifyStudyPassword(id, password, {
+        timeout: 10000,
+      });
       console.log('StudyDetailPage: 비밀번호 검증 결과', { isValid });
       if (isValid) {
         setIsPasswordModalOpen(false);
-        // 비밀번호 검증 성공 시 HabitPage로 이동 (비밀번호를 state로 전달)
+        // 비밀번호 검증 성공 시 HabitPage로 이동 (보안상 비밀번호는 전달하지 않음)
         navigate(`/habit/${id}`, {
           state: {
-            verifiedPassword: password,
             studyData: studyData,
           },
         });
@@ -335,11 +330,6 @@ export default function StudyDetailPage() {
         </div>
 
         <div className={styles.pointsSection}>
-          {console.log('StudyDetailPage - studyData:', studyData)}
-          {console.log(
-            'StudyDetailPage - getStudyPoints result:',
-            getStudyPoints(studyData),
-          )}
           <StudyPoints points={getStudyPoints(studyData)} />
         </div>
       </div>

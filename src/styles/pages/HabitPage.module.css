@@ -437,6 +437,7 @@
 
   .todayButtons a[href*='/focus/'] {
     font-size: 0;
+    gap: 0.5rem;
   }
 
   .todayButtons a[href*='/study/']::before {
@@ -448,6 +449,7 @@
 
   .todayButtons a[href*='/study/'] {
     font-size: 0;
+    gap: 0.5rem;
   }
 
   /* 홈 버튼 글씨 크기 조정 */
@@ -462,7 +464,7 @@
   }
 
   .cardHeader {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     margin-bottom: 3.9rem;
   }
 

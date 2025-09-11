@@ -69,14 +69,15 @@ export default function FocusPage() {
       password: password ? '***' : 'empty',
     });
     try {
-      const isValid = await verifyStudyPassword(id, password);
+      const isValid = await verifyStudyPassword(id, password, {
+        timeout: 10000,
+      });
       console.log('FocusPage: 비밀번호 검증 결과', { isValid });
       if (isValid) {
         setIsPasswordModalOpen(false);
-        // 비밀번호 검증 성공 시 HabitPage로 이동 (비밀번호를 state로 전달)
+        // 비밀번호 검증 성공 시 HabitPage로 이동 (보안상 비밀번호는 전달하지 않음)
         navigate(`/habit/${id}`, {
           state: {
-            verifiedPassword: password,
             studyData: focusData,
           },
         });
