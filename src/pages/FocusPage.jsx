@@ -20,6 +20,7 @@ export default function FocusPage() {
   const [focusData, setFocusData] = useState({});
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const timer = useTimer(initialMinutes);
+  const verifyAbortRef = useRef(null);
 
   useEffect(() => {
     const fetchStudyData = async () => {
@@ -32,6 +33,9 @@ export default function FocusPage() {
     };
     fetchStudyData();
   }, [id]);
+
+  // 언마운트 시 안전 취소
+  useEffect(() => () => verifyAbortRef.current?.abort(), []);
 
   const minutesValue =
     timer.isRunning || timer.isPaused
@@ -64,15 +68,22 @@ export default function FocusPage() {
 
   // 비밀번호 검증 핸들러
   const handlePasswordVerify = async password => {
-    console.log('FocusPage: 비밀번호 검증 시작', {
-      id,
-      password: password ? '***' : 'empty',
-    });
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('FocusPage: 비밀번호 검증 시작', {
+        id,
+        password: password ? '***' : 'empty',
+      });
+    }
     try {
+      const controller = new AbortController();
+      verifyAbortRef.current = controller;
       const isValid = await verifyStudyPassword(id, password, {
         timeout: 10000,
+        signal: controller.signal,
       });
-      console.log('FocusPage: 비밀번호 검증 결과', { isValid });
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('FocusPage: 비밀번호 검증 결과', { isValid });
+      }
       if (isValid) {
         setIsPasswordModalOpen(false);
         // 비밀번호 검증 성공 시 HabitPage로 이동 (보안상 비밀번호는 전달하지 않음)
@@ -88,6 +99,8 @@ export default function FocusPage() {
       console.error('FocusPage: 비밀번호 검증 실패:', error);
       // 네트워크 오류는 예외를 다시 throw하여 모달에서 처리하도록 함
       throw error;
+    } finally {
+      verifyAbortRef.current = null;
     }
   };
 
@@ -200,14 +213,20 @@ export default function FocusPage() {
             tag="h1"
           />
           <div className={styles.nav}>
-            <NavigationButton onClick={handleHabitClick}>
-              오늘의 습관
+            <NavigationButton
+              onClick={handleHabitClick}
+              aria-label="오늘의 습관"
+            >
+              <span className={styles.fullLabel}>오늘의 습관</span>
+              <span className={styles.shortLabel} aria-hidden="true">
+                습관
+              </span>
             </NavigationButton>
             <NavigationButton to="/">홈</NavigationButton>
           </div>
         </div>
 
-        <StudyPoints points={focusData.point} />
+        <StudyPoints points={Number(focusData.point) || 0} />
 
         <div className={styles.timerContainer}>
           <h2 className={styles.timerTitle}>오늘의 집중</h2>
@@ -323,7 +342,10 @@ export default function FocusPage() {
       {/* 비밀번호 입력 모달 */}
       <StudyPasswordModal
         isOpen={isPasswordModalOpen}
-        onClose={() => setIsPasswordModalOpen(false)}
+        onClose={() => {
+          verifyAbortRef.current?.abort();
+          setIsPasswordModalOpen(false);
+        }}
         onVerify={handlePasswordVerify}
         mode="habit"
         nickname={focusData.nick}

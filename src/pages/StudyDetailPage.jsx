@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import styles from '../styles/pages/StudyDetailPage.module.css';
 import { useRecentStudyStore } from '../store/recentStudyStore';
 import { studyApi } from '../utils/api/study/getStudyApi';
@@ -55,6 +55,7 @@ export default function StudyDetailPage() {
   const [error, setError] = useState(null);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [currentHabits, setCurrentHabits] = useState([]); // 현재 활성 습관들
+  const verifyAbortRef = useRef(null);
 
   // 최신 습관 데이터 가져오기
   const fetchCurrentHabits = useCallback(async () => {
@@ -179,15 +180,22 @@ export default function StudyDetailPage() {
 
   // 비밀번호 검증 핸들러
   const handlePasswordVerify = async password => {
-    console.log('StudyDetailPage: 비밀번호 검증 시작', {
-      id,
-      password: password ? '***' : 'empty',
-    });
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('StudyDetailPage: 비밀번호 검증 시작', {
+        id,
+        password: password ? '***' : 'empty',
+      });
+    }
     try {
+      const controller = new AbortController();
+      verifyAbortRef.current = controller;
       const isValid = await verifyStudyPassword(id, password, {
         timeout: 10000,
+        signal: controller.signal,
       });
-      console.log('StudyDetailPage: 비밀번호 검증 결과', { isValid });
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('StudyDetailPage: 비밀번호 검증 결과', { isValid });
+      }
       if (isValid) {
         setIsPasswordModalOpen(false);
         // 비밀번호 검증 성공 시 HabitPage로 이동 (보안상 비밀번호는 전달하지 않음)
@@ -203,6 +211,8 @@ export default function StudyDetailPage() {
       console.error('StudyDetailPage: 비밀번호 검증 실패:', error);
       // 네트워크 오류는 예외를 다시 throw하여 모달에서 처리하도록 함
       throw error;
+    } finally {
+      verifyAbortRef.current = null;
     }
   };
 
@@ -237,6 +247,9 @@ export default function StudyDetailPage() {
 
     fetchStudyData();
   }, [id, addRecentStudy]);
+
+  // 언마운트 시 안전 취소
+  useEffect(() => () => verifyAbortRef.current?.abort(), []);
 
   // 이모지 데이터 로드 (스터디 데이터 로드 후)
   useEffect(() => {
