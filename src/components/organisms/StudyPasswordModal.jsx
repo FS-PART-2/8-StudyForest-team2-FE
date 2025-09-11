@@ -32,15 +32,15 @@ export default function StudyPasswordModal({
     }
   }, [isOpen]);
 
-  // Esc로 닫기 (접근성)
-  useEffect(() => {
-    if (!isOpen) return;
-    const onKeyDown = e => {
-      if (e.key === 'Escape') onClose?.();
-    };
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [isOpen, onClose]);
+  // Esc로 닫기 비활성화 (나가기 버튼으로만 닫기)
+  // useEffect(() => {
+  //   if (!isOpen) return;
+  //   const onKeyDown = e => {
+  //     if (e.key === 'Escape') onClose?.();
+  //   };
+  //   window.addEventListener('keydown', onKeyDown);
+  //   return () => window.removeEventListener('keydown', onKeyDown);
+  // }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -77,10 +77,9 @@ export default function StudyPasswordModal({
   };
 
   return createPortal(
-    <div className={styles.modalBackdrop} onClick={onClose}>
+    <div className={styles.modalBackdrop}>
       <div
         className={styles.modal}
-        onClick={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="studyPasswordTitle"

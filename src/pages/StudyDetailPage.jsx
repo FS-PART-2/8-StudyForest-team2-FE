@@ -185,8 +185,13 @@ export default function StudyDetailPage() {
 
   // 비밀번호 검증 핸들러
   const handlePasswordVerify = async password => {
+    console.log('StudyDetailPage: 비밀번호 검증 시작', {
+      id,
+      password: password ? '***' : 'empty',
+    });
     try {
       const isValid = await verifyStudyPassword(id, password);
+      console.log('StudyDetailPage: 비밀번호 검증 결과', { isValid });
       if (isValid) {
         setIsPasswordModalOpen(false);
         // 비밀번호 검증 성공 시 HabitPage로 이동 (비밀번호를 state로 전달)
@@ -200,7 +205,7 @@ export default function StudyDetailPage() {
       }
       return false;
     } catch (error) {
-      console.error('비밀번호 검증 실패:', error);
+      console.error('StudyDetailPage: 비밀번호 검증 실패:', error);
       // 네트워크 오류는 예외를 다시 throw하여 모달에서 처리하도록 함
       throw error;
     }
