@@ -135,6 +135,12 @@ export default function StudyDetailPage() {
         setEmojiData(data);
         return;
       }
+      // data가 null인 경우 (404 에러로 인한 fallback)
+      if (data === null) {
+        console.log(
+          '이모지 API가 구현되지 않음. 스터디 데이터에서 이모지를 가져옵니다.',
+        );
+      }
     } catch (error) {
       // 404 에러인 경우 스터디 데이터에서 이모지 가져오기
       if (error.response?.status === 404) {
@@ -182,7 +188,8 @@ export default function StudyDetailPage() {
       return false;
     } catch (error) {
       console.error('비밀번호 검증 실패:', error);
-      return false;
+      // 네트워크 오류는 예외를 다시 throw하여 모달에서 처리하도록 함
+      throw error;
     }
   };
 

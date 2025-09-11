@@ -9,6 +9,7 @@ export async function modifyStudy(
 ) {
   // PATCH 메서드로 시도 (비밀번호를 헤더로 전송)
   try {
+    const encodedId = encodeURIComponent(String(studyId));
     const requestData = {
       name: studyName,
       content: description,
@@ -17,11 +18,14 @@ export async function modifyStudy(
       password: password || '', // 백엔드에서 요구하는 password 필드 추가
     };
 
+    const safeRequestData = {
+      ...requestData,
+      password: requestData.password ? '***' : undefined,
+    };
     console.log('modifyStudy API 요청 데이터:', {
       studyId,
-      requestData,
+      requestData: safeRequestData,
       hasPassword: !!password,
-      password: password ? '***' : 'none',
     });
 
     // requestData 상세 내용 확인
@@ -33,7 +37,7 @@ export async function modifyStudy(
       isActiveType: typeof requestData.isActive,
     });
 
-    const res = await instance.patch(`/api/studies/${studyId}`, requestData);
+    const res = await instance.patch(`/api/studies/${encodedId}`, requestData);
     return res.data;
   } catch (error) {
     console.error('modifyStudy PATCH 오류:', {
@@ -60,13 +64,10 @@ export async function modifyStudy(
     if (error.response?.status === 404 || error.response?.status === 405) {
       console.log('PATCH 실패, POST로 재시도...');
       try {
-        const res = await instance.post(`/api/studies/${studyId}/update`, {
-          name: studyName,
-          content: description,
-          img: background,
-          isActive: isPublic,
-          password: password || '', // 백엔드에서 요구하는 password 필드 추가
-        });
+        const res = await instance.post(
+          `/api/studies/${encodedId}/update`,
+          requestData,
+        );
         return res.data;
       } catch (postError) {
         console.error('POST도 실패:', postError.response?.data);

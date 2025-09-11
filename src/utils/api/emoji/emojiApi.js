@@ -15,6 +15,13 @@ export const emojiApi = {
       const response = await instance.get(`/api/studies/${id}/emojis`);
       return response.data;
     } catch (error) {
+      // 404 에러는 백엔드에서 이모지 API가 구현되지 않았을 때 발생
+      if (error.response?.status === 404) {
+        console.debug(
+          '이모지 API가 구현되지 않음. 스터디 데이터에서 이모지를 가져옵니다.',
+        );
+        return null; // null을 반환하여 호출하는 곳에서 fallback 처리
+      }
       console.error('이모지 목록 조회 실패:', error);
       throw error;
     }

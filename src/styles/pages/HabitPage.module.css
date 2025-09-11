@@ -99,20 +99,30 @@
   font-size: 1.4rem;
 }
 
+/* PC/태블릿에서만 적용 */
+@media (min-width: 745px) {
+  .editButton {
+    margin-right: 4rem; /* 칩의 오른쪽 끝과 정렬 */
+    margin-top: -0.8rem; /* 위로 0.8rem 이동 */
+  }
+}
+
 .editButton:hover {
   background-color: #f3f4f6;
 }
 
-/* 습관 컨테이너 */
+/* 습관 컨테이너 - TodayHabitModal과 동일한 스타일 */
 .habitsContainer {
   grid-column: 2;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  align-items: center; /* 칩들을 가운데 정렬 */
+  gap: 2rem; /* 20px 간격 유지 */
   width: 100%;
   min-height: 40rem;
   max-height: 40rem;
   overflow-y: auto;
+
   padding-right: 1rem;
   /* 스크롤바를 컨테이너 밖으로 밀어내기 */
 }
@@ -191,44 +201,7 @@
   text-align: center;
 }
 
-.activeHabit {
-  width: 100%;
-  height: 5.5rem;
-  padding: 1.3rem 2rem;
-  color: white;
-  border: none;
-  border-radius: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  transform: translateY(0);
-  background: var(--brand-blue, #0013a7);
-  font-size: 1.6rem;
-}
-
-.activeHabit:hover {
-  transform: translateY(-2px);
-}
-
-.activeHabit:active {
-  transform: translateY(0);
-}
-
-.inactiveHabit {
-  width: 100%;
-  height: 5.5rem;
-  padding: 1.3rem 2rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  font-size: 1.6rem;
-}
-
-.inactiveHabit:hover {
-  border-color: #d1d5db;
-}
+/* activeHabit과 inactiveHabit 스타일 제거 - Chip 컴포넌트 사용 */
 
 /* 모달 스타일 */
 .modalOverlay {
