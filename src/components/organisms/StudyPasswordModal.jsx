@@ -6,6 +6,22 @@ import Toast from '../atoms/Toast.jsx';
 import styles from '../../styles/components/organisms/StudyPasswordModal.module.css';
 import { verifyStudyPassword } from '../../utils/api/study/studyPasswordApi';
 
+/**
+ * 스터디 비밀번호 확인용 모달을 포털로 렌더링한다.
+ *
+ * 모달은 비밀번호 입력 후 onVerify 검사 결과에 따라 닫거나(검증 성공),
+ * 불일치 토스트를 표시하거나(검증 실패), 네트워크/서버 오류 토스트를 표시한다.
+ * Escape 키 또는 배경/나가기 버튼으로 닫을 수 있으며, isOpen이 false이면 아무것도 렌더링하지 않는다.
+ *
+ * @param {boolean} isOpen - 모달 열림 상태.
+ * @param {Function} onClose - 모달을 닫는 콜백.
+ * @param {(pw: string) => Promise<boolean> | boolean} onVerify - 입력한 비밀번호를 검증하는 함수.
+ *   true: 검증 성공, false: 비밀번호 불일치, throw: 네트워크/서버 오류로 간주.
+ * @param {string} [studyTitle='스터디'] - 모달 상단에 표시할 스터디 제목.
+ * @param {'edit'|'delete'} [mode='edit'] - 모달 동작 모드; 'delete'면 제출 버튼에 "삭제하기"를 표시하고,
+ *   그 외에는 "수정하러 가기"를 표시한다.
+ * @returns {JSX.Element|null} 모달을 포함하는 포털 노드 또는 isOpen이 false일 때 null.
+ */
 export default function StudyPasswordModal({
   isOpen,
   onClose,

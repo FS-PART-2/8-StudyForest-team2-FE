@@ -1,17 +1,23 @@
 import { getNicknameColor } from '../../utils/getNicknameColor';
 
 /**
- * DynamicStudyTitle Atom 컴포넌트
- * 배경에 따라 닉네임 색상이 동적으로 변경되는 스터디 제목 컴포넌트
+ * 배경 이미지를 기준으로 닉네임 색상을 적용해 스터디 제목을 렌더링하는 컴포넌트.
+ *
+ * 주된 동작:
+ * - backgroundImage로부터 닉네임 색상을 계산하여 닉네임에 적용합니다.
+ * - studyName이 "<nickname>의 " 접두어로 시작하면 해당 접두어를 제거해 표시합니다.
+ * - tag가 'h1'일 때(디테일 페이지) 한 줄로 닉네임 + '의' + 스터디명을 표시하고,
+ *   그 외(카드 등)에는 닉네임 + '의'와 스터디명을 두 줄로 분리해 표시합니다.
+ * - nickname 또는 studyName이 없으면 studyName 또는 '스터디'를 대체로 출력합니다.
  *
  * @param {Object} props
- * @param {string} props.nickname - 닉네임
- * @param {string} props.studyName - 스터디 이름
- * @param {string} props.backgroundImage - 배경 이미지 경로 (닉네임 색상 결정용)
- * @param {string} props.className - 추가 CSS 클래스
- * @param {string} props.tag - HTML 태그 (기본값: 'h1')
- * @param {Object} props.style - 추가 인라인 스타일
- * @returns {JSX.Element}
+ * @param {string} props.nickname - 표시할 닉네임.
+ * @param {string} props.studyName - 원본 스터디 이름(필요 시 nickname 접두어 제거).
+ * @param {string} props.backgroundImage - 닉네임 색상 결정에 사용하는 배경 이미지 경로.
+ * @param {string} [props.className] - 추가 CSS 클래스.
+ * @param {string} [props.tag='h1'] - 사용할 HTML 태그; 'h1'이면 디테일 페이지 레이아웃을 사용.
+ * @param {Object} [props.style] - 추가 인라인 스타일(컴포넌트 기본 스타일에 병합됨).
+ * @returns {JSX.Element} 렌더링된 제목 요소.
  */
 export default function DynamicStudyTitle({
   nickname,

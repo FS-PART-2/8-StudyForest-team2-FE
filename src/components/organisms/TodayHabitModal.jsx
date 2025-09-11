@@ -5,6 +5,20 @@ import Button from '../atoms/Button.jsx';
 import { instance } from '../../utils/api/axiosInstance.js';
 import styles from '../../styles/components/organisms/TodayHabitModal.module.css';
 
+/**
+ * 오늘의 습관을 관리하는 모달 컴포넌트.
+ *
+ * 모달이 열리면 주어진 studyId에 대한 최신 습관 목록을 로드해 편집, 추가, 삭제할 수 있도록 UI를 제공합니다.
+ * 변경사항은 UI 로컬 상태로 즉시 반영되며, 추가/삭제/수정 동작은 가능한 경우 서버 API와 동기화하려 시도합니다(실패 시 로컬 변경만 적용).
+ * "수정 완료" 버튼을 누르면 onSave 콜백에 최종 칩 목록이 전달됩니다.
+ *
+ * @param {object} props
+ * @param {boolean} props.open - 모달 표시 여부(true이면 렌더링하고 습관을 로드함).
+ * @param {() => void} props.onClose - 모달을 닫기 위한 콜백.
+ * @param {(chips: Array<{id:string,label:string,isDone:boolean}>) => void} [props.onSave] - 수정 완료 시 호출되는 선택적 콜백. 현재 칩 배열을 인수로 받음.
+ * @param {string} props.studyId - 로드/동기화에 사용하는 스터디 식별자.
+ * @returns {JSX.Element|null} 렌더링된 모달 요소 또는 open이 false일 때 null.
+ */
 export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
   const [chips, setChips] = useState([]);
   const [editingId, setEditingId] = useState(null);

@@ -10,7 +10,17 @@ import { instance } from '../utils/api/axiosInstance';
 import { habitUpdateApi } from '../utils/api/habit/updateHabitApi';
 import styles from '../styles/pages/HabitPage.module.css';
 
-// 메인 HabitPage 컴포넌트
+/**
+ * 오늘의 습관 페이지를 렌더링하는 React 컴포넌트.
+ *
+ * 상세:
+ * - 스터디 ID(param)에 따라 스터디 상세와 최신 습관 목록을 API에서 로드하여 화면에 표시합니다.
+ * - 내부적으로 현재 시간을 초 단위로 갱신하여 표시합니다(언마운트 시 타이머 정리).
+ * - 습관 항목은 클릭 시 로컬 상태에서 isDone을 토글하여 즉시 UI에 반영합니다(서버에 즉시 반영하지 않음).
+ * - "목록 수정" 모달에서 저장하면 습관 목록을 다시 불러와 최신 상태로 갱신합니다.
+ *
+ * @returns {JSX.Element} 오늘의 습관 페이지 JSX
+ */
 export default function HabitPageMain() {
   const { id } = useParams();
   const navigate = useNavigate();

@@ -18,6 +18,27 @@ import HabitPage from './pages/HabitPage';
 import { useAuthStore } from './store/authStore';
 import ProfilePage from './pages/ProfilePage';
 
+/**
+ * 애플리케이션의 루트 React 컴포넌트 — 라우터와 전역 레이아웃을 설정합니다.
+ *
+ * 렌더링 시 BrowserRouter와 Routes를 구성하여 주요 페이지 경로들을 연결합니다.
+ * 초기 마운트 시 localStorage의 'hasLoggedIn' 값이 존재하면 인증 상태 초기화를 위해 useAuthStore의 initialize를 호출합니다.
+ *
+ * 제공하는 주요 라우트:
+ * - / (index): StudyPage
+ * - /focus/:id: FocusPage
+ * - /test: TestPage
+ * - /study/new: StudyCreatePage
+ * - /study/:id: StudyDetailPage
+ * - /study/:id/modify: StudyModifyPage
+ * - /habit/:id: HabitPage
+ * - /register: RegisterPage
+ * - /login: LoginPage
+ * - /profile: ProfilePage
+ * - *: NotFoundPage
+ *
+ * @returns {JSX.Element} 앱의 루트 JSX 요소
+ */
 export function App() {
   const { initialize } = useAuthStore();
 

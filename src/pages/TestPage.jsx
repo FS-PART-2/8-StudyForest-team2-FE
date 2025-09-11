@@ -17,6 +17,13 @@ import Popup from '../components/molecules/Popup.jsx'; // ✅ 추가
 import HabitWeekRow from '../components/molecules/HabitWeekRow.jsx'; // ✅ HabitWeekRow 추가
 import HabitRecordTable from '../components/organisms/HabitRecordTable.jsx';
 
+/**
+ * 다양한 UI 컴포넌트(EmojiCounter, Chip 편집, StudyPasswordModal, SearchBar, Popup, HabitRecordTable, Card 닉네임 색상 테스트 등)를 시연하는 테스트 페이지를 렌더링합니다.
+ *
+ * 이 컴포넌트는 내부 상태로 칩 목록과 편집 상태, 검색어, 모달 및 팝업 열림 상태 등을 관리하며 각 데모 UI와 상호작용할 수 있는 핸들러를 제공합니다.
+ *
+ * @returns {JSX.Element} 데모용 구성 요소들을 포함한 테스트 페이지 엘리먼트
+ */
 export default function TestPage() {
   /** ------------------------------
    *  EmojiCounter demo

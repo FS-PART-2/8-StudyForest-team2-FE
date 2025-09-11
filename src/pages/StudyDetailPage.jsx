@@ -12,6 +12,20 @@ import StudyPoints from '../components/molecules/StudyPoints';
 import HabitRecordTable from '../components/organisms/HabitRecordTable';
 import NavigationButton from '../components/atoms/NavigationButton';
 
+/**
+ * 스터디 상세 페이지를 렌더링하는 React 컴포넌트입니다.
+ *
+ * 상세 설명:
+ * - URL 파라미터 `id`에 해당하는 스터디 상세 데이터를 서버에서 조회하고 로딩/오류 상태를 관리합니다.
+ * - 조회된 스터디 데이터를 최근 본 스터디 저장소에 추가(addRecentStudy).
+ * - 이모지 데이터는 emoji API를 우선 호출하고, 실패(특히 404)하면 스터디 응답의 `studyEmojis`로 폴백합니다.
+ * - 이모지 갱신을 위한 콜백(handleEmojiUpdate)을 제공하여 하위 컴포넌트가 변경 후 데이터를 재로딩할 수 있게 합니다.
+ * - 로딩 중에는 로딩 뷰를, 스터디를 찾지 못한 경우에는 안내 뷰를 노출합니다.
+ * - 정상 데이터가 있으면 이모지 카운터, 스터디 액션, 동적 타이틀, 소개와 포인트 영역, 그리고 공개·활성 상태인 경우 습관 기록 테이블을 렌더링합니다.
+ * - "오늘의 습관"과 "오늘의 집중" 버튼은 각각 `/habit/{id}`와 `/focus/{id}`로 이동하는 네비게이션 버튼입니다.
+ *
+ * @returns {JSX.Element} 스터디 상세 페이지의 React 엘리먼트
+ */
 export default function StudyDetailPage() {
   const { id } = useParams();
   const addRecentStudy = useRecentStudyStore(state => state.addRecentStudy);

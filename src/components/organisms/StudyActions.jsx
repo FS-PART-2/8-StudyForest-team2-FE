@@ -10,19 +10,20 @@ import { verifyStudyPassword } from '../../utils/api/study/studyPasswordApi';
 import { deleteStudyApi } from '../../utils/api/study/deleteStudyApi';
 
 /**
- * 스터디 상세 상단 액션(공유하기/수정하기/스터디 삭제하기)
+ * 스터디 상세 페이지 상단의 액션 바(공유 / 수정 / 삭제)를 렌더링합니다.
  *
- * 사용법:
- * <StudyActions studyId={id} title={studyTitle} onDelete={openDeleteModal} />
+ * 상세:
+ * - 기본 동작: 공유 모달 오픈, 수정/삭제는 비밀번호 확인 모달을 통해 API 검증 후 라우팅(수정) 또는 삭제 API 호출 및 토스트 표시(삭제).
+ * - 각 동작은 대응하는 커스텀 핸들러(prop)로 대체할 수 있습니다.
  *
- * props:
- * - studyId?: string           // 제공 시 기본 edit 라우팅(/studies/:id/edit) 사용
- * - title?: string             // 공유하기에 사용할 제목
- * - className?: string
- * - onShare?: () => void       // 공유하기 커스텀 핸들러(있으면 이걸 사용)
- * - onEdit?: () => void        // 수정하기 커스텀 핸들러(없고 studyId 있으면 자동 라우팅)
- * - onDelete?: () => void      // 삭제하기 핸들러 (보통 모달 오픈)
- * - confirmBeforeDelete?: boolean // 삭제 전 confirm (기본 true; onDelete 없을 때만 동작)
+ * @param {string} [studyId] 스터디 식별자. 제공되면 수정 라우팅(/study/:id/modify)과 비밀번호 검증·삭제 API 호출에 사용됩니다.
+ * @param {string} [title] 공유 및 비밀번호 모달에 표시할 스터디 제목.
+ * @param {string} nickname 모달에 표시되는 제목 조합에 사용됩니다 (예: `${nickname}의 ${title}`).
+ * @param {string} [className] 컨테이너에 추가할 CSS 클래스.
+ * @param {Function} [onShare] 공유 동작의 커스텀 핸들러가 있으면 기본 공유 모달 대신 호출됩니다.
+ * @param {Function} [onEdit] 수정 동작의 커스텀 핸들러가 있으면 기본 비밀번호 확인/라우팅 대신 호출됩니다.
+ * @param {Function} [onDelete] 삭제 동작의 커스텀 핸들러가 있으면 기본 비밀번호 확인/삭제 흐름 대신 호출됩니다.
+ * @returns {JSX.Element} 렌더링된 액션 버튼들과 관련 모달들.
  */
 export default function StudyActions({
   studyId,
