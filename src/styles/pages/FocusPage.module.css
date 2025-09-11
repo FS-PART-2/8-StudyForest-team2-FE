@@ -288,4 +288,29 @@
   .title {
     font-size: 2.4rem;
   }
+
+  /* 모바일에서 네비게이션 버튼 텍스트 줄이기 - 접근성 친화적 */
+  .nav .fullLabel {
+    /* 기본적으로 표시 */
+  }
+
+  .nav .shortLabel {
+    display: none;
+  }
+
+  /* 모바일에서 짧은 라벨 표시, 긴 라벨 숨김 */
+  .nav .fullLabel {
+    position: absolute;
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 0;
+    border: 0;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .nav .shortLabel {
+    display: inline;
+  }
 }
