@@ -16,30 +16,29 @@ export async function getStudyName(studyId, options = {}) {
 
 export async function verifyStudyPassword(studyId, password, options = {}) {
   const id = encodeURIComponent(String(studyId));
-  const url = `/api/studies/${id}`;
 
-  console.log('studyPasswordApi: 비밀번호 검증 요청 (PATCH API 활용)', {
+  console.log('studyPasswordApi: 비밀번호 검증 요청', {
     studyId,
     encodedId: id,
-    url,
     password: password ? '***' : 'empty',
   });
 
   try {
-    // PATCH 메소드로 비밀번호 검증 (실제 수정하지 않고 검증만)
-    const config = {
+    // x-study-password 헤더를 사용한 GET 요청으로 비밀번호 검증 시도
+    const { data } = await instance.get(`/api/studies/${id}`, {
+      headers: {
+        'x-study-password': password,
+      },
       signal: options.signal,
       timeout: options.timeout,
-    };
+    });
 
-    // 실제로는 수정하지 않고 검증만 하기 위해 빈 데이터로 PATCH 요청
-    const { data } = await instance.patch(url, { password }, config);
-
-    console.log('studyPasswordApi: API 응답 성공', { hasData: !!data });
-    // PATCH 요청이 성공하면 비밀번호가 맞는 것
+    console.log('studyPasswordApi: 비밀번호 검증 성공 (헤더)', {
+      hasData: !!data,
+    });
     return true;
   } catch (err) {
-    console.error('studyPasswordApi: API 요청 실패', {
+    console.error('studyPasswordApi: 비밀번호 검증 실패', {
       message: err.message,
       code: err.code,
       status: err.response?.status,

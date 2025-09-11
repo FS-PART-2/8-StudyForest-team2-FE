@@ -71,7 +71,7 @@ const Chip = forwardRef(function Chip(
           onKeyDown={e => {
             if (e.key === 'Enter') {
               e.preventDefault();
-              console.log('Chip Enter 키 눌림:', e.currentTarget.value);
+              ignoreNextBlurRef.current = true;
               onConfirm?.(e, e.currentTarget.value);
             } else if (e.key === 'Escape') {
               e.preventDefault();

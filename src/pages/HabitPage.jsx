@@ -227,10 +227,11 @@ export default function HabitPageMain() {
 
       // 서버 응답으로 로컬 상태 업데이트 (서버가 최신 상태를 반환하는 경우)
       if (result && typeof result.isDone !== 'undefined') {
-        const serverUpdatedHabits = habits.map((h, i) =>
-          i === index ? { ...h, isDone: result.isDone } : h,
+        setHabits(prev =>
+          prev.map((h, i) =>
+            i === index ? { ...h, isDone: result.isDone } : h,
+          ),
         );
-        setHabits(serverUpdatedHabits);
       }
     } catch (error) {
       console.error('습관 상태 업데이트 실패:', error);

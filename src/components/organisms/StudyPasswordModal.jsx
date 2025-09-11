@@ -102,7 +102,7 @@ export default function StudyPasswordModal({
           }}
         />
         <p id="studyPasswordDesc" className={styles.subTitle}>
-          습관 관리를 위해 스터디 비밀번호를 입력해주세요.
+          권한이 필요해요!
         </p>
 
         {/* 모바일 폭 제어 wrapper */}

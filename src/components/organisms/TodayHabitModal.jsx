@@ -164,7 +164,7 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
           ),
         );
       }
-      await confirmEdit();
+      await confirmEdit(draft);
     }
 
     const cur = chips.find(c => c.id === id);
@@ -173,11 +173,12 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
   };
 
   // 편집 확정(Enter) - 백엔드 API 사용
-  const confirmEdit = async valueFromChip => {
+  const confirmEdit = async (valueFromChip, explicitDraft) => {
     console.log('confirmEdit 함수 호출됨:', {
       valueFromChip,
       editingId,
       draft,
+      explicitDraft,
     });
 
     // 이미 편집 중이면 중복 실행 방지
@@ -186,7 +187,7 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
       return;
     }
 
-    const value = (valueFromChip ?? draft ?? '').trim();
+    const value = (valueFromChip ?? explicitDraft ?? draft ?? '').trim();
     if (!value) {
       // 빈 값이면 원복
       setEditingId(null);
@@ -206,53 +207,37 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
     }
 
     const currentEditingId = targetChip.id;
-    console.log('편집할 칩 찾음:', { currentEditingId, value, targetChip });
+    const isNewChip =
+      targetChip?.isNew || String(targetChip?.id || '').startsWith('temp_');
+    console.log('편집할 칩 찾음:', {
+      currentEditingId,
+      value,
+      targetChip,
+      isNewChip,
+    });
     console.log('전체 chips 배열:', chips);
     console.log('첫 번째 칩의 구조:', chips[0]);
     console.log('targetChip의 모든 키:', Object.keys(targetChip || {}));
 
-    if (!currentEditingId) {
-      console.log('새로 추가된 칩이므로 로컬에서 새 습관으로 생성합니다:', {
-        targetChip,
-        value,
-      });
-
-      // 중복 습관 이름 체크
-      const existingChip = chips.find(
-        chip => chip.id && chip.label && chip.label.trim() === value.trim(),
+    if (isNewChip) {
+      const normalized = value.trim().toLowerCase();
+      const hasDup = chips.some(
+        c =>
+          c.id !== currentEditingId &&
+          (c.label || '').trim().toLowerCase() === normalized,
       );
-
-      if (existingChip) {
-        console.log('이미 존재하는 습관 이름입니다:', value);
+      if (hasDup) {
         alert('이미 존재하는 습관 이름입니다. 다른 이름을 사용해주세요.');
-        // 편집 모드 종료
-        setEditingId(null);
-        setDraft('');
         return;
       }
-
-      // 로컬에서 새 습관 생성 (임시 ID 사용)
-      const tempId = `temp_${Date.now()}_${Math.random()}`;
-      const newChip = {
-        id: tempId,
-        label: value,
-        isDone: false,
-        isNew: true, // 새로 생성된 습관임을 표시
-      };
-
-      setChips(prevChips => {
-        // 기존 임시 칩들(id가 없는 칩들) 제거 후 새 칩 추가
-        const validChips = prevChips.filter(chip => chip.id);
-        const updatedChips = [...validChips, newChip];
-        return updatedChips;
-      });
-
-      // 새로 생성된 칩을 바로 편집 모드로 설정 (다음 렌더링 사이클에서)
-      setTimeout(() => {
-        setEditingId(newChip.id);
-        setDraft(value); // 사용자가 입력한 원래 값 사용
-      }, 0);
-
+      // 신규 칩은 현재 칩의 label만 갱신하고 isNew 유지
+      setChips(prev =>
+        prev.map(c =>
+          c.id === currentEditingId ? { ...c, label: value, isNew: true } : c,
+        ),
+      );
+      setEditingId(null);
+      setDraft('');
       return;
     }
 

@@ -78,9 +78,13 @@ export default function StudyDetailPage() {
     const habitRows = [];
     const mondayBasedDay = (new Date().getDay() + 6) % 7;
 
-    // 오늘 날짜 문자열 생성 (YYYY-MM-DD 형식)
-    const today = new Date();
-    const todayString = today.toISOString().split('T')[0];
+    // 오늘 날짜 문자열 생성 (YYYY-MM-DD 형식) - 로컬 시간 기준
+    const now = new Date();
+    const todayString = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, '0'),
+      String(now.getDate()).padStart(2, '0'),
+    ].join('-');
 
     // currentHabits를 사용하는 경우 (API에서 가져온 최신 데이터)
     if (currentHabits.length > 0) {

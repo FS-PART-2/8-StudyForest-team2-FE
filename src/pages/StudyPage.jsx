@@ -83,10 +83,29 @@ export function StudyPage() {
         {recentStudies.length > 0 ? (
           <div className={styles.studyList}>
             {recentStudies.map(study => {
+              // study.img 값을 올바른 프리셋 키로 매핑
+              const mapToPresetKey = (imgValue) => {
+                if (!imgValue) return 'img-01'; // 기본값
+                
+                // 백엔드에서 오는 경로를 프리셋 키로 매핑
+                const pathToKeyMapping = {
+                  '/assets/images/card-bg-color-01.svg': 'img-01',
+                  '/assets/images/card-bg-color-02.svg': 'img-02',
+                  '/assets/images/card-bg-color-03.svg': 'img-03',
+                  '/assets/images/card-bg-color-04.svg': 'img-04',
+                  '/assets/images/card-bg-01.svg': 'img-05',
+                  '/assets/images/card-bg-02.svg': 'img-06',
+                  '/assets/images/card-bg-03.svg': 'img-07',
+                  '/assets/images/card-bg-04.svg': 'img-08',
+                };
+                
+                return pathToKeyMapping[imgValue] || 'img-01';
+              };
+              
               return (
                 <Card
                   key={study.id}
-                  preset={study.img}
+                  preset={mapToPresetKey(study.img)}
                   nick={study.nick}
                   title={study.name}
                   points={study.point || 0}
@@ -123,10 +142,29 @@ export function StudyPage() {
         {studyList.length > 0 ? (
           <div className={styles.studyList}>
             {studyList.map(study => {
+              // study.img 값을 올바른 프리셋 키로 매핑
+              const mapToPresetKey = (imgValue) => {
+                if (!imgValue) return 'img-01'; // 기본값
+                
+                // 백엔드에서 오는 경로를 프리셋 키로 매핑
+                const pathToKeyMapping = {
+                  '/assets/images/card-bg-color-01.svg': 'img-01',
+                  '/assets/images/card-bg-color-02.svg': 'img-02',
+                  '/assets/images/card-bg-color-03.svg': 'img-03',
+                  '/assets/images/card-bg-color-04.svg': 'img-04',
+                  '/assets/images/card-bg-01.svg': 'img-05',
+                  '/assets/images/card-bg-02.svg': 'img-06',
+                  '/assets/images/card-bg-03.svg': 'img-07',
+                  '/assets/images/card-bg-04.svg': 'img-08',
+                };
+                
+                return pathToKeyMapping[imgValue] || 'img-01';
+              };
+              
               return (
                 <Card
                   key={study.id}
-                  preset={study.img}
+                  preset={mapToPresetKey(study.img)}
                   id={study.id}
                   nick={study.nick}
                   title={study.name}
