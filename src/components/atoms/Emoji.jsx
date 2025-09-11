@@ -9,13 +9,14 @@ import styles from '../../styles/components/atoms/Emoji.module.css';
  * @returns {JSX.Element}
  */
 export default function Emoji({
+  id,
   size = 'lg',
   emoji,
   count,
   onClick = () => {},
 }) {
   const handleClick = () => {
-    onClick(emoji);
+    onClick({ id, emoji, count });
   };
 
   return (

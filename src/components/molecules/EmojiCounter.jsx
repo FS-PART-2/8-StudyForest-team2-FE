@@ -12,7 +12,11 @@ import Emoji from '../atoms/Emoji';
  * @param {number} props.emojiData[].id
  * @returns {JSX.Element}
  */
-export default function EmojiCounter({ emojiData = [] }) {
+export default function EmojiCounter({
+  emojiData = [],
+  increaseEmojiCount,
+  decreaseEmojiCount,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [isRestOpen, setIsRestOpen] = useState(false);
   const [selectedEmojis, setSelectedEmojis] = useState(emojiData);
@@ -21,6 +25,7 @@ export default function EmojiCounter({ emojiData = [] }) {
 
   // prop 변경 시 내부 state 동기화
   useEffect(() => {
+    console.log(emojiData);
     setSelectedEmojis(Array.isArray(emojiData) ? emojiData : []);
   }, [emojiData]);
 
@@ -50,8 +55,9 @@ export default function EmojiCounter({ emojiData = [] }) {
         );
       } else {
         // 새로운 이모지인 경우 배열에 추가 (새 ID 생성)
-        const newId = Math.max(...prev.map(item => item.id || 0)) + 1;
-        return [...prev, { id: newId, emoji: event.emoji, count: 1 }];
+        // const newId = Math.max(...prev.map(item => item.id || 0)) + 1;
+        increaseEmojiCount({ id: event.unified, emoji: event.emoji, count: 1 });
+        return [...prev, { id: event.unified, emoji: event.emoji, count: 1 }];
       }
     });
     setIsOpen(false);
@@ -62,13 +68,14 @@ export default function EmojiCounter({ emojiData = [] }) {
     setSelectedEmojis(prev => {
       return prev
         .map(item => {
-          if (item.emoji === clickedEmoji && item.count > 0) {
+          if (item.emoji === clickedEmoji.emoji && item.count > 0) {
             return { ...item, count: item.count - 1 };
           }
           return item;
         })
         .filter(item => item.count > 0); // 카운트가 0이 된 이모지는 제거
     });
+    decreaseEmojiCount(clickedEmoji);
   };
 
   // 이모지 추가 버튼 클릭 시 이모지 팝업 토글
@@ -84,12 +91,13 @@ export default function EmojiCounter({ emojiData = [] }) {
   return (
     <div className={styles.emojiWrapper}>
       <div className={styles.emojiContainer}>
-        {topEmojis.map(({ id, emoji, count }) => (
+        {topEmojis.map(emojiData => (
           <Emoji
-            key={id}
+            key={emojiData.id}
+            id={emojiData.id}
             size="lg"
-            emoji={emoji}
-            count={count}
+            emoji={emojiData.emoji}
+            count={emojiData.count}
             onClick={handleEmojiDecrease}
           />
         ))}
@@ -107,12 +115,13 @@ export default function EmojiCounter({ emojiData = [] }) {
             {restEmojis.length > 0 && isRestOpen && (
               <div className={styles.restEmojiContainer}>
                 <div className={styles.restPopup}>
-                  {restEmojis.map(({ id, emoji, count }) => (
+                  {restEmojis.map(emojiData => (
                     <Emoji
-                      key={id}
+                      key={emojiData.id}
+                      id={emojiData.id}
                       size="sm"
-                      emoji={emoji}
-                      count={count}
+                      emoji={emojiData.emoji}
+                      count={emojiData.count}
                       onClick={handleEmojiDecrease}
                     />
                   ))}
@@ -138,6 +147,7 @@ export default function EmojiCounter({ emojiData = [] }) {
               onEmojiClick={handleEmojiClick}
               style={{
                 position: 'absolute',
+                zIndex: 1000,
               }}
             />
           )}

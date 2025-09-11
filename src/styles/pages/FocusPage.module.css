@@ -1,7 +1,7 @@
 /* FocusPage 스타일 */
 .focusPage {
   max-width: 1248px;
-  margin: 5rem auto;
+  margin: 0 auto;
   padding: 4rem;
   position: relative;
   background-color: var(--background-secondary);

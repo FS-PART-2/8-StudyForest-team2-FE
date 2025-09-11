@@ -68,12 +68,6 @@ export default function FocusPage() {
 
   // 비밀번호 검증 핸들러
   const handlePasswordVerify = async password => {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('FocusPage: 비밀번호 검증 시작', {
-        id,
-        password: password ? '***' : 'empty',
-      });
-    }
     try {
       const controller = new AbortController();
       verifyAbortRef.current = controller;
@@ -81,9 +75,6 @@ export default function FocusPage() {
         timeout: 10000,
         signal: controller.signal,
       });
-      if (process.env.NODE_ENV !== 'production') {
-        console.log('FocusPage: 비밀번호 검증 결과', { isValid });
-      }
       if (isValid) {
         setIsPasswordModalOpen(false);
         // 비밀번호 검증 성공 시 HabitPage로 이동 (보안상 비밀번호는 전달하지 않음)
@@ -175,7 +166,6 @@ export default function FocusPage() {
       handleMinutesBlur();
     } else if (e.key === 'ArrowRight') {
       e.preventDefault();
-      // secondsInputRef.current?.focus();
       secondsInputRef.current?.select();
     }
   };
@@ -186,7 +176,6 @@ export default function FocusPage() {
       handleSecondsBlur();
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault();
-      // minutesInputRef.current?.focus();
       minutesInputRef.current?.select();
     }
   };
@@ -205,13 +194,9 @@ export default function FocusPage() {
     <main className={styles.focusPage}>
       <div className={styles.container}>
         <div className={styles.focusHeader}>
-          <DynamicStudyTitle
-            nickname={focusData.nick}
-            studyName={focusData.name}
-            backgroundImage={focusData.img}
-            className={styles.studyTitle}
-            tag="h1"
-          />
+          <h1 className={styles.title}>
+            {focusData.nick} {focusData.name}
+          </h1>
           <div className={styles.nav}>
             <NavigationButton
               onClick={handleHabitClick}
