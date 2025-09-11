@@ -3,8 +3,7 @@
 .page {
   display: grid;
   place-items: center center;
-  padding: 2.4rem;
-  min-height: 100vh;
+  padding: 0 2.4rem;
   background: var(--background-primary);
   min-width: 35rem; /* 350px 이하 프리즈 */
 }
@@ -16,7 +15,6 @@
   border-radius: 1.2rem;
   box-shadow: 0 0.4rem 2.4rem rgba(0, 0, 0, 0.08);
   padding: 4rem 3.2rem 3.2rem;
-  margin: 2.4rem 0;
 }
 
 /* 헤더 섹션 */
@@ -49,12 +47,8 @@
 
 /* 섹션 공통 */
 .section {
-  padding-bottom: 1.6rem;
-  margin-bottom: 1.2rem;
-}
-
-.section > * + * {
-  margin-top: 1.2rem;
+  padding-bottom: 0.8rem;
+  margin-bottom: 0.8rem;
 }
 
 /* 라벨 */
@@ -66,15 +60,6 @@
   margin-bottom: 1.2rem;
 }
 
-/* 인풋 통일 규칙 */
-.section :global(input),
-.section :global(textarea),
-.section :global(.wrap) {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* CTA 버튼 영역 */
 .cta {
   margin: 3.2rem 0 2.4rem;
   display: flex;
@@ -92,12 +77,6 @@
   transition: all 200ms ease;
   border-radius: 1rem;
   background: linear-gradient(135deg, var(--brand-blue) 0%, #4338ca 100%);
-}
-
-.submitButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--btn-active) 0%, #3730a3 100%);
-  transform: translateY(-0.2rem);
-  box-shadow: 0 0.8rem 2rem rgba(0, 19, 167, 0.2);
 }
 
 .submitButton:disabled {
@@ -195,13 +174,11 @@
 /* 태블릿 반응형 */
 @media (max-width: 1024px) {
   .page {
-    padding: 2rem;
+    padding: 0 2rem;
   }
 
   .card {
-    max-width: 100%;
     padding: 3.2rem 2.4rem;
-    margin: 1.6rem 0;
     border-radius: 1rem;
   }
 
@@ -240,10 +217,6 @@
 
 /* 모바일 반응형 */
 @media (max-width: 743px) {
-  .page {
-    padding: 1.6rem;
-  }
-
   .card {
     padding: 2.4rem 2rem;
     border-radius: 0.8rem;
@@ -346,12 +319,4 @@
   .label {
     color: #fff;
   }
-}
-
-/* 포커스 스타일 강화 */
-.section :global(input:focus),
-.section :global(textarea:focus) {
-  border-color: var(--brand-blue);
-  box-shadow: 0 0 0 0.3rem rgba(0, 19, 167, 0.1);
-  outline: none;
 }

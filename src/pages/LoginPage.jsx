@@ -8,13 +8,20 @@ import PasswordInput from '../components/molecules/PasswordInput.jsx';
 import { loginSchema } from '../utils/validation/loginSchema.js';
 import styles from '../styles/pages/LoginPage.module.css';
 import { useAuthStore } from '../store/authStore.js';
+import { useEffect } from 'react';
 
 /**
  * 로그인 페이지
  */
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login } = useAuthStore();
+  const { login, user } = useAuthStore();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   // 폼 상태 관리
   const {
@@ -23,7 +30,7 @@ export default function LoginPage() {
     formState: { errors, isSubmitting, isValid },
   } = useForm({
     resolver: zodResolver(loginSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
     defaultValues: {
       email: '',
       password: '',
@@ -56,9 +63,7 @@ export default function LoginPage() {
         {/* 헤더 */}
         <div className={styles.header}>
           <h1 className={styles.title}>로그인</h1>
-          <p className={styles.subtitle}>
-            MindMeld에 다시 오신 것을 환영합니다
-          </p>
+          <p className={styles.subtitle}>MindMeld에 오신 것을 환영합니다</p>
         </div>
 
         {/* 이메일 */}

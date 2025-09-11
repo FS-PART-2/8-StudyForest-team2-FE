@@ -16,7 +16,6 @@
   border-radius: 1.2rem;
   box-shadow: 0 0.4rem 2.4rem rgba(0, 0, 0, 0.08);
   padding: 3.2rem 2.4rem 2.4rem;
-  margin: 2.4rem 0;
 }
 
 /* 헤더 섹션 */
@@ -62,15 +61,6 @@
   margin-bottom: 1.2rem;
 }
 
-/* 인풋 통일 규칙 */
-.section :global(input),
-.section :global(textarea),
-.section :global(.wrap) {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* CTA 버튼 영역 */
 .cta {
   margin: 2.4rem 0 1.6rem;
   display: flex;
@@ -87,12 +77,6 @@
   font-size: 1.8rem;
   font-weight: 600;
   transition: all 120ms ease;
-}
-
-.submitButton:hover:not(:disabled) {
-  background: var(--btn-active);
-  transform: translateY(-0.1rem);
-  box-shadow: 0 0.6rem 1.2rem rgba(0, 19, 167, 0.15);
 }
 
 /* 로그인 링크 */
