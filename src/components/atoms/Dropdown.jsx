@@ -1,16 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from '../../styles/components/atoms/Dropdown.module.css';
 
-const Dropdown = ({ onChange, value = 'recent' }) => {
+const Dropdown = ({ onChange, value = 'recent', options = [] }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-
-  const options = [
-    { value: 'recent', label: '최근순' },
-    { value: 'old', label: '오래된 순' },
-    { value: 'desc', label: '많은 포인트 순' },
-    { value: 'asc', label: '적은 포인트 순' },
-  ];
 
   const selectedOption =
     options.find(option => option.value === value) || options[0];

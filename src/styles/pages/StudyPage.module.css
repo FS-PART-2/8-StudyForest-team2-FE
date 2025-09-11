@@ -42,7 +42,6 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2.4rem;
-  min-height: 51rem;
   align-items: flex-start;
 }
 
@@ -50,6 +49,10 @@
   font-size: 2.4rem;
   font-weight: 700;
   margin-bottom: 2.5rem;
+}
+
+.studyPageWrapper:nth-of-type(1) .studyPageTitle:nth-of-type(1) {
+  margin-bottom: 0;
 }
 
 .studyListEmpty {
@@ -72,10 +75,35 @@
     grid-template-columns: repeat(2, 1fr);
     justify-items: center;
   }
+
+  .studyPageContainer {
+    max-width: calc(120rem + 5rem);
+    padding: 0 2.5rem;
+  }
 }
 
 @media (max-width: 820px) {
   .studyList {
     grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media (max-width: 743px) {
+  .studyPageContainer {
+    padding: 0 1.6rem;
+  }
+
+  .studyPageWrapper {
+    padding: 2rem 1.6rem;
+  }
+
+  .studyPageTitle {
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: -1px;
+  }
+
+  .studyListFilter {
+    flex-direction: column;
   }
 }
