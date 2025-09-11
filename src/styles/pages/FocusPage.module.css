@@ -29,6 +29,16 @@
   margin: 0;
 }
 
+.studyTitle {
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: var(--text-primary, #222);
+  margin: 0;
+  line-height: 1.2;
+  display: flex;
+  align-items: baseline;
+}
+
 .nav {
   display: flex;
   gap: 1rem;

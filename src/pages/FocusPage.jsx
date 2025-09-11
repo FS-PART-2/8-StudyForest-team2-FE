@@ -3,16 +3,22 @@ import Button from '../components/atoms/Button';
 import Toast from '../components/atoms/Toast';
 import useTimer from '../hooks/useTimer';
 import NavigationButton from '../components/atoms/NavigationButton';
+import DynamicStudyTitle from '../components/atoms/DynamicStudyTitle';
+import StudyPasswordModal from '../components/organisms/StudyPasswordModal';
+import StudyPoints from '../components/molecules/StudyPoints';
 import styles from '../styles/pages/FocusPage.module.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { studyApi } from '../utils/api/study/getStudyApi';
 import { patchFocusTimeApi } from '../utils/api/focus/patchFocusTimeApi';
+import { verifyStudyPassword } from '../utils/api/study/studyPasswordApi';
 
 const initialMinutes = 30;
 
 export default function FocusPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [focusData, setFocusData] = useState({});
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const timer = useTimer(initialMinutes);
 
   useEffect(() => {
@@ -50,6 +56,40 @@ export default function FocusPage() {
 
   const minutesInputRef = useRef(null);
   const secondsInputRef = useRef(null);
+
+  // 오늘의 습관 버튼 클릭 핸들러
+  const handleHabitClick = () => {
+    setIsPasswordModalOpen(true);
+  };
+
+  // 비밀번호 검증 핸들러
+  const handlePasswordVerify = async password => {
+    console.log('FocusPage: 비밀번호 검증 시작', {
+      id,
+      password: password ? '***' : 'empty',
+    });
+    try {
+      const isValid = await verifyStudyPassword(id, password, {
+        timeout: 10000,
+      });
+      console.log('FocusPage: 비밀번호 검증 결과', { isValid });
+      if (isValid) {
+        setIsPasswordModalOpen(false);
+        // 비밀번호 검증 성공 시 HabitPage로 이동 (보안상 비밀번호는 전달하지 않음)
+        navigate(`/habit/${id}`, {
+          state: {
+            studyData: focusData,
+          },
+        });
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('FocusPage: 비밀번호 검증 실패:', error);
+      // 네트워크 오류는 예외를 다시 throw하여 모달에서 처리하도록 함
+      throw error;
+    }
+  };
 
   // 시작 버튼 클릭
   const handleStart = () => {
@@ -152,22 +192,22 @@ export default function FocusPage() {
     <main className={styles.focusPage}>
       <div className={styles.container}>
         <div className={styles.focusHeader}>
-          <h1 className={styles.title}>
-            {focusData.nick} {focusData.name}
-          </h1>
+          <DynamicStudyTitle
+            nickname={focusData.nick}
+            studyName={focusData.name}
+            backgroundImage={focusData.img}
+            className={styles.studyTitle}
+            tag="h1"
+          />
           <div className={styles.nav}>
-            <NavigationButton to={`/habit/${id}`}>오늘의 습관</NavigationButton>
+            <NavigationButton onClick={handleHabitClick}>
+              오늘의 습관
+            </NavigationButton>
             <NavigationButton to="/">홈</NavigationButton>
           </div>
         </div>
 
-        <div className={styles.pointContainer}>
-          <p className={styles.focusContentTitle}>현재까지 획득한 포인트</p>
-          <div className={styles.pointBadge}>
-            <span className={styles.pointIcon}>🌿</span>
-            <span className={styles.pointText}>{focusData.point}P 획득</span>
-          </div>
-        </div>
+        <StudyPoints points={focusData.point} />
 
         <div className={styles.timerContainer}>
           <h2 className={styles.timerTitle}>오늘의 집중</h2>
@@ -279,6 +319,17 @@ export default function FocusPage() {
           />
         </div>
       )}
+
+      {/* 비밀번호 입력 모달 */}
+      <StudyPasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+        onVerify={handlePasswordVerify}
+        mode="habit"
+        nickname={focusData.nick}
+        studyName={focusData.name}
+        backgroundImage={focusData.img}
+      />
     </main>
   );
 }

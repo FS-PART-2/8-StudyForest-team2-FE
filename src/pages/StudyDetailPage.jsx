@@ -35,8 +35,15 @@ const getStudyBackground = studyData =>
   getStudyField(studyData, 'background') ||
   getStudyField(studyData, 'backgroundImage', '');
 
-const getStudyPoints = studyData =>
-  studyData?.pointsSum || studyData?._count?.points || studyData?.points || 0;
+const getStudyPoints = studyData => {
+  const result =
+    studyData?.point ??
+    studyData?.points ??
+    studyData?.pointsSum ??
+    studyData?._count?.points ??
+    0;
+  return typeof result === 'number' ? result : Number(result) || 0;
+};
 
 export default function StudyDetailPage() {
   const { id } = useParams();
@@ -172,14 +179,20 @@ export default function StudyDetailPage() {
 
   // 비밀번호 검증 핸들러
   const handlePasswordVerify = async password => {
+    console.log('StudyDetailPage: 비밀번호 검증 시작', {
+      id,
+      password: password ? '***' : 'empty',
+    });
     try {
-      const isValid = await verifyStudyPassword(id, password);
+      const isValid = await verifyStudyPassword(id, password, {
+        timeout: 10000,
+      });
+      console.log('StudyDetailPage: 비밀번호 검증 결과', { isValid });
       if (isValid) {
         setIsPasswordModalOpen(false);
-        // 비밀번호 검증 성공 시 HabitPage로 이동 (비밀번호를 state로 전달)
+        // 비밀번호 검증 성공 시 HabitPage로 이동 (보안상 비밀번호는 전달하지 않음)
         navigate(`/habit/${id}`, {
           state: {
-            verifiedPassword: password,
             studyData: studyData,
           },
         });
@@ -187,7 +200,7 @@ export default function StudyDetailPage() {
       }
       return false;
     } catch (error) {
-      console.error('비밀번호 검증 실패:', error);
+      console.error('StudyDetailPage: 비밀번호 검증 실패:', error);
       // 네트워크 오류는 예외를 다시 throw하여 모달에서 처리하도록 함
       throw error;
     }

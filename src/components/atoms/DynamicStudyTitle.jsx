@@ -73,7 +73,6 @@ export default function DynamicStudyTitle({
               style={{
                 color: 'var(--black-black_414141, #414141)',
                 display: 'inline-block',
-                marginLeft: '0.5rem',
                 marginRight: '0.5rem',
               }}
             >

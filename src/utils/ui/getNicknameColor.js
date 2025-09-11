@@ -9,6 +9,23 @@ export function getNicknameColor(backgroundImage) {
     return 'var(--brand-blue, #0013A7)';
   }
 
+  // CSS 변수 형태 처리 (우선순위 높음)
+  if (backgroundImage.includes('--card-mintblue')) {
+    return 'var(--text-mint, #418099)'; // Mint Blue
+  }
+  if (backgroundImage.includes('--card-green')) {
+    return 'var(--text-forest, #2F5233)'; // Green
+  }
+  if (backgroundImage.includes('--card-forest')) {
+    return 'var(--text-forest, #2F5233)'; // Forest
+  }
+  if (backgroundImage.includes('--card-ocean')) {
+    return 'var(--text-ocean, #1A365D)'; // Ocean
+  }
+  if (backgroundImage.includes('--card-blue')) {
+    return 'var(--brand-blue, #0013A7)'; // Blue
+  }
+
   // 백엔드 실제 저장 형식에 맞게 매핑
   if (
     backgroundImage.includes('/img/img-01') ||
@@ -74,6 +91,23 @@ export function getNicknameColor(backgroundImage) {
 export function getNicknameColorClass(backgroundImage) {
   if (!backgroundImage) {
     return 'nickname-blue';
+  }
+
+  // CSS 변수 형태 처리 (우선순위 높음)
+  if (backgroundImage.includes('--card-mintblue')) {
+    return 'nickname-mint'; // Mint Blue
+  }
+  if (backgroundImage.includes('--card-green')) {
+    return 'nickname-forest'; // Green
+  }
+  if (backgroundImage.includes('--card-forest')) {
+    return 'nickname-forest'; // Forest
+  }
+  if (backgroundImage.includes('--card-ocean')) {
+    return 'nickname-ocean'; // Ocean
+  }
+  if (backgroundImage.includes('--card-blue')) {
+    return 'nickname-blue'; // Blue
   }
 
   // 백엔드 실제 저장 형식에 맞게 매핑

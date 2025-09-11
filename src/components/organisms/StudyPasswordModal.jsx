@@ -32,15 +32,25 @@ export default function StudyPasswordModal({
     }
   }, [isOpen]);
 
-  // Esc로 닫기 (접근성)
+  // Esc로 닫기 비활성화 (나가기 버튼으로만 닫기)
+  // useEffect(() => {
+  //   if (!isOpen) return;
+  //   const onKeyDown = e => {
+  //     if (e.key === 'Escape') onClose?.();
+  //   };
+  //   window.addEventListener('keydown', onKeyDown);
+  //   return () => window.removeEventListener('keydown', onKeyDown);
+  // }, [isOpen, onClose]);
+
+  // 모달 열릴 때 body 스크롤 락
   useEffect(() => {
     if (!isOpen) return;
-    const onKeyDown = e => {
-      if (e.key === 'Escape') onClose?.();
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
     };
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -77,16 +87,16 @@ export default function StudyPasswordModal({
   };
 
   return createPortal(
-    <div className={styles.modalBackdrop} onClick={onClose}>
+    <div className={styles.modalBackdrop}>
       <div
         className={styles.modal}
-        onClick={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="studyPasswordTitle"
         aria-describedby="studyPasswordDesc"
       >
         <DynamicStudyTitle
+          id="studyPasswordTitle"
           nickname={nickname}
           studyName={studyName}
           backgroundImage={backgroundImage}
@@ -114,6 +124,7 @@ export default function StudyPasswordModal({
               onSubmit={handleSubmit}
               placeholder="비밀번호를 입력해 주세요"
               disabled={submitting}
+              autoFocus
             />
 
             <div className={styles.actions}>
@@ -135,7 +146,7 @@ export default function StudyPasswordModal({
           </form>
 
           {/* PC: 우상단 absolute / 모바일: 버튼 아래 중앙 (CSS에서 분기) */}
-          <button className={styles.exit} onClick={onClose}>
+          <button type="button" className={styles.exit} onClick={onClose}>
             나가기
           </button>
         </div>
