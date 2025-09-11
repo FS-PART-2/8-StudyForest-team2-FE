@@ -48,7 +48,7 @@
 
   .frame {
     width: 100%; /* 모바일: 페이지 너비에 맞춤 */
-    max-width: 31.2rem; /* 최대 너비 제한 */
+    max-width: 35.2rem; /* 최대 너비 제한 */
     min-width: 0; /* base의 min-width:35rem 무력화 */
     overflow-x: auto; /* 모바일에서 가로 스크롤 활성화 */
     padding: 2.4rem 1.5rem 2.4rem 1.6rem; /* 모바일: 위 2.4rem, 우 1.5rem, 아래 2.4rem, 좌 1.6rem */

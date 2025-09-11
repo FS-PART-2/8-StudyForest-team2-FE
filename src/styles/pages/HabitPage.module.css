@@ -10,6 +10,9 @@
   margin: 0 auto;
   box-sizing: border-box;
   gap: 1.2rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* 제목 + 네비게이션 버튼 (같은 row) */
@@ -39,6 +42,11 @@
 .todayButtons {
   display: flex;
   gap: 1.2rem;
+}
+
+/* PC에서 홈 버튼 글씨 크기 */
+.todayButtons a[href='/'] {
+  font-size: 1.6rem;
 }
 
 /* 현재 시간 섹션 */
@@ -398,13 +406,17 @@
   }
 
   .cardHeader {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.4rem;
+    position: relative;
   }
 
   .cardHeader h2 {
-    /* 모바일에서도 전체 너비 사용 */
-    width: auto;
+    margin: 0;
+    flex: 1;
+    text-align: center;
   }
 
   /* 네비게이션 버튼 - 왼쪽 정렬 */
@@ -415,6 +427,34 @@
     justify-content: flex-start;
   }
 
+  /* 모바일에서 네비게이션 버튼 텍스트 줄이기 */
+  .todayButtons a[href*='/focus/']::before {
+    content: '집중';
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-right: 0.4rem;
+  }
+
+  .todayButtons a[href*='/focus/'] {
+    font-size: 0;
+  }
+
+  .todayButtons a[href*='/study/']::before {
+    content: '스터디';
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-right: 0.4rem;
+  }
+
+  .todayButtons a[href*='/study/'] {
+    font-size: 0;
+  }
+
+  /* 홈 버튼 글씨 크기 조정 */
+  .todayButtons a[href='/'] {
+    font-size: 1.4rem;
+  }
+
   .mainCard {
     padding: 2rem 1.6rem;
     width: 31.2rem;
@@ -422,7 +462,7 @@
   }
 
   .cardHeader {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     margin-bottom: 3.9rem;
   }
 
