@@ -5,6 +5,7 @@ import { useRecentStudyStore } from '../store/recentStudyStore';
 import { studyApi } from '../utils/api/study/getStudyApi';
 import { emojiApi } from '../utils/api/emoji/emojiApi';
 import { verifyStudyPassword } from '../utils/api/study/studyPasswordApi';
+import { getHabitsApi } from '../utils/api/habit/habitApi';
 import DynamicStudyTitle from '../components/atoms/DynamicStudyTitle';
 import EmojiCounter from '../components/molecules/EmojiCounter';
 import StudyActions from '../components/organisms/StudyActions';
@@ -14,6 +15,29 @@ import HabitRecordTable from '../components/organisms/HabitRecordTable';
 import NavigationButton from '../components/atoms/NavigationButton';
 import StudyPasswordModal from '../components/organisms/StudyPasswordModal';
 
+// 헬퍼 함수들 (컴포넌트 외부)
+const getStudyField = (studyData, field, fallback = '') => {
+  return studyData?.[field] || fallback;
+};
+
+const getStudyName = studyData =>
+  getStudyField(studyData, 'name') || getStudyField(studyData, 'title', '');
+
+const getStudyNickname = studyData =>
+  getStudyField(studyData, 'nick') || getStudyField(studyData, 'nickname', '');
+
+const getStudyDescription = studyData =>
+  getStudyField(studyData, 'content') ||
+  getStudyField(studyData, 'description', '');
+
+const getStudyBackground = studyData =>
+  getStudyField(studyData, 'img') ||
+  getStudyField(studyData, 'background') ||
+  getStudyField(studyData, 'backgroundImage', '');
+
+const getStudyPoints = studyData =>
+  studyData?.pointsSum || studyData?._count?.points || studyData?.points || 0;
+
 export default function StudyDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -21,7 +45,82 @@ export default function StudyDetailPage() {
   const [studyData, setStudyData] = useState(null);
   const [emojiData, setEmojiData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [currentHabits, setCurrentHabits] = useState([]); // 현재 활성 습관들
+
+  // 최신 습관 데이터 가져오기
+  const fetchCurrentHabits = useCallback(async () => {
+    if (!id) return;
+
+    try {
+      console.log('최신 습관 데이터를 가져옵니다...');
+      const habitsData = await getHabitsApi(id);
+      console.log('최신 습관 데이터:', habitsData);
+      setCurrentHabits(habitsData || []);
+    } catch (error) {
+      console.error('습관 데이터 로드 실패:', error);
+      // API 실패 시 기존 studyData의 습관 사용
+      setCurrentHabits([]);
+    }
+  }, [id]);
+
+  // 습관 데이터를 HabitRecordTable 형식으로 변환 (현재 활성 습관만)
+  const getHabitRows = useCallback(() => {
+    // 현재 활성 습관이 있으면 그것을 사용, 없으면 기존 studyData 사용
+    const habitsToUse =
+      currentHabits.length > 0
+        ? currentHabits
+        : studyData?.habitHistories || [];
+
+    if (!habitsToUse || habitsToUse.length === 0) return [];
+
+    const habitRows = [];
+    const mondayBasedDay = (new Date().getDay() + 6) % 7;
+
+    // 오늘 날짜 문자열 생성 (YYYY-MM-DD 형식)
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0];
+
+    // currentHabits를 사용하는 경우 (API에서 가져온 최신 데이터)
+    if (currentHabits.length > 0) {
+      currentHabits.forEach(habit => {
+        const checks = Array(7).fill(false);
+        checks[mondayBasedDay] = !!habit?.isDone;
+
+        habitRows.push({
+          id: habit?.habitId || habit?.id,
+          name: habit?.title || habit?.habit || '습관',
+          checks: checks,
+          isDone: habit?.isDone,
+          date: todayString,
+          habitHistoryId: habit?.habitHistoryId,
+        });
+      });
+    } else {
+      // 기존 studyData 사용 (fallback)
+      studyData.habitHistories.forEach(history => {
+        if (history?.date === todayString) {
+          history?.habits?.forEach(habit => {
+            const checks = Array(7).fill(false);
+            checks[mondayBasedDay] = !!habit?.isDone;
+
+            habitRows.push({
+              id: habit?.id,
+              name: habit?.habit || '습관',
+              checks: checks,
+              isDone: habit?.isDone,
+              date: habit?.date,
+              habitHistoryId: habit?.habitHistoryId,
+            });
+          });
+        }
+      });
+    }
+
+    console.log('현재 활성 습관들:', habitRows);
+    return habitRows;
+  }, [currentHabits, studyData?.habitHistories]);
 
   // 이모지 데이터 가져오기 함수 (API 우선, 실패 시 스터디 데이터 사용)
   const fetchEmojiData = useCallback(async () => {
@@ -85,33 +184,34 @@ export default function StudyDetailPage() {
 
   useEffect(() => {
     const fetchStudyData = async () => {
+      if (!id) return;
+
       try {
         setLoading(true);
+        setError(null);
         const data = await studyApi.getStudyDetailApi(id);
         setStudyData(data);
         addRecentStudy(data);
       } catch (error) {
-        // 404 에러인 경우 조용히 처리 (스터디가 존재하지 않음)
+        console.error('스터디 데이터 로딩 실패:', error);
+
+        // 에러 타입별 처리
         if (error.response?.status === 404) {
-          console.log('스터디를 찾을 수 없습니다.');
-          setStudyData(null);
+          setError('스터디를 찾을 수 없습니다.');
+        } else if (error.code === 'ECONNABORTED') {
+          setError('요청 시간이 초과되었습니다. 잠시 후 다시 시도해주세요.');
+        } else if (error.response?.status >= 500) {
+          setError('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
         } else {
-          console.error('스터디 데이터 로딩 실패:', error);
-          // 타임아웃 에러인 경우 사용자에게 알림
-          if (error.code === 'ECONNABORTED') {
-            console.error(
-              '요청 시간이 초과되었습니다. 잠시 후 다시 시도해주세요.',
-            );
-          }
+          setError('스터디 정보를 불러오는데 실패했습니다.');
         }
+        setStudyData(null);
       } finally {
         setLoading(false);
       }
     };
 
-    if (id) {
-      fetchStudyData();
-    }
+    fetchStudyData();
   }, [id, addRecentStudy]);
 
   // 이모지 데이터 로드 (스터디 데이터 로드 후)
@@ -121,6 +221,13 @@ export default function StudyDetailPage() {
     }
   }, [id, studyData, fetchEmojiData]);
 
+  // 최신 습관 데이터 로드 (스터디 데이터 로드 후)
+  useEffect(() => {
+    if (id && studyData) {
+      fetchCurrentHabits();
+    }
+  }, [id, studyData, fetchCurrentHabits]);
+
   if (loading) {
     return (
       <div className={styles.page}>
@@ -129,11 +236,11 @@ export default function StudyDetailPage() {
     );
   }
 
-  if (!studyData) {
+  if (!studyData && !loading) {
     return (
       <div className={styles.page}>
         <div className={styles.error}>
-          <h2>스터디를 찾을 수 없습니다</h2>
+          <h2>{error || '스터디를 찾을 수 없습니다'}</h2>
           <p>요청하신 스터디 ID({id})가 존재하지 않습니다.</p>
           <p>스터디 목록에서 다른 스터디를 선택해주세요.</p>
           <div style={{ marginTop: '1rem' }}>
@@ -166,14 +273,9 @@ export default function StudyDetailPage() {
         <div className={styles.actionsSection}>
           <StudyActions
             studyId={id}
-            title={studyData?.name || studyData?.title || ''}
-            nickname={studyData?.nick || studyData?.nickname || ''}
-            backgroundImage={
-              studyData?.img ||
-              studyData?.background ||
-              studyData?.backgroundImage ||
-              ''
-            }
+            title={getStudyName(studyData)}
+            nickname={getStudyNickname(studyData)}
+            backgroundImage={getStudyBackground(studyData)}
           />
         </div>
       </div>
@@ -182,14 +284,9 @@ export default function StudyDetailPage() {
       <div className={styles.titleRow}>
         <div className={styles.studyTitleContainer}>
           <DynamicStudyTitle
-            nickname={studyData?.nick || studyData?.nickname || ''}
-            studyName={studyData?.name || studyData?.title || ''}
-            backgroundImage={
-              studyData?.img ||
-              studyData?.background ||
-              studyData?.backgroundImage ||
-              ''
-            }
+            nickname={getStudyNickname(studyData)}
+            studyName={getStudyName(studyData)}
+            backgroundImage={getStudyBackground(studyData)}
             className={styles.studyTitle}
             tag="h1"
           />
@@ -205,67 +302,18 @@ export default function StudyDetailPage() {
       {/* 하단 섹션: 소개 + 포인트 */}
       <div className={styles.bottomSection}>
         <div className={styles.introSection}>
-          <StudyIntro
-            description={studyData?.content || studyData?.description || ''}
-          />
+          <StudyIntro description={getStudyDescription(studyData)} />
         </div>
 
         <div className={styles.pointsSection}>
-          <StudyPoints
-            points={
-              studyData?.pointsSum ||
-              studyData?._count?.points ||
-              studyData?.points ||
-              0
-            }
-          />
+          <StudyPoints points={getStudyPoints(studyData)} />
         </div>
       </div>
 
       {/* 습관 기록표 - 공개 스터디인 경우에만 표시 */}
       {studyData?.isPublic !== false && studyData?.isActive !== false && (
         <div className={styles.habitTableSection}>
-          <HabitRecordTable
-            studyId={id}
-            rows={(() => {
-              const habitRows = [];
-
-              // 오늘 날짜를 기준으로 요일 계산 (한 번만 계산)
-              const mondayBasedDay = (new Date().getDay() + 6) % 7;
-
-              // habitHistories 배열을 순회하면서 각 습관을 개별 행으로 변환
-              studyData?.habitHistories?.forEach(history => {
-                history?.habits?.forEach(habit => {
-                  const finalIsDone = habit?.isDone;
-
-                  // 7일 배열 초기화 (월요일부터 일요일까지)
-                  const checks = [
-                    false, // 월요일
-                    false, // 화요일
-                    false, // 수요일
-                    false, // 목요일
-                    false, // 금요일
-                    false, // 토요일
-                    false, // 일요일
-                  ];
-
-                  // 해당 요일에 습관 완료 상태 설정 (로컬 변경사항 반영)
-                  checks[mondayBasedDay] = !!finalIsDone;
-
-                  habitRows.push({
-                    id: habit?.id,
-                    name: habit?.habit || '습관',
-                    checks: checks,
-                    isDone: finalIsDone,
-                    date: habit?.date,
-                    habitHistoryId: habit?.habitHistoryId,
-                  });
-                });
-              });
-
-              return habitRows;
-            })()}
-          />
+          <HabitRecordTable studyId={id} rows={getHabitRows()} />
         </div>
       )}
 
@@ -275,14 +323,9 @@ export default function StudyDetailPage() {
         onClose={() => setIsPasswordModalOpen(false)}
         onVerify={handlePasswordVerify}
         mode="habit"
-        nickname={studyData?.nick || studyData?.nickname || ''}
-        studyName={studyData?.name || studyData?.title || ''}
-        backgroundImage={
-          studyData?.img ||
-          studyData?.background ||
-          studyData?.backgroundImage ||
-          ''
-        }
+        nickname={getStudyNickname(studyData)}
+        studyName={getStudyName(studyData)}
+        backgroundImage={getStudyBackground(studyData)}
       />
     </div>
   );

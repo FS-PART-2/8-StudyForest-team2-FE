@@ -115,7 +115,47 @@
   overflow-y: auto;
   padding-right: 1rem;
   /* 스크롤바를 컨테이너 밖으로 밀어내기 */
-  margin-right: -1.7rem; /* 스크롤바 너비만큼 음수 마진 */
+}
+
+/* 습관 칩 스타일 - button.chip에 적용 */
+.habitChip {
+  width: 100% !important;
+  height: 5.5rem !important;
+  padding: 1.3rem 2rem !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 1rem !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-size: 1.6rem;
+  background: white !important;
+  color: #374151 !important;
+}
+
+.habitChip:hover {
+  border-color: #d1d5db !important;
+  transform: translateY(-2px);
+}
+
+.habitChip:active {
+  transform: translateY(0);
+}
+
+/* Chip atom의 기본 스타일 덮어쓰기 */
+.habitChip.chip {
+  width: 100% !important;
+  height: 5.5rem !important;
+  padding: 1.3rem 2rem !important;
+  border: 2px solid #e5e7eb !important;
+  background: white !important;
+  color: #374151 !important;
+}
+
+/* 완료된 습관 칩 스타일 */
+.habitChip.chip.selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border: none !important;
 }
 
 .emptyHabits {

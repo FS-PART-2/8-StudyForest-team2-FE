@@ -1,5 +1,5 @@
-import { forwardRef, useEffect, useRef } from "react";
-import styles from "../../styles/components/atoms/Chip.module.css";
+import { forwardRef, useEffect, useRef } from 'react';
+import styles from '../../styles/components/atoms/Chip.module.css';
 
 /**
  * Chip Atom
@@ -11,8 +11,8 @@ import styles from "../../styles/components/atoms/Chip.module.css";
  */
 const Chip = forwardRef(function Chip(
   {
-    label = "",
-    variant = "neutral",
+    label = '',
+    variant = 'neutral',
     selected = false,
     editing = false,
     disabled = false,
@@ -20,10 +20,10 @@ const Chip = forwardRef(function Chip(
     onChange,
     onConfirm,
     onCancel,
-    className = "",
+    className = '',
     ...rest
   },
-  ref
+  ref,
 ) {
   const inputRef = useRef(null);
   const ignoreNextBlurRef = useRef(false);
@@ -35,7 +35,7 @@ const Chip = forwardRef(function Chip(
     }
   }, [editing]);
 
-  const isAdd = variant === "add";
+  const isAdd = variant === 'add';
   const toneClass = !isAdd && selected ? styles.selected : styles.unselected;
 
   return (
@@ -45,41 +45,48 @@ const Chip = forwardRef(function Chip(
       className={[
         styles.chip,
         toneClass,
-        editing ? styles.editing : "",
-        disabled ? styles.disabled : "",
+        editing ? styles.editing : '',
+        disabled ? styles.disabled : '',
         className,
-      ].filter(Boolean).join(" ")}
+      ]
+        .filter(Boolean)
+        .join(' ')}
       onClick={disabled ? undefined : onClick}
       {...rest}
       aria-pressed={!isAdd ? selected : undefined}
       aria-disabled={disabled || undefined}
-      aria-label={isAdd ? "새 칩 추가" : undefined}
+      aria-label={isAdd ? '새 칩 추가' : undefined}
       disabled={disabled}
     >
       {isAdd ? (
-        <span className={styles.addSign} aria-hidden="true">＋</span>
+        <span className={styles.addSign} aria-hidden="true">
+          ＋
+        </span>
       ) : editing ? (
         <input
           ref={inputRef}
           className={styles.editorInput}
           defaultValue={label}
-          onClick={(e) => e.stopPropagation()}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
+          onClick={e => e.stopPropagation()}
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
               e.preventDefault();
+              console.log('Chip Enter 키 눌림:', e.currentTarget.value);
               onConfirm?.(e, e.currentTarget.value);
-            } else if (e.key === "Escape") {
+            } else if (e.key === 'Escape') {
               e.preventDefault();
               ignoreNextBlurRef.current = true;
               onCancel?.(e);
             }
           }}
-          onChange={(e) => onChange?.(e.target.value)}
-          onBlur={(e) => {
+          onChange={e => onChange?.(e.target.value)}
+          onBlur={e => {
             if (ignoreNextBlurRef.current) {
               ignoreNextBlurRef.current = false;
               return;
             }
+            console.log('Chip onBlur 이벤트:', e.currentTarget.value);
+            console.log('Chip onConfirm 콜백:', onConfirm);
             onConfirm?.(e, e.currentTarget.value);
           }}
           aria-label="칩 라벨 편집"

@@ -1,4 +1,4 @@
-import { getNicknameColor } from '../../utils/getNicknameColor';
+import { getNicknameColor } from '../../ui/getNicknameColor';
 
 /**
  * DynamicStudyTitle Atom 컴포넌트
