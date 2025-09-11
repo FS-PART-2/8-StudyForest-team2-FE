@@ -35,8 +35,21 @@ const getStudyBackground = studyData =>
   getStudyField(studyData, 'background') ||
   getStudyField(studyData, 'backgroundImage', '');
 
-const getStudyPoints = studyData =>
-  studyData?.pointsSum || studyData?._count?.points || studyData?.points || 0;
+const getStudyPoints = studyData => {
+  console.log('getStudyPoints - studyData:', studyData);
+  console.log('getStudyPoints - studyData.point:', studyData?.point);
+  console.log('getStudyPoints - studyData.points:', studyData?.points);
+  console.log('getStudyPoints - studyData.pointsSum:', studyData?.pointsSum);
+
+  const result =
+    studyData?.point ||
+    studyData?.points ||
+    studyData?.pointsSum ||
+    studyData?._count?.points ||
+    0;
+  console.log('getStudyPoints - final result:', result);
+  return result;
+};
 
 export default function StudyDetailPage() {
   const { id } = useParams();
@@ -317,6 +330,11 @@ export default function StudyDetailPage() {
         </div>
 
         <div className={styles.pointsSection}>
+          {console.log('StudyDetailPage - studyData:', studyData)}
+          {console.log(
+            'StudyDetailPage - getStudyPoints result:',
+            getStudyPoints(studyData),
+          )}
           <StudyPoints points={getStudyPoints(studyData)} />
         </div>
       </div>
