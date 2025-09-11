@@ -2,9 +2,7 @@ import { instance } from '../axiosInstance.js';
 
 export const postRefreshApi = async () => {
   try {
-    const response = await instance.post('/api/users/refresh', null, {
-      headers: { Authorization: null },
-    });
+    const response = await instance.post('/api/users/refresh');
 
     // 응답 데이터 구조 안전하게 접근
     const responseData = response.data?.data || response.data;

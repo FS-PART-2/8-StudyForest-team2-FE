@@ -3,8 +3,7 @@
 .page {
   display: grid;
   place-items: start center;
-  padding: 2.4rem;
-  min-height: 100vh;
+  padding: 0 2.4rem;
   background: var(--background-primary);
 }
 
@@ -15,7 +14,6 @@
   border-radius: 1.2rem;
   box-shadow: 0 0.4rem 2.4rem rgba(0, 0, 0, 0.08);
   padding: 3.2rem 2.4rem 2.4rem;
-  margin: 2.4rem 0;
 }
 
 /* 헤더 섹션 */
@@ -52,10 +50,6 @@
   margin-bottom: 0.8rem;
 }
 
-.section > * + * {
-  margin-top: 1.2rem;
-}
-
 /* 라벨 */
 .label {
   display: block;
@@ -63,14 +57,6 @@
   font-weight: 600;
   font-size: 1.6rem;
   margin-bottom: 1.2rem;
-}
-
-/* 인풋 통일 규칙 */
-.section :global(input),
-.section :global(textarea),
-.section :global(.wrap) {
-  width: 100%;
-  box-sizing: border-box;
 }
 
 /* 버튼 그룹 */
@@ -83,7 +69,6 @@
 
 .cancelButton,
 .submitButton {
-  flex: 1;
   height: 5.2rem;
   display: inline-flex;
   align-items: center;
@@ -99,13 +84,6 @@
   color: var(--text-gray);
   border: 0.2rem solid var(--border-gray);
   background: transparent;
-}
-
-.cancelButton:hover:not(:disabled) {
-  border-color: var(--text-gray);
-  color: var(--text-primary);
-  transform: translateY(-0.1rem);
-  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
 }
 
 .submitButton {
@@ -193,19 +171,12 @@
 /* 태블릿 반응형 */
 @media (max-width: 76.8rem) {
   .page {
-    padding: 2rem;
+    padding: 0 2rem;
   }
 
   .card {
-    max-width: 100%;
     padding: 2.4rem 2rem;
-    margin: 1.6rem 0;
     border-radius: 1rem;
-  }
-
-  .header {
-    margin-bottom: 2.4rem;
-    padding-bottom: 1.6rem;
   }
 
   .title {
@@ -242,7 +213,7 @@
 }
 
 /* 모바일 반응형 */
-@media (max-width: 48rem) {
+@media (max-width: 480px) {
   .page {
     padding: 1.2rem;
   }
@@ -250,11 +221,6 @@
   .card {
     padding: 2rem 1.6rem;
     border-radius: 0.8rem;
-  }
-
-  .header {
-    margin-bottom: 2rem;
-    padding-bottom: 1.2rem;
   }
 
   .title {
@@ -266,7 +232,6 @@
   }
 
   .buttonGroup {
-    flex-direction: column;
     margin: 2rem 0 1.2rem;
     gap: 0.8rem;
   }

@@ -6,3 +6,9 @@ footer {
   padding: 1.6rem;
   margin: 8rem auto;
 }
+
+@media (max-width: 743px) {
+  footer {
+    margin: 4rem auto;
+  }
+}

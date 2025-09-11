@@ -8,12 +8,22 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { registerSchema } from '../utils/validation/registerSchema.js';
 import { postRegisterApi } from '../utils/api/user/postRegisterApi';
+import { useEffect } from 'react';
+import { useAuthStore } from '../store/authStore.js';
 
 /**
  * 회원가입 페이지
  */
 export default function RegisterPage() {
   const navigate = useNavigate();
+
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   // 폼 상태
   const {
@@ -23,7 +33,7 @@ export default function RegisterPage() {
     formState: { errors, isSubmitting, isValid },
   } = useForm({
     resolver: zodResolver(registerSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
     defaultValues: {
       username: '',
       email: '',

@@ -27,7 +27,7 @@ export default function ProfilePage() {
     formState: { errors, isSubmitting, isValid },
   } = useForm({
     resolver: zodResolver(profileSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
     defaultValues: {
       username: '',
       nick: '',
