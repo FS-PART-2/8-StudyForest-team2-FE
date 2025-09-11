@@ -7,14 +7,22 @@ import SearchBar from '../components/molecules/SearchBar';
 import Button from '../components/atoms/Button';
 import { useRecentStudyStore } from '../store/recentStudyStore';
 
+const MORE_LIMIT = 6;
+
+const options = [
+  { value: 'recent', label: '최근순' },
+  { value: 'old', label: '오래된 순' },
+  { value: 'points_desc', label: '많은 포인트 순' },
+  { value: 'points_asc', label: '적은 포인트 순' },
+];
+
 export function StudyPage() {
   const [studyList, setStudyList] = useState([]);
   const [studyParams, setStudyParams] = useState({
-    recentOrder: 'recent',
     offset: 0,
     limit: 6,
     keyword: '',
-    pointOrder: '',
+    sort: 'recent',
     isActive: true,
   });
 
@@ -42,24 +50,14 @@ export function StudyPage() {
   };
 
   const handleDropdownChange = value => {
-    if (value === 'recent' || value === 'old') {
-      setStudyParams({
-        ...studyParams,
-        recentOrder: value,
-        pointOrder: '',
-      });
-    }
-    if (value === 'desc' || value === 'asc') {
-      setStudyParams({
-        ...studyParams,
-        recentOrder: '',
-        pointOrder: value,
-      });
-    }
+    setStudyParams({
+      ...studyParams,
+      sort: value,
+    });
   };
 
   const handleStudyMore = () => {
-    setStudyParams({ ...studyParams, limit: studyParams.limit + 6 });
+    setStudyParams({ ...studyParams, limit: studyParams.limit + MORE_LIMIT });
   };
 
   const handleResetRecentStudies = () => {
@@ -83,39 +81,22 @@ export function StudyPage() {
         {recentStudies.length > 0 ? (
           <div className={styles.studyList}>
             {recentStudies.map(study => {
-              // study.img 값을 올바른 프리셋 키로 매핑
-              const mapToPresetKey = (imgValue) => {
-                if (!imgValue) return 'img-01'; // 기본값
-                
-                // 백엔드에서 오는 경로를 프리셋 키로 매핑
-                const pathToKeyMapping = {
-                  '/assets/images/card-bg-color-01.svg': 'img-01',
-                  '/assets/images/card-bg-color-02.svg': 'img-02',
-                  '/assets/images/card-bg-color-03.svg': 'img-03',
-                  '/assets/images/card-bg-color-04.svg': 'img-04',
-                  '/assets/images/card-bg-01.svg': 'img-05',
-                  '/assets/images/card-bg-02.svg': 'img-06',
-                  '/assets/images/card-bg-03.svg': 'img-07',
-                  '/assets/images/card-bg-04.svg': 'img-08',
-                };
-                
-                return pathToKeyMapping[imgValue] || 'img-01';
-              };
-              
               return (
                 <Card
                   key={study.id}
-                  preset={mapToPresetKey(study.img)}
+                  preset={study.img}
                   nick={study.nick}
                   title={study.name}
                   points={study.point || 0}
                   createdAt={study?.createdAt?.split('T')[0]}
                   description={study.content}
                   id={study.id}
-                  emojiData={study.studyEmojis?.map(item => ({
-                    emoji: item.emoji?.symbol || item.symbol || '🔥',
-                    count: item.count || 0,
-                  })) || []}
+                  emojiData={
+                    study.studyEmojis?.map(item => ({
+                      emoji: item.emoji?.symbol || item.symbol || '🔥',
+                      count: item.count || 0,
+                    })) || []
+                  }
                 />
               );
             })}
@@ -134,47 +115,29 @@ export function StudyPage() {
           <SearchBar onSubmit={handleSubmit} />
           <Dropdown
             onChange={handleDropdownChange}
-            value={
-              studyParams.recentOrder || studyParams.pointOrder || 'recent'
-            }
+            value={studyParams.sort || 'recent'}
+            options={options}
           />
         </div>
         {studyList.length > 0 ? (
           <div className={styles.studyList}>
             {studyList.map(study => {
-              // study.img 값을 올바른 프리셋 키로 매핑
-              const mapToPresetKey = (imgValue) => {
-                if (!imgValue) return 'img-01'; // 기본값
-                
-                // 백엔드에서 오는 경로를 프리셋 키로 매핑
-                const pathToKeyMapping = {
-                  '/assets/images/card-bg-color-01.svg': 'img-01',
-                  '/assets/images/card-bg-color-02.svg': 'img-02',
-                  '/assets/images/card-bg-color-03.svg': 'img-03',
-                  '/assets/images/card-bg-color-04.svg': 'img-04',
-                  '/assets/images/card-bg-01.svg': 'img-05',
-                  '/assets/images/card-bg-02.svg': 'img-06',
-                  '/assets/images/card-bg-03.svg': 'img-07',
-                  '/assets/images/card-bg-04.svg': 'img-08',
-                };
-                
-                return pathToKeyMapping[imgValue] || 'img-01';
-              };
-              
               return (
                 <Card
                   key={study.id}
-                  preset={mapToPresetKey(study.img)}
+                  preset={study.img}
                   id={study.id}
                   nick={study.nick}
                   title={study.name}
                   points={study.point || 0}
                   createdAt={study?.createdAt?.split('T')[0]}
                   description={study.content}
-                  emojiData={study.studyEmojis?.map(item => ({
-                    emoji: item.emoji?.symbol || item.symbol || '🔥',
-                    count: item.count || 0,
-                  })) || []}
+                  emojiData={
+                    study.studyEmojis?.map(item => ({
+                      emoji: item.emoji?.symbol || item.symbol || '🔥',
+                      count: item.count || 0,
+                    })) || []
+                  }
                 />
               );
             })}

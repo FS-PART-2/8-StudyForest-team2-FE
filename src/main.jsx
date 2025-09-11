@@ -41,5 +41,4 @@ export function App() {
   );
 }
 
-const root = createRoot(document.getElementById('root'));
-root.render(<App />);
+createRoot(document.getElementById('root')).render(<App />);

@@ -112,3 +112,9 @@
     0 0 0 1px #3b82f6,
     0 6px 20px rgba(59, 130, 246, 0.4);
 }
+
+@media (max-width: 1199px) {
+  .card {
+    max-width: none;
+  }
+}

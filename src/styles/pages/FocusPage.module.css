@@ -242,7 +242,7 @@
 @media (max-width: 743px) {
   .focusPage {
     width: calc(100% - 3.2rem);
-    padding: 1.6rem;
+    padding: 3rem 1.6rem;
   }
 
   .mainTime {
