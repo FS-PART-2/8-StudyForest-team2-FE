@@ -35,43 +35,51 @@ export function StudyCreatePage() {
     () => [
       {
         id: 'img-01',
-        type: 'image',
-        value: `${base}assets/images/card-bg-color-01.svg`,
+        type: 'color',
+        value: 'var(--card-blue)',
+        name: '연한 파란색',
       },
       {
         id: 'img-02',
-        type: 'image',
-        value: `${base}assets/images/card-bg-color-02.svg`,
+        type: 'color',
+        value: 'var(--card-green)',
+        name: '연한 초록색',
       },
       {
         id: 'img-03',
-        type: 'image',
-        value: `${base}assets/images/card-bg-color-03.svg`,
+        type: 'color',
+        value: 'var(--card-mintblue)',
+        name: '어두운 회색',
       },
       {
         id: 'img-04',
-        type: 'image',
-        value: `${base}assets/images/card-bg-color-04.svg`,
+        type: 'color',
+        value: 'var(--card-ocean)',
+        name: '연한 보라색',
       },
       {
         id: 'img-05',
         type: 'image',
         value: `${base}assets/images/card-bg-01.svg`,
+        name: '작업공간',
       },
       {
         id: 'img-06',
         type: 'image',
         value: `${base}assets/images/card-bg-02.svg`,
+        name: '노트북',
       },
       {
         id: 'img-07',
         type: 'image',
         value: `${base}assets/images/card-bg-03.svg`,
+        name: '패턴',
       },
       {
         id: 'img-08',
         type: 'image',
         value: `${base}assets/images/card-bg-04.svg`,
+        name: '식물',
       },
     ],
     [base],
@@ -303,13 +311,24 @@ export function StudyCreatePage() {
                   aria-pressed={selected}
                   className={`${styles.bgItem} ${selected ? styles.bgItemSelected : ''}`}
                   onClick={() => setSelectedBgId(bg.id)}
+                  style={
+                    bg.type === 'color' ? { backgroundColor: bg.value } : {}
+                  }
                 >
-                  <img
-                    className={styles.bgImg}
-                    src={bg.value}
-                    alt="배경 이미지"
-                    loading="lazy"
-                  />
+                  {bg.type === 'image' ? (
+                    <img
+                      className={styles.bgImg}
+                      src={bg.value}
+                      alt={bg.name || '배경 이미지'}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div
+                      className={styles.bgColor}
+                      style={{ backgroundColor: bg.value }}
+                      title={bg.name}
+                    />
+                  )}
                   {selected && (
                     <img
                       src={`${base}assets/icons/selected.svg`}
