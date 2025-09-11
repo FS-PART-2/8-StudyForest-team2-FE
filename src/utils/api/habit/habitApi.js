@@ -119,26 +119,13 @@ export const deleteHabitApi = async (studyId, habitId) => {
 
 /**
  * 습관 완료/미완료 토글 (HabitPage용)
- * @param {string|number} studyId - 스터디 ID
  * @param {string|number} habitId - 습관 ID
  * @returns {Promise<Object>} 토글된 습관 데이터
  */
-export const toggleHabitApi = async (studyId, habitId) => {
+export const toggleHabitApi = async habitId => {
   try {
-    const numericStudyId = parseInt(studyId, 10);
-    if (isNaN(numericStudyId) || numericStudyId < 1) {
-      throw new Error(`유효하지 않은 studyId: ${studyId}`);
-    }
-
-    // 백엔드에서 studyId를 헤더로 받는지 확인
     const response = await instance.patch(
       `/api/habits/${encodeURIComponent(habitId)}/toggle`,
-      {},
-      {
-        headers: {
-          'x-study-id': numericStudyId.toString()
-        }
-      }
     );
     return response.data;
   } catch (error) {
