@@ -217,8 +217,8 @@ export default function FocusPage() {
               onClick={handleHabitClick}
               aria-label="오늘의 습관"
             >
-              <span className="fullLabel">오늘의 습관</span>
-              <span className="shortLabel" aria-hidden="true">
+              <span className={styles.fullLabel}>오늘의 습관</span>
+              <span className={styles.shortLabel} aria-hidden="true">
                 습관
               </span>
             </NavigationButton>
