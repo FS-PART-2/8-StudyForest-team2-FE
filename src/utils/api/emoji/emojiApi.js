@@ -84,9 +84,7 @@ export const emojiApi = {
       const response = await instance.post(
         `/api/studies/${id}/emojis/decrement`,
         {
-          id: emoji.id,
-          emoji: emoji.emoji,
-          count: emoji.count,
+          id: emoji,
         },
       );
       return response.data;
