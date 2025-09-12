@@ -7,7 +7,7 @@ export default function Toast({
   message = '',
 }) {
   const messageMap = {
-    error: '집중이 중단되었습니다.',
+    error: '비밀번호가 일치하지 않습니다. 다시 입력해주세요.',
     mismatch: '비밀번호가 일치하지 않습니다. 다시 입력해주세요.',
     point: `${point}포인트를 획득했습니다!`,
     basic: message,
