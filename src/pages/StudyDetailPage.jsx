@@ -78,25 +78,44 @@ export default function StudyDetailPage() {
     console.log(emoji);
   }
 
-  // 최신 습관 데이터 가져오기 (주간 습관 데이터)
+  // 최신 습관 데이터 가져오기 (현재 활성 습관만)
   const fetchCurrentHabits = useCallback(async () => {
     if (!id) return;
 
     try {
-      console.log('주간 습관 데이터를 가져옵니다...');
+      console.log('현재 활성 습관 데이터를 가져옵니다...');
+
+      // 1. 현재 활성 습관 목록 가져오기 (삭제되지 않은 습관만)
+      const { getHabitsApi } = await import('../utils/api/habit/habitApi');
+      const activeHabits = await getHabitsApi(id);
+      console.log('현재 활성 습관:', activeHabits);
+
+      // 2. 주간 습관 데이터 가져오기
       const weekData = await habitWeekApi.getHabitWeekApi(id, {
         password: '1234',
       });
       console.log('주간 습관 데이터:', weekData);
 
-      // API 응답에서 습관 데이터를 변환
+      // 3. 활성 습관 ID 목록 생성
+      const activeHabitIds = new Set(activeHabits.map(habit => habit.habitId));
+      console.log('활성 습관 ID 목록:', activeHabitIds);
+
+      // 4. API 응답에서 활성 습관만 필터링하여 변환
       if (weekData?.days) {
         const habitRows = [];
 
-        // 각 날짜별 습관을 수집
+        // 각 날짜별 습관을 수집 (활성 습관만)
         Object.entries(weekData.days).forEach(([date, habits]) => {
           if (Array.isArray(habits) && habits.length > 0) {
             habits.forEach(habit => {
+              // 활성 습관인지 확인
+              if (!activeHabitIds.has(habit.habitId)) {
+                console.log(
+                  `삭제된 습관 제외: ${habit.title} (ID: ${habit.habitId})`,
+                );
+                return; // 삭제된 습관은 건너뛰기
+              }
+
               // 이미 존재하는 습관인지 확인
               const existingHabit = habitRows.find(h => h.id === habit.habitId);
               if (existingHabit) {
@@ -123,6 +142,7 @@ export default function StudyDetailPage() {
           }
         });
 
+        console.log('필터링된 습관 데이터:', habitRows);
         setCurrentHabits(habitRows);
       } else {
         setCurrentHabits([]);

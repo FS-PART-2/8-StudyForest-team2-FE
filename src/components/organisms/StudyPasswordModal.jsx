@@ -102,14 +102,7 @@ export default function StudyPasswordModal({
           backgroundImage={backgroundImage}
           className={styles.title}
           tag="h1"
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
+          isOneLine={true}
         />
         <p id="studyPasswordDesc" className={styles.subTitle}>
           권한이 필요해요!

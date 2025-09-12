@@ -357,8 +357,13 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
                 // 1. 새로 추가된 습관들 생성 (수정된 새 습관 포함)
                 const newHabits = chips.filter(chip => chip.isNew);
                 console.log('생성할 새 습관들:', newHabits);
+                console.log('studyId:', studyId, 'type:', typeof studyId);
+
                 for (const habit of newHabits) {
                   try {
+                    console.log(
+                      `습관 생성 시도: "${habit.label}" (studyId: ${studyId})`,
+                    );
                     const result = await createHabitApi(studyId, {
                       title: habit.label,
                     });
@@ -369,6 +374,11 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
                     delete habit.isModified; // 새로 생성된 습관의 수정 플래그도 제거
                   } catch (error) {
                     console.error('새 습관 생성 실패:', error);
+                    console.error('생성 실패 상세:', {
+                      habit: habit,
+                      studyId: studyId,
+                      error: error.response?.data || error.message,
+                    });
                     if (error.response?.status === 409) {
                       alert(
                         `습관 "${habit.label}"은 이미 존재합니다. 다른 이름을 사용해주세요.`,
@@ -385,11 +395,15 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
                     chip.isModified &&
                     !chip.isNew &&
                     chip.id &&
-                    !chip.id.startsWith('temp_'),
+                    !String(chip.id).startsWith('temp_'),
                 );
                 console.log('수정할 습관들:', modifiedHabits);
+
                 for (const habit of modifiedHabits) {
                   try {
+                    console.log(
+                      `습관 수정 시도: "${habit.label}" (habitId: ${habit.id}, studyId: ${studyId})`,
+                    );
                     await updateHabitApi(studyId, habit.id, {
                       title: habit.label,
                     });
@@ -397,6 +411,11 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
                     delete habit.isModified;
                   } catch (error) {
                     console.error('습관 수정 실패:', error);
+                    console.error('수정 실패 상세:', {
+                      habit: habit,
+                      studyId: studyId,
+                      error: error.response?.data || error.message,
+                    });
                     if (error.response?.status === 409) {
                       alert(
                         `습관 "${habit.label}"은 이미 존재합니다. 다른 이름을 사용해주세요.`,
@@ -415,12 +434,22 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
                     !String(original.id).startsWith('temp_') &&
                     !currentIds.includes(original.id),
                 );
+                console.log('삭제할 습관들:', deletedHabits);
+
                 for (const habit of deletedHabits) {
                   try {
+                    console.log(
+                      `습관 삭제 시도: "${habit.label}" (habitId: ${habit.id}, studyId: ${studyId})`,
+                    );
                     await deleteHabitApi(studyId, habit.id);
                     console.log('습관 삭제 성공:', habit.id);
                   } catch (error) {
                     console.error('습관 삭제 실패:', error);
+                    console.error('삭제 실패 상세:', {
+                      habit: habit,
+                      studyId: studyId,
+                      error: error.response?.data || error.message,
+                    });
                     // 삭제 실패는 무시하고 계속 진행
                   }
                 }
@@ -437,7 +466,33 @@ export default function TodayHabitModal({ open, onClose, onSave, studyId }) {
                 console.log('모든 변경사항이 성공적으로 저장되었습니다.');
               } catch (error) {
                 console.error('변경사항 저장 실패:', error);
-                alert('변경사항 저장에 실패했습니다. 다시 시도해주세요.');
+                console.error('에러 상세 정보:', {
+                  message: error.message,
+                  status: error.response?.status,
+                  statusText: error.response?.statusText,
+                  data: error.response?.data,
+                  url: error.config?.url,
+                  method: error.config?.method,
+                  studyId: studyId,
+                  chips: chips,
+                  originalChips: originalChips,
+                });
+
+                // 더 구체적인 에러 메시지 제공
+                let errorMessage = '변경사항 저장에 실패했습니다.';
+                if (error.response?.status === 409) {
+                  errorMessage =
+                    '이미 존재하는 습관 이름이 있습니다. 다른 이름을 사용해주세요.';
+                } else if (error.response?.status === 404) {
+                  errorMessage = '스터디를 찾을 수 없습니다.';
+                } else if (error.response?.status >= 500) {
+                  errorMessage =
+                    '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+                } else if (error.message) {
+                  errorMessage = `오류: ${error.message}`;
+                }
+
+                alert(errorMessage);
               }
             }}
           >

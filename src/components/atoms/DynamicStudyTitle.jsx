@@ -37,18 +37,22 @@ export default function DynamicStudyTitle({
       : studyName;
 
   // 한 줄 표시 여부 결정
-  // 1. isOneLine prop이 명시적으로 true인 경우
-  // 2. h1 태그인 경우 (디테일 페이지) - 하지만 긴 텍스트는 줄바꿈 허용
-  // 3. style에 whiteSpace: 'nowrap'이 있는 경우
-  const shouldShowOneLine =
-    isOneLine || (style && style.whiteSpace === 'nowrap');
+  // 1. isOneLine prop이 명시적으로 true인 경우만
+  // 2. style에 whiteSpace: 'nowrap'이 있어도 긴 텍스트는 줄바꿈 허용
+  const shouldShowOneLine = isOneLine;
 
   // 스터디 이름 길이에 따른 줄바꿈 결정
   // PC, 모바일 모두 10자 제한
-  const characterLimit = 10;
+  const studyNameLimit = 10;
   const isLongStudyName =
-    cleanStudyName && cleanStudyName.length > characterLimit;
-  const shouldWrapStudyName = Tag === 'h1' && isLongStudyName;
+    cleanStudyName && cleanStudyName.length > studyNameLimit;
+  const shouldWrapStudyName = isLongStudyName;
+
+  // 닉네임 길이에 따른 줄바꿈 결정
+  // 7자 제한, 단어 단위로 줄바꿈
+  const nicknameLimit = 7;
+  const isLongNickname = nickname && nickname.length > nicknameLimit;
+  const shouldWrapNickname = isLongNickname;
 
   return (
     <Tag
@@ -97,15 +101,23 @@ export default function DynamicStudyTitle({
               {cleanStudyName}
             </span>
           </>
-        ) : shouldWrapStudyName ? (
-          // 디테일 페이지: 긴 스터디 이름은 줄바꿈
+        ) : shouldWrapStudyName || shouldWrapNickname ? (
+          // 긴 닉네임 또는 스터디 이름은 줄바꿈
           <>
-            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                flexWrap: 'nowrap', // 닉네임과 "의"는 항상 같은 줄
+              }}
+            >
               <span
                 style={{
                   color: nicknameColor,
-                  whiteSpace: 'nowrap',
                   display: 'inline-block',
+                  wordWrap: 'break-word',
+                  overflowWrap: 'break-word',
+                  whiteSpace: 'normal',
                 }}
               >
                 {nickname}
@@ -115,6 +127,8 @@ export default function DynamicStudyTitle({
                   color: 'var(--black-black_414141, #414141)',
                   display: 'inline-block',
                   marginLeft: '0.5rem',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0, // "의"는 줄어들지 않도록
                 }}
               >
                 의
