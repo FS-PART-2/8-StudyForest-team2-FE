@@ -18,6 +18,29 @@
   font-weight: 400;
   margin: 0;
   line-height: 1.5;
+  max-height: 5.4rem; /* 2줄 제한 (1.8rem * 1.5 * 2 = 5.4rem) */
+  overflow-y: auto; /* 세 줄 이상일 때 스크롤 */
+  overflow-x: hidden; /* 가로 스크롤 숨김 */
+  scrollbar-width: thin; /* Firefox에서 얇은 스크롤바 */
+  scrollbar-color: var(--text-gray, #818181) transparent; /* Firefox 스크롤바 색상 */
+}
+
+/* Webkit 브라우저용 스크롤바 스타일링 */
+.description::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+.description::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.description::-webkit-scrollbar-thumb {
+  background: var(--text-gray, #818181);
+  border-radius: 0.2rem;
+}
+
+.description::-webkit-scrollbar-thumb:hover {
+  background: var(--text-primary, #222);
 }
 
 /* 태블릿 반응형 */
@@ -25,6 +48,10 @@
   .label,
   .description {
     font-size: 1.6rem;
+  }
+
+  .description {
+    max-height: 4.8rem; /* 2줄 제한 (1.6rem * 1.5 * 2 = 4.8rem) */
   }
 }
 
@@ -37,5 +64,9 @@
   .label,
   .description {
     font-size: 1.4rem;
+  }
+
+  .description {
+    max-height: 4.2rem; /* 2줄 제한 (1.4rem * 1.5 * 2 = 4.2rem) */
   }
 }

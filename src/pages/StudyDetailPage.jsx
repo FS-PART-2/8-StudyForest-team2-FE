@@ -5,7 +5,7 @@ import { useRecentStudyStore } from '../store/recentStudyStore';
 import { studyApi } from '../utils/api/study/getStudyApi';
 import { emojiApi } from '../utils/api/emoji/emojiApi';
 import { verifyStudyPassword } from '../utils/api/study/studyPasswordApi';
-import { getHabitsApi } from '../utils/api/habit/habitApi';
+import { habitWeekApi } from '../utils/api/habit/getHabitWeekApi';
 import DynamicStudyTitle from '../components/atoms/DynamicStudyTitle';
 import EmojiCounter from '../components/molecules/EmojiCounter';
 import StudyActions from '../components/organisms/StudyActions';
@@ -78,78 +78,78 @@ export default function StudyDetailPage() {
     console.log(emoji);
   }
 
-  // 최신 습관 데이터 가져오기
+  // 최신 습관 데이터 가져오기 (주간 습관 데이터)
   const fetchCurrentHabits = useCallback(async () => {
     if (!id) return;
 
     try {
-      const habitsData = await getHabitsApi(id);
-      setCurrentHabits(habitsData || []);
+      console.log('주간 습관 데이터를 가져옵니다...');
+      const weekData = await habitWeekApi.getHabitWeekApi(id, {
+        password: '1234',
+      });
+      console.log('주간 습관 데이터:', weekData);
+
+      // API 응답에서 습관 데이터를 변환
+      if (weekData?.days) {
+        const habitRows = [];
+
+        // 각 날짜별 습관을 수집
+        Object.entries(weekData.days).forEach(([date, habits]) => {
+          if (Array.isArray(habits) && habits.length > 0) {
+            habits.forEach(habit => {
+              // 이미 존재하는 습관인지 확인
+              const existingHabit = habitRows.find(h => h.id === habit.habitId);
+              if (existingHabit) {
+                // 기존 습관에 해당 날짜의 완료 상태 추가
+                const dateObj = new Date(date);
+                const dayIndex = dateObj.getDay(); // 0=일요일, 1=월요일, ..., 6=토요일
+                const mondayBasedIndex = (dayIndex + 6) % 7; // 월요일을 0으로 변환
+                existingHabit.checks[mondayBasedIndex] = habit.isDone;
+              } else {
+                // 새로운 습관 추가
+                const checks = Array(7).fill(false);
+                const dateObj = new Date(date);
+                const dayIndex = dateObj.getDay(); // 0=일요일, 1=월요일, ..., 6=토요일
+                const mondayBasedIndex = (dayIndex + 6) % 7; // 월요일을 0으로 변환
+                checks[mondayBasedIndex] = habit.isDone;
+
+                habitRows.push({
+                  id: habit.habitId,
+                  name: habit.title,
+                  checks: checks,
+                });
+              }
+            });
+          }
+        });
+
+        setCurrentHabits(habitRows);
+      } else {
+        setCurrentHabits([]);
+      }
     } catch (error) {
       console.error('습관 데이터 로드 실패:', error);
-      // API 실패 시 기존 studyData의 습관 사용
+      // API 실패 시 빈 배열로 설정
       setCurrentHabits([]);
     }
   }, [id]);
 
-  // 습관 데이터를 HabitRecordTable 형식으로 변환 (현재 활성 습관만)
+  // 습관 데이터를 HabitRecordTable 형식으로 변환 (주간 데이터)
   const getHabitRows = useCallback(() => {
-    // 현재 활성 습관이 있으면 그것을 사용, 없으면 기존 studyData 사용
-    const habitsToUse =
-      currentHabits.length > 0
-        ? currentHabits
-        : studyData?.habitHistories || [];
-
-    if (!habitsToUse || habitsToUse.length === 0) return [];
-
-    const habitRows = [];
-    const mondayBasedDay = (new Date().getDay() + 6) % 7;
-
-    // 오늘 날짜 문자열 생성 (YYYY-MM-DD 형식) - 로컬 시간 기준
-    const now = new Date();
-    const todayString = [
-      now.getFullYear(),
-      String(now.getMonth() + 1).padStart(2, '0'),
-      String(now.getDate()).padStart(2, '0'),
-    ].join('-');
-
-    // currentHabits를 사용하는 경우 (API에서 가져온 최신 데이터)
+    // currentHabits가 있으면 그것을 사용 (API에서 가져온 주간 습관 데이터)
     if (currentHabits.length > 0) {
-      currentHabits.forEach(habit => {
-        const checks = Array(7).fill(false);
-        checks[mondayBasedDay] = !!habit?.isDone;
-
-        habitRows.push({
-          id: habit?.habitId || habit?.id,
-          name: habit?.title || habit?.habit || '습관',
-          checks: checks,
-          isDone: habit?.isDone,
-          date: todayString,
-          habitHistoryId: habit?.habitHistoryId,
-        });
-      });
-    } else {
-      // 기존 studyData 사용 (fallback)
-      studyData.habitHistories.forEach(history => {
-        if (history?.date === todayString) {
-          history?.habits?.forEach(habit => {
-            const checks = Array(7).fill(false);
-            checks[mondayBasedDay] = !!habit?.isDone;
-
-            habitRows.push({
-              id: habit?.id,
-              name: habit?.habit || '습관',
-              checks: checks,
-              isDone: habit?.isDone,
-              date: habit?.date,
-              habitHistoryId: habit?.habitHistoryId,
-            });
-          });
-        }
-      });
+      console.log('주간 습관 데이터 사용:', currentHabits);
+      return currentHabits;
     }
 
-    return habitRows;
+    // fallback: 기존 studyData 사용
+    if (studyData?.habitHistories && studyData.habitHistories.length > 0) {
+      console.log('기존 스터디 데이터의 습관 사용:', studyData.habitHistories);
+      return studyData.habitHistories;
+    }
+
+    console.log('습관 데이터가 없습니다.');
+    return [];
   }, [currentHabits, studyData?.habitHistories]);
 
   // 이모지 데이터 가져오기 함수 (API 우선, 실패 시 스터디 데이터 사용)
