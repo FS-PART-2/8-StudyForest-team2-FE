@@ -61,7 +61,6 @@ export default function StudyDetailPage() {
     try {
       // API에는 이모지 문자열만 전달
       await emojiApi.incrementEmoji(id, emojiData);
-      // console.log('API Response:', response);
 
       // API 성공 후 최신 스터디 데이터 다시 가져오기
       const updatedStudyData = await studyApi.getStudyDetailApi(id);
@@ -73,8 +72,7 @@ export default function StudyDetailPage() {
 
   async function decreaseEmojiCount(emojiData) {
     try {
-      const response = await emojiApi.decrementEmoji(id, emojiData);
-      console.log('API Response:', response);
+      await emojiApi.decrementEmoji(id, emojiData);
 
       // API 성공 후 최신 스터디 데이터 다시 가져오기
       const updatedStudyData = await studyApi.getStudyDetailApi(id);
@@ -89,22 +87,17 @@ export default function StudyDetailPage() {
     if (!id) return;
 
     try {
-      console.log('현재 활성 습관 데이터를 가져옵니다...');
-
       // 1. 현재 활성 습관 목록 가져오기 (삭제되지 않은 습관만)
       const { getHabitsApi } = await import('../utils/api/habit/habitApi');
       const activeHabits = await getHabitsApi(id);
-      console.log('현재 활성 습관:', activeHabits);
 
       // 2. 주간 습관 데이터 가져오기
       const weekData = await habitWeekApi.getHabitWeekApi(id, {
         password: '1234',
       });
-      console.log('주간 습관 데이터:', weekData);
 
       // 3. 활성 습관 ID 목록 생성
       const activeHabitIds = new Set(activeHabits.map(habit => habit.habitId));
-      console.log('활성 습관 ID 목록:', activeHabitIds);
 
       // 4. API 응답에서 활성 습관만 필터링하여 변환
       if (weekData?.days) {
@@ -148,7 +141,6 @@ export default function StudyDetailPage() {
           }
         });
 
-        console.log('필터링된 습관 데이터:', habitRows);
         setCurrentHabits(habitRows);
       } else {
         setCurrentHabits([]);

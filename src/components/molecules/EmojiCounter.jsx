@@ -54,9 +54,9 @@ export default function EmojiCounter({
 
   // 이모지 클릭 시 카운트 감소
   const handleEmojiDecrease = async clickedEmoji => {
-    console.log(clickedEmoji.id);
+    console.log(clickedEmoji);
     try {
-      await decreaseEmojiCount(clickedEmoji.id);
+      await decreaseEmojiCount(clickedEmoji.emoji);
     } catch (error) {
       console.error('이모지 감소 실패:', error);
     }
