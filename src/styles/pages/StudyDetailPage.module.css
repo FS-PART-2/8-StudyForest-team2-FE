@@ -86,6 +86,7 @@
   gap: 1.2rem;
   flex-shrink: 0; /* 버튼 영역이 축소되지 않도록 */
   align-items: flex-start;
+  align-content: flex-start;
 }
 
 /* 하단 섹션: 소개 + 포인트 */

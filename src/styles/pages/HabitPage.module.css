@@ -42,6 +42,7 @@
 .todayButtons {
   display: flex;
   gap: 1.2rem;
+  align-content: flex-start;
 }
 
 /* PC에서 홈 버튼 글씨 크기 */
