@@ -47,14 +47,17 @@
 .titleRow {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 1.2rem;
+  gap: 1.6rem;
 }
 
 .studyTitleContainer {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0; /* flex item이 축소될 수 있도록 */
 }
 
 .studyTitle {
@@ -64,7 +67,11 @@
   margin: 0;
   line-height: 1.2;
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  width: 100%;
 }
 
 .studyNickname {
@@ -77,6 +84,8 @@
 .todayButtons {
   display: flex;
   gap: 1.2rem;
+  flex-shrink: 0; /* 버튼 영역이 축소되지 않도록 */
+  align-items: flex-start;
 }
 
 /* 하단 섹션: 소개 + 포인트 */
@@ -184,6 +193,13 @@
   .studyTitle {
     font-size: 2.4rem;
     width: 100%;
+  }
+
+  /* 모바일에서 긴 스터디 이름 줄바꿈 처리 */
+  .studyTitle span:last-child {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
   }
 
   /* 네비게이션 버튼 - 왼쪽 정렬 */

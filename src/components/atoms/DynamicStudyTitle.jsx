@@ -38,10 +38,17 @@ export default function DynamicStudyTitle({
 
   // 한 줄 표시 여부 결정
   // 1. isOneLine prop이 명시적으로 true인 경우
-  // 2. h1 태그인 경우 (디테일 페이지)
+  // 2. h1 태그인 경우 (디테일 페이지) - 하지만 긴 텍스트는 줄바꿈 허용
   // 3. style에 whiteSpace: 'nowrap'이 있는 경우
   const shouldShowOneLine =
-    isOneLine || Tag === 'h1' || (style && style.whiteSpace === 'nowrap');
+    isOneLine || (style && style.whiteSpace === 'nowrap');
+
+  // 스터디 이름 길이에 따른 줄바꿈 결정
+  // PC, 모바일 모두 10자 제한
+  const characterLimit = 10;
+  const isLongStudyName =
+    cleanStudyName && cleanStudyName.length > characterLimit;
+  const shouldWrapStudyName = Tag === 'h1' && isLongStudyName;
 
   return (
     <Tag
@@ -58,7 +65,7 @@ export default function DynamicStudyTitle({
     >
       {nickname && cleanStudyName ? (
         shouldShowOneLine ? (
-          // 한 줄로 표시 (디테일 페이지 또는 모달)
+          // 한 줄로 표시 (모달 등)
           <>
             <span
               style={{
@@ -85,6 +92,41 @@ export default function DynamicStudyTitle({
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
+              }}
+            >
+              {cleanStudyName}
+            </span>
+          </>
+        ) : shouldWrapStudyName ? (
+          // 디테일 페이지: 긴 스터디 이름은 줄바꿈
+          <>
+            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+              <span
+                style={{
+                  color: nicknameColor,
+                  whiteSpace: 'nowrap',
+                  display: 'inline-block',
+                }}
+              >
+                {nickname}
+              </span>
+              <span
+                style={{
+                  color: 'var(--black-black_414141, #414141)',
+                  display: 'inline-block',
+                  marginLeft: '0.5rem',
+                }}
+              >
+                의
+              </span>
+            </div>
+            <span
+              style={{
+                color: 'var(--black-black_414141, #414141)',
+                display: 'inline-block',
+                marginTop: '0.2rem',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
               }}
             >
               {cleanStudyName}
