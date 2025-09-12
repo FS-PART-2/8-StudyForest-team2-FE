@@ -6,9 +6,6 @@ import styles from '../../styles/components/molecules/StudyPoints.module.css';
  * @param {number} points - 획득한 포인트
  */
 export default function StudyPoints({ points = 0 }) {
-  console.log('StudyPoints - received points:', points);
-  console.log('StudyPoints - points type:', typeof points);
-
   return (
     <div className={styles.container}>
       <p className={styles.label}>현재까지 획득한 포인트</p>

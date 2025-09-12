@@ -50,21 +50,40 @@ export default function StudyDetailPage() {
   const navigate = useNavigate();
   const addRecentStudy = useRecentStudyStore(state => state.addRecentStudy);
   const [studyData, setStudyData] = useState(null);
-  const [emojiData, setEmojiData] = useState([]);
+  // const [emojiData, setEmojiData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [currentHabits, setCurrentHabits] = useState([]); // 현재 활성 습관들
   const verifyAbortRef = useRef(null);
 
+  async function increaseEmojiCount(emoji) {
+    console.log(emoji);
+    try {
+      await emojiApi.incrementEmoji(id, emoji);
+      setStudyData(prev => ({
+        ...prev,
+        studyEmojis: prev.studyEmojis.map(item =>
+          item.emoji.id === emoji.id
+            ? { ...item, count: item.count + 1 }
+            : item,
+        ),
+      }));
+    } catch (error) {
+      console.error('이모지 카운트 증가 실패:', error);
+    }
+  }
+
+  function decreaseEmojiCount(emoji) {
+    console.log(emoji);
+  }
+
   // 최신 습관 데이터 가져오기
   const fetchCurrentHabits = useCallback(async () => {
     if (!id) return;
 
     try {
-      console.log('최신 습관 데이터를 가져옵니다...');
       const habitsData = await getHabitsApi(id);
-      console.log('최신 습관 데이터:', habitsData);
       setCurrentHabits(habitsData || []);
     } catch (error) {
       console.error('습관 데이터 로드 실패:', error);
@@ -130,48 +149,47 @@ export default function StudyDetailPage() {
       });
     }
 
-    console.log('현재 활성 습관들:', habitRows);
     return habitRows;
   }, [currentHabits, studyData?.habitHistories]);
 
   // 이모지 데이터 가져오기 함수 (API 우선, 실패 시 스터디 데이터 사용)
-  const fetchEmojiData = useCallback(async () => {
-    try {
-      // 먼저 이모지 API 시도
-      const data = await emojiApi.getEmojis(id);
-      if (Array.isArray(data)) {
-        setEmojiData(data);
-        return;
-      }
-      // data가 null인 경우 (404 에러로 인한 fallback)
-      if (data === null) {
-        console.log(
-          '이모지 API가 구현되지 않음. 스터디 데이터에서 이모지를 가져옵니다.',
-        );
-      }
-    } catch (error) {
-      // 404 에러인 경우 스터디 데이터에서 이모지 가져오기
-      if (error.response?.status === 404) {
-        console.log(
-          '이모지 API가 구현되지 않음. 스터디 데이터에서 이모지를 가져옵니다.',
-        );
-      } else {
-        console.warn('이모지 API 호출 실패:', error.message);
-      }
-    }
+  // const fetchEmojiData = useCallback(async () => {
+  //   try {
+  //     // 먼저 이모지 API 시도
+  //     const data = await emojiApi.getEmojis(id);
+  //     if (Array.isArray(data)) {
+  //       setEmojiData(data);
+  //       return;
+  //     }
+  //     // data가 null인 경우 (404 에러로 인한 fallback)
+  //     if (data === null) {
+  //       console.log(
+  //         '이모지 API가 구현되지 않음. 스터디 데이터에서 이모지를 가져옵니다.',
+  //       );
+  //     }
+  //   } catch (error) {
+  //     // 404 에러인 경우 스터디 데이터에서 이모지 가져오기
+  //     if (error.response?.status === 404) {
+  //       console.log(
+  //         '이모지 API가 구현되지 않음. 스터디 데이터에서 이모지를 가져옵니다.',
+  //       );
+  //     } else {
+  //       console.warn('이모지 API 호출 실패:', error.message);
+  //     }
+  //   }
 
-    // API 실패 시 스터디 데이터에서 이모지 사용
-    if (studyData?.studyEmojis && Array.isArray(studyData.studyEmojis)) {
-      setEmojiData(studyData.studyEmojis);
-    } else {
-      setEmojiData([]);
-    }
-  }, [id, studyData?.studyEmojis]);
+  //   // API 실패 시 스터디 데이터에서 이모지 사용
+  //   if (studyData?.studyEmojis && Array.isArray(studyData.studyEmojis)) {
+  //     setEmojiData(studyData.studyEmojis);
+  //   } else {
+  //     setEmojiData([]);
+  //   }
+  // }, [id, studyData?.studyEmojis]);
 
   // 이모지 업데이트 콜백
-  const handleEmojiUpdate = () => {
-    fetchEmojiData();
-  };
+  // const handleEmojiUpdate = () => {
+  //   fetchEmojiData();
+  // };
 
   // 오늘의 습관 버튼 클릭 핸들러
   const handleHabitClick = () => {
@@ -180,12 +198,6 @@ export default function StudyDetailPage() {
 
   // 비밀번호 검증 핸들러
   const handlePasswordVerify = async password => {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('StudyDetailPage: 비밀번호 검증 시작', {
-        id,
-        password: password ? '***' : 'empty',
-      });
-    }
     try {
       const controller = new AbortController();
       verifyAbortRef.current = controller;
@@ -193,9 +205,7 @@ export default function StudyDetailPage() {
         timeout: 10000,
         signal: controller.signal,
       });
-      if (process.env.NODE_ENV !== 'production') {
-        console.log('StudyDetailPage: 비밀번호 검증 결과', { isValid });
-      }
+
       if (isValid) {
         setIsPasswordModalOpen(false);
         // 비밀번호 검증 성공 시 HabitPage로 이동 (보안상 비밀번호는 전달하지 않음)
@@ -252,11 +262,11 @@ export default function StudyDetailPage() {
   useEffect(() => () => verifyAbortRef.current?.abort(), []);
 
   // 이모지 데이터 로드 (스터디 데이터 로드 후)
-  useEffect(() => {
-    if (id && studyData) {
-      fetchEmojiData();
-    }
-  }, [id, studyData, fetchEmojiData]);
+  // useEffect(() => {
+  //   if (id && studyData) {
+  //     fetchEmojiData();
+  //   }
+  // }, [id, studyData, fetchEmojiData]);
 
   // 최신 습관 데이터 로드 (스터디 데이터 로드 후)
   useEffect(() => {
@@ -297,14 +307,15 @@ export default function StudyDetailPage() {
         <div className={styles.emojiSection}>
           <EmojiCounter
             emojiData={
-              emojiData?.map((item, index) => ({
-                id: item.id || `emoji-${index}`,
-                emoji: item.emoji?.symbol || item.symbol || '🔥',
-                count: item.count || 0,
+              studyData?.studyEmojis?.map(emojiData => ({
+                id: emojiData?.emoji?.id,
+                emoji: emojiData?.emoji?.symbol,
+                count: emojiData?.count || 0,
               })) || []
             }
             studyId={id}
-            onEmojiUpdate={handleEmojiUpdate}
+            increaseEmojiCount={increaseEmojiCount}
+            decreaseEmojiCount={decreaseEmojiCount}
           />
         </div>
         <div className={styles.actionsSection}>
@@ -329,6 +340,7 @@ export default function StudyDetailPage() {
           />
         </div>
         <div className={styles.todayButtons}>
+          <NavigationButton to="/">홈</NavigationButton>
           <NavigationButton onClick={handleHabitClick}>
             오늘의 습관
           </NavigationButton>

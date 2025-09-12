@@ -33,12 +33,15 @@ export const emojiApi = {
    * @param {string} emoji - 이모지
    * @returns {Promise<EmojiUpdated>} 추가된 이모지 데이터
    */
-  addEmoji: async (studyId, emoji) => {
+  incrementEmoji: async (studyId, emoji) => {
     try {
-      const id = encodeURIComponent(String(studyId));
-      const response = await instance.post(`/api/studies/${id}/emojis`, {
-        emoji,
-      });
+      // const id = encodeURIComponent(String(studyId));
+      const response = await instance.post(
+        `/api/studies/${studyId}/emojis/increment`,
+        {
+          emoji,
+        },
+      );
       return response.data;
     } catch (error) {
       console.error('이모지 추가 실패:', error);
@@ -52,19 +55,19 @@ export const emojiApi = {
    * @param {string} emoji - 이모지
    * @returns {Promise<EmojiUpdated>} 업데이트된 이모지 데이터
    */
-  incrementEmoji: async (studyId, emoji) => {
-    try {
-      const id = encodeURIComponent(String(studyId));
-      const e = encodeURIComponent(emoji);
-      const response = await instance.patch(
-        `/api/studies/${id}/emojis/${e}/increment`,
-      );
-      return response.data;
-    } catch (error) {
-      console.error('이모지 카운트 증가 실패:', error);
-      throw error;
-    }
-  },
+  // incrementEmoji: async (studyId, emoji) => {
+  //   try {
+  //     const id = encodeURIComponent(String(studyId));
+  //     const e = encodeURIComponent(emoji);
+  //     const response = await instance.patch(
+  //       `/api/studies/${id}/emojis/${e}/increment`,
+  //     );
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('이모지 카운트 증가 실패:', error);
+  //     throw error;
+  //   }
+  // },
 
   /**
    * 스터디의 이모지 카운트 감소

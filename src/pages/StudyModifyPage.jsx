@@ -201,7 +201,7 @@ export function StudyModifyPage() {
       setSubmitting(true);
 
       const selected = backgrounds.find(bg => bg.id === selectedBgId);
-      const background = selected?.value ?? selectedBgId; // id 미스매치 대비 안전장치
+      const background = selected?.id ?? selectedBgId; // id 미스매치 대비 안전장치
 
       // 스터디 수정 API 호출
       await modifyStudy(id, {

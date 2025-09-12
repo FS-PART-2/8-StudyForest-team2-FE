@@ -157,7 +157,7 @@ export function StudyCreatePage() {
       setSubmitting(true);
 
       const selected = backgrounds.find(bg => bg.id === selectedBgId);
-      const background = selected?.value ?? selectedBgId; // id 미스매치 대비 안전장치
+      const background = selected?.id ?? selectedBgId; // id 미스매치 대비 안전장치
 
       console.log('스터디 생성 데이터:', {
         nickname: nickname.trim(),
