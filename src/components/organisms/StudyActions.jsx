@@ -114,7 +114,7 @@ export default function StudyActions({
         statusText: error.response?.statusText,
         data: error.response?.data,
       });
-      return false; // false 반환 → StudyPasswordModal에서 네트워크 에러 토스트 표시, 모달 유지
+      return false; // false 반환 → StudyPasswordModal에서 mismatch 토스트 표시
     }
   };
 
@@ -163,7 +163,7 @@ export default function StudyActions({
       }
     } catch (error) {
       console.error('비밀번호 검증 실패:', error);
-      return false;
+      return false; // false 반환 → StudyPasswordModal에서 mismatch 토스트 표시
     }
   };
 
