@@ -28,19 +28,18 @@
   font-size: 1.6rem;
   font-weight: 500;
   text-align: right;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal; /* 줄바꿈 허용 */
+  overflow: visible; /* overflow 제거 */
+  text-overflow: unset; /* ... 제거 */
   max-width: 100%;
+  line-height: 1.3; /* 줄 간격 조정 */
+  word-wrap: break-word; /* 긴 단어 줄바꿈 */
 }
 
-/* 태블릿에서 습관명 줄바꿈 허용 */
+/* 태블릿에서 추가 스타일 조정 (필요시) */
 @media (max-width: 1024px) {
   .nameText {
-    white-space: normal; /* 줄바꿈 허용 */
-    text-overflow: unset; /* ... 제거 */
-    overflow: visible; /* overflow 제거 */
-    line-height: 1.3; /* 줄 간격 조정 */
+    /* 기본 스타일에서 이미 줄바꿈 허용됨 */
   }
 }
 
