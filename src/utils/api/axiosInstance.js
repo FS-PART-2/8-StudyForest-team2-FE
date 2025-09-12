@@ -1,9 +1,8 @@
 import axios from 'axios';
 
 export const instance = axios.create({
-
   baseURL:
-    import.meta.env.VITE_API_TEST_URL ||
+    import.meta.env.VITE_API_BASE_URL ||
     'https://eight-studyforest-team2-be.onrender.com',
 
   withCredentials: true,
