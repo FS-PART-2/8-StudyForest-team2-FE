@@ -56,24 +56,49 @@ export default function HabitRecordTable({
         }
 
         const data = await habitWeekApi.getHabitWeekApi(studyId, apiParams);
-        // 예상 형태에 맞게 변환 (shape만): [{ name, checks:[...7] }]
-        const mapped = Array.isArray(data?.habits)
-          ? data.habits.map(h => ({
-              name: h.name || h.title || '습관',
-              checks: Array.isArray(h.checks)
-                ? h.checks
-                : [
-                    !!h.mon,
-                    !!h.tue,
-                    !!h.wed,
-                    !!h.thu,
-                    !!h.fri,
-                    !!h.sat,
-                    !!h.sun,
-                  ],
-            }))
-          : [];
-        setApiRows(mapped);
+        console.log('HabitRecordTable: API 응답 데이터:', data);
+
+        // API 응답에서 습관 데이터를 변환
+        if (data?.days) {
+          const habitRows = [];
+          const dayNames = ['월', '화', '수', '목', '금', '토', '일'];
+
+          // 각 날짜별 습관을 수집
+          Object.entries(data.days).forEach(([date, habits]) => {
+            if (Array.isArray(habits) && habits.length > 0) {
+              habits.forEach(habit => {
+                // 이미 존재하는 습관인지 확인
+                const existingHabit = habitRows.find(
+                  h => h.id === habit.habitId,
+                );
+                if (existingHabit) {
+                  // 기존 습관에 해당 날짜의 완료 상태 추가
+                  const dateObj = new Date(date);
+                  const dayIndex = dateObj.getDay(); // 0=일요일, 1=월요일, ..., 6=토요일
+                  const mondayBasedIndex = (dayIndex + 6) % 7; // 월요일을 0으로 변환
+                  existingHabit.checks[mondayBasedIndex] = habit.isDone;
+                } else {
+                  // 새로운 습관 추가
+                  const checks = Array(7).fill(false);
+                  const dateObj = new Date(date);
+                  const dayIndex = dateObj.getDay(); // 0=일요일, 1=월요일, ..., 6=토요일
+                  const mondayBasedIndex = (dayIndex + 6) % 7; // 월요일을 0으로 변환
+                  checks[mondayBasedIndex] = habit.isDone;
+
+                  habitRows.push({
+                    id: habit.habitId,
+                    name: habit.title,
+                    checks: checks,
+                  });
+                }
+              });
+            }
+          });
+
+          setApiRows(habitRows);
+        } else {
+          setApiRows([]);
+        }
       } catch (error) {
         console.log('HabitRecordTable: 습관 데이터 로드 실패:', error.message);
         // 401 에러인 경우 비밀번호가 필요한 스터디임을 표시
