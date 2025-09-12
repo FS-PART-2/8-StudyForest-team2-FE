@@ -18,6 +18,7 @@
   font-weight: 400;
   margin: 0;
   line-height: 1.5;
+
   max-height: 5.4rem; /* 2줄 제한 (1.8rem * 1.5 * 2 = 5.4rem) */
   overflow-y: auto; /* 세 줄 이상일 때 스크롤 */
   overflow-x: hidden; /* 가로 스크롤 숨김 */
@@ -41,6 +42,7 @@
 
 .description::-webkit-scrollbar-thumb:hover {
   background: var(--text-primary, #222);
+  word-break: break-word;
 }
 
 /* 태블릿 반응형 */
