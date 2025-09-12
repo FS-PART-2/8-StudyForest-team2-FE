@@ -113,6 +113,13 @@
     0 6px 20px rgba(59, 130, 246, 0.4);
 }
 
+.emojiWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 1199px) {
   .card {
     max-width: none;

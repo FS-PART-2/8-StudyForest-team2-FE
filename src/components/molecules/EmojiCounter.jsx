@@ -25,7 +25,6 @@ export default function EmojiCounter({
 
   // prop 변경 시 내부 state 동기화
   useEffect(() => {
-    console.log(emojiData);
     setSelectedEmojis(Array.isArray(emojiData) ? emojiData : []);
   }, [emojiData]);
 
@@ -40,42 +39,27 @@ export default function EmojiCounter({
   useOutsideClick(restPopupRef, () => setIsRestOpen(() => false));
 
   // 이모지 선택 시 이모지 추가 및 카운트 증가
-  const handleEmojiClick = event => {
-    setSelectedEmojis(prev => {
-      const existingEmojiIndex = prev.findIndex(
-        item => item.emoji === event.emoji,
-      );
-
-      if (existingEmojiIndex > -1) {
-        // 이미 존재하는 이모지인 경우 카운트만 증가
-        return prev.map((item, index) =>
-          index === existingEmojiIndex
-            ? { ...item, count: item.count + 1 }
-            : item,
-        );
-      } else {
-        // 새로운 이모지인 경우 배열에 추가 (새 ID 생성)
-        // const newId = Math.max(...prev.map(item => item.id || 0)) + 1;
-        increaseEmojiCount({ id: event.unified, emoji: event.emoji, count: 1 });
-        return [...prev, { id: event.unified, emoji: event.emoji, count: 1 }];
-      }
-    });
-    setIsOpen(false);
+  const handleEmojiClick = async event => {
+    try {
+      await increaseEmojiCount({
+        id: event.unified,
+        emoji: event.emoji,
+        count: 1,
+      });
+      setIsOpen(false);
+    } catch (error) {
+      console.error('이모지 추가 실패:', error);
+    }
   };
 
   // 이모지 클릭 시 카운트 감소
-  const handleEmojiDecrease = clickedEmoji => {
-    setSelectedEmojis(prev => {
-      return prev
-        .map(item => {
-          if (item.emoji === clickedEmoji.emoji && item.count > 0) {
-            return { ...item, count: item.count - 1 };
-          }
-          return item;
-        })
-        .filter(item => item.count > 0); // 카운트가 0이 된 이모지는 제거
-    });
-    decreaseEmojiCount(clickedEmoji);
+  const handleEmojiDecrease = async clickedEmoji => {
+    console.log(clickedEmoji.id);
+    try {
+      await decreaseEmojiCount(clickedEmoji.id);
+    } catch (error) {
+      console.error('이모지 감소 실패:', error);
+    }
   };
 
   // 이모지 추가 버튼 클릭 시 이모지 팝업 토글
