@@ -141,7 +141,7 @@ export default function Card({
         </div>
 
         <div className={styles.emojiSection}>
-          <div>
+          <div className={styles.emojiWrapper}>
             {emojiData.map((item, index) => (
               <Emoji
                 key={index}

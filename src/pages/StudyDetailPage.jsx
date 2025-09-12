@@ -57,25 +57,31 @@ export default function StudyDetailPage() {
   const [currentHabits, setCurrentHabits] = useState([]); // 현재 활성 습관들
   const verifyAbortRef = useRef(null);
 
-  async function increaseEmojiCount(emoji) {
-    console.log(emoji);
+  async function increaseEmojiCount(emojiData) {
     try {
-      await emojiApi.incrementEmoji(id, emoji);
-      setStudyData(prev => ({
-        ...prev,
-        studyEmojis: prev.studyEmojis.map(item =>
-          item.emoji.id === emoji.id
-            ? { ...item, count: item.count + 1 }
-            : item,
-        ),
-      }));
+      // API에는 이모지 문자열만 전달
+      await emojiApi.incrementEmoji(id, emojiData);
+      // console.log('API Response:', response);
+
+      // API 성공 후 최신 스터디 데이터 다시 가져오기
+      const updatedStudyData = await studyApi.getStudyDetailApi(id);
+      setStudyData(updatedStudyData);
     } catch (error) {
       console.error('이모지 카운트 증가 실패:', error);
     }
   }
 
-  function decreaseEmojiCount(emoji) {
-    console.log(emoji);
+  async function decreaseEmojiCount(emojiData) {
+    try {
+      const response = await emojiApi.decrementEmoji(id, emojiData);
+      console.log('API Response:', response);
+
+      // API 성공 후 최신 스터디 데이터 다시 가져오기
+      const updatedStudyData = await studyApi.getStudyDetailApi(id);
+      setStudyData(updatedStudyData);
+    } catch (error) {
+      console.error('이모지 카운트 감소 실패:', error);
+    }
   }
 
   // 최신 습관 데이터 가져오기 (현재 활성 습관만)

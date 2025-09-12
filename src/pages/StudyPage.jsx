@@ -91,12 +91,14 @@ export function StudyPage() {
                   createdAt={study?.createdAt?.split('T')[0]}
                   description={study.content}
                   id={study.id}
-                  emojiData={
+                  emojiData={(
                     study.studyEmojis?.map(item => ({
                       emoji: item.emoji?.symbol || item.symbol || '🔥',
                       count: item.count || 0,
                     })) || []
-                  }
+                  )
+                    .sort((a, b) => b.count - a.count)
+                    .slice(0, 3)}
                 />
               );
             })}
@@ -132,12 +134,14 @@ export function StudyPage() {
                   points={study.point || 0}
                   createdAt={study?.createdAt?.split('T')[0]}
                   description={study.content}
-                  emojiData={
+                  emojiData={(
                     study.studyEmojis?.map(item => ({
                       emoji: item.emoji?.symbol || item.symbol || '🔥',
                       count: item.count || 0,
                     })) || []
-                  }
+                  )
+                    .sort((a, b) => b.count - a.count)
+                    .slice(0, 3)}
                 />
               );
             })}
