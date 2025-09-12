@@ -53,9 +53,7 @@ export function Header() {
         {isLoggedIn ? (
           <div>
             <Link to="/profile">
-              <span className={styles.userName}>
-                {user.username + '님 환영'}
-              </span>
+              <span className={styles.userName}>{user.nick + '님 환영'}</span>
             </Link>
             <Button
               variant="secondary"
