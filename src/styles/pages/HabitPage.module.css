@@ -87,6 +87,8 @@
   align-items: center;
   font-size: 2.4rem;
   position: relative;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 .cardHeader h2 {
@@ -465,6 +467,7 @@
 
   .cardHeader {
     font-size: 1.8rem;
+    margin-top: 1rem;
     margin-bottom: 3.9rem;
   }
 
